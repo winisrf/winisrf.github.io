@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Wang Xin — Nanyang Technological University, Singapore.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hyperparameter Tuning Analysis for Food-11 Image Classification">
+<meta property="og:url" content="http://example.com/2026/07/02/hyperparameter-tuning-food11/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="Wang Xin — Nanyang Technological University, Singapore.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/food11/figure1-1.png">
+<meta property="og:image" content="http://example.com/images/food11/figure1-2.png">
+<meta property="og:image" content="http://example.com/images/food11/figure2-1.png">
+<meta property="og:image" content="http://example.com/images/food11/figure2-2.png">
+<meta property="og:image" content="http://example.com/images/food11/figure3.png">
+<meta property="og:image" content="http://example.com/images/food11/figure4-1.png">
+<meta property="og:image" content="http://example.com/images/food11/figure4-2.png">
+<meta property="article:published_time" content="2026-07-02T05:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-02T00:16:20.231Z">
+<meta property="article:author" content="winis">
+<meta property="article:tag" content="EfficientNet">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="hyperparameter tuning">
+<meta property="article:tag" content="image classification">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/food11/figure1-1.png">
+
+
+<link rel="canonical" href="http://example.com/2026/07/02/hyperparameter-tuning-food11/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/02/hyperparameter-tuning-food11/","path":"2026/07/02/hyperparameter-tuning-food11/","title":"Hyperparameter Tuning Analysis for Food-11 Image Classification"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hyperparameter Tuning Analysis for Food-11 Image Classification | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Preprocessing"><span class="nav-number">1.</span> <span class="nav-text">Data Preprocessing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-Rate"><span class="nav-number">2.</span> <span class="nav-text">Learning Rate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">2.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results"><span class="nav-number">2.2.</span> <span class="nav-text">Results</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis"><span class="nav-number">2.3.</span> <span class="nav-text">Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-Rate-Schedule"><span class="nav-number">3.</span> <span class="nav-text">Learning Rate Schedule</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction-2"><span class="nav-number">3.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results-2"><span class="nav-number">3.2.</span> <span class="nav-text">Results</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis-2"><span class="nav-number">3.3.</span> <span class="nav-text">Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Weight-Decay"><span class="nav-number">4.</span> <span class="nav-text">Weight Decay</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction-3"><span class="nav-number">4.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results-3"><span class="nav-number">4.2.</span> <span class="nav-text">Results</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis-3"><span class="nav-number">4.3.</span> <span class="nav-text">Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Augmentation"><span class="nav-number">5.</span> <span class="nav-text">Data Augmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction-4"><span class="nav-number">5.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results-4"><span class="nav-number">5.2.</span> <span class="nav-text">Results</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis-4"><span class="nav-number">5.3.</span> <span class="nav-text">Analysis</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">We laughed and kept saying"see u soon",but inside we both knew we would never see each other again.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/02/hyperparameter-tuning-food11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="We laughed and kept saying"see u soon",but inside we both knew we would never see each other again.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hyperparameter Tuning Analysis for Food-11 Image Classification | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hyperparameter Tuning Analysis for Food-11 Image Classification
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-07-02 13:00:00 / Modified: 08:16:20" itemprop="dateCreated datePublished" datetime="2026-07-02T13:00:00+08:00">2026-07-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Coursework/" itemprop="url" rel="index"><span itemprop="name">Coursework</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><em>Wang Xin — Nanyang Technological University, Singapore.</em></p>
+<span id="more"></span>
+<p><strong>Abstract.</strong> This report investigates the impact of several important hyperparameters and regularization methods on the image classification performance of deep neural networks. Experiments were conducted on the Food-11 dataset using the EfficientNet-B0 architecture. The study consists of four parts: learning rate comparison, learning rate schedule comparison, weight decay comparison, and mixup data augmentation. The results show that an initial learning rate of 0.025 provides the best balance between convergence speed and stability, constant learning rate outperforms cosine annealing in validation performance under the current setting, stronger weight decay improves generalization, and mixup provides a slight improvement in validation and test performance at the cost of lower training accuracy.</p>
+<h2 id="Data-Preprocessing">Data Preprocessing</h2>
+<p>The Food-11 dataset contains a total of 16,643 images, with 9,866 images in the training set, 3,430 images in the validation set, and 3,347 images in the test set. As per the assignment requirements, all images were scaled to 100×100. The code for this preprocessing is in Code 1 and Code 2.</p>
+<p><strong>Code 1. Calculate Mean and STD</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">raw_transform = transforms.Compose([</span><br><span class="line">    transforms.Resize((<span class="number">100</span>, <span class="number">100</span>)),</span><br><span class="line">    transforms.ToTensor()])</span><br><span class="line">raw_train = ImageFolder(train_dir,</span><br><span class="line">            transform=raw_transform)</span><br><span class="line">raw_loader = DataLoader(raw_train,</span><br><span class="line">            batch_size=<span class="number">256</span>, shuffle=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">mean = torch.zeros(<span class="number">3</span>)</span><br><span class="line">std = torch.zeros(<span class="number">3</span>)</span><br><span class="line">n_samples = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> images, _ <span class="keyword">in</span> raw_loader:</span><br><span class="line">    b = images.size(<span class="number">0</span>)</span><br><span class="line">    imgs = images.view(b, <span class="number">3</span>, -<span class="number">1</span>)</span><br><span class="line">    mean += imgs.mean(dim=<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">0</span>)</span><br><span class="line">    std += imgs.std(dim=<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">0</span>)</span><br><span class="line">    n_samples += b</span><br><span class="line">    mean /= n_samples</span><br><span class="line">    std /= n_samples</span><br></pre></td></tr></table></figure>
+<p><strong>Code 2. Data preprocessing</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">train_transform = transforms.Compose([</span><br><span class="line">    transforms.Resize((<span class="number">100</span>, <span class="number">100</span>)),</span><br><span class="line">    transforms.RandomHorizontalFlip(p=<span class="number">0.5</span>),</span><br><span class="line">    transforms.RandomCrop(<span class="number">100</span>, padding=<span class="number">12</span>),</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize(</span><br><span class="line">        mean=mean.tolist(), std=std.tolist()),</span><br><span class="line">])</span><br><span class="line">eval_transform = transforms.Compose([</span><br><span class="line">    transforms.Resize((<span class="number">100</span>, <span class="number">100</span>)),</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize(</span><br><span class="line">        mean=mean.tolist(), std=std.tolist()),</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<p>The mean and standard deviation of the three RGB channels calculated on the training set are as Table 1.</p>
+<p><strong>Table 1: Channel-wise mean and standard deviation.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th style="text-align:center">Mean</th>
+<th style="text-align:center">Std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R</td>
+<td style="text-align:center">0.5548</td>
+<td style="text-align:center">0.2233</td>
+</tr>
+<tr>
+<td>G</td>
+<td style="text-align:center">0.4508</td>
+<td style="text-align:center">0.2334</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:center">0.3435</td>
+<td style="text-align:center">0.2323</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Learning-Rate">Learning Rate</h2>
+<h3 id="Introduction">Introduction</h3>
+<p>This section tested three initial learning rates: 0.1, 0.025, and 0.001. All experiments used the SGD optimization algorithm with momentum set to 0.9, a batch size of 128, and 15 epochs per group.</p>
+<h3 id="Results">Results</h3>
+<p>The results are summarized in Table 2.</p>
+<p><strong>Table 2: Performance under different initial learning rates.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Learning Rate</th>
+<th style="text-align:center">Train Loss</th>
+<th style="text-align:center">Train Acc.</th>
+<th style="text-align:center">Val Loss</th>
+<th style="text-align:center">Val Acc.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td style="text-align:center">1.5989</td>
+<td style="text-align:center">44.46%</td>
+<td style="text-align:center">1.5720</td>
+<td style="text-align:center">45.36%</td>
+</tr>
+<tr>
+<td>0.025</td>
+<td style="text-align:center">1.2397</td>
+<td style="text-align:center">57.75%</td>
+<td style="text-align:center">1.2853</td>
+<td style="text-align:center">56.21%</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td style="text-align:center">1.6722</td>
+<td style="text-align:center">42.05%</td>
+<td style="text-align:center">1.7323</td>
+<td style="text-align:center">41.02%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Analysis">Analysis</h3>
+<p>The experimental results show that the learning rate of 0.025 significantly outperformed the other two groups. With a learning rate of 0.025, the model achieved the lowest training loss (1.2397) and the highest training accuracy (57.75%), as well as the lowest validation loss (1.2853) and the highest validation accuracy (56.21%). In contrast, with a learning rate of 0.1, the training loss was 1.5989 and the training accuracy was 44.46%, while the validation loss was 1.5720 and the validation accuracy was 45.36%. However, with a learning rate of 0.001, all metrics were the worst, with a training loss of 1.6722, a validation loss of 1.7323, and a validation accuracy of only 41.02%.</p>
+<p>This demonstrates that when the learning rate is too large, the parameters are updated more rapidly at each step, making it more prone to oscillations during optimization and hindering the model from converging. In this experiment, the learning rate of 0.1 significantly lagged behind 0.025, indicating that this setting was too large for the current task and number of training epochs, affecting the model’s convergence quality. When the learning rate is too small, the parameter update pace is too slow, although the model is still learning, it often fails to converge sufficiently within a limited number of epochs. The learning rate of 0.001 showed the worst performance in both training and validation, as its learning process was too slow to learn enough effective features within the current training budget.</p>
+<p>In summary, a learning rate of 0.025 achieved the best balance between convergence speed and training stability. On the one hand, it is not as aggressively updated as 0.1, on the other hand, it drives model optimization faster than 0.001, achieving optimal results on both the training and validation sets. Based on this experimental result, 0.025 can be selected as the initial learning rate for subsequent experiments.</p>
+<h2 id="Learning-Rate-Schedule">Learning Rate Schedule</h2>
+<h3 id="Introduction-2">Introduction</h3>
+<p>After determining the optimal initial learning rate, the next step is to compare constant learning rate and cosine annealing learning rate scheduling, training each for 300 epochs.</p>
+<p>Cosine annealing gradually decays the learning rate from its initial value to 0 according to a cosine curve, with the following formula:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msubsup><mi>η</mi><mi>min</mi><mo>⁡</mo><mi>i</mi></msubsup><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo fence="true">(</mo><msubsup><mi>η</mi><mi>max</mi><mo>⁡</mo><mi>i</mi></msubsup><mo>−</mo><msubsup><mi>η</mi><mi>min</mi><mo>⁡</mo><mi>i</mi></msubsup><mo fence="true">)</mo></mrow><mrow><mo fence="true">(</mo><mn>1</mn><mo>+</mo><mi>cos</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mfrac><msub><mi>T</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">r</mi></mrow></msub><msub><mi>T</mi><mi>i</mi></msub></mfrac><mi>π</mi><mo fence="true">)</mo></mrow><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\eta_t = \eta_{\min}^{i} + \frac{1}{2}\left(\eta_{\max}^{i} - \eta_{\min}^{i}\right)\left(1 + \cos\left(\frac{T_{\mathrm{cur}}}{T_i}\pi\right)\right)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1217em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8747em;"><span style="top:-2.453em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mop mtight"><span class="mtight">m</span><span class="mtight">i</span><span class="mtight">n</span></span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8747em;"><span style="top:-2.453em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mop mtight"><span class="mtight">m</span><span class="mtight">a</span><span class="mtight">x</span></span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8747em;"><span style="top:-2.453em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mop mtight"><span class="mtight">m</span><span class="mtight">i</span><span class="mtight">n</span></span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">cur</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.0359em;">π</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span></p>
+<p>Here, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> represents the run number, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>η</mi><mi>min</mi><mo>⁡</mo><mi>i</mi></msubsup></mrow><annotation encoding="application/x-tex">\eta_{\min}^{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0892em;vertical-align:-0.2645em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8247em;"><span style="top:-2.4355em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mop mtight"><span class="mtight">m</span><span class="mtight">i</span><span class="mtight">n</span></span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2645em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>η</mi><mi>max</mi><mo>⁡</mo><mi>i</mi></msubsup></mrow><annotation encoding="application/x-tex">\eta_{\max}^{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0717em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8247em;"><span style="top:-2.453em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mop mtight"><span class="mtight">m</span><span class="mtight">a</span><span class="mtight">x</span></span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span> represent the minimum and maximum values of the learning rate respectively, defining the range of the learning rate. <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">r</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_{\mathrm{cur}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">cur</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> indicates the number of epochs executed so far, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">T_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> represents the total number of epochs in the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>i</mi><mtext>th</mtext></msup></mrow><annotation encoding="application/x-tex">i^{\text{th}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">th</span></span></span></span></span></span></span></span></span></span></span></span></span> run.</p>
+<p>Cosine annealing changes the originally fixed learning rate to one that gradually decreases with each epoch, and then observes whether the model performs better on the validation set. The learning rate changes smoothly from large to small.</p>
+<h3 id="Results-2">Results</h3>
+<p>Table 3 reports the final results, and Figure 1 shows the corresponding training curves.</p>
+<p>As shown in the figure, both methods continuously optimize on the training set, but cosine annealing achieves a more complete fit in the later stages. In the left graph, the green solid line (cosine annealing training loss) decreases more overall, while in the right graph, the green solid line (cosine annealing training accuracy) eventually surpasses the blue solid line of constant LR. Cosine annealing does indeed improve the model’s learning on the training set.</p>
+<p>In the right graph, both validation accuracy curves tend to plateau around 0.70, but the validation accuracy of constant LR is slightly higher overall than that of cosine annealing; in the left graph, the validation loss of constant LR is also lower overall than that of cosine annealing. Although cosine annealing makes the training set metrics look better, it doesn’t lead to better generalization.</p>
+<p>The graph exhibits some instability, with the validation curve showing obvious peaks or sudden drops, especially the validation set curve in the loss graph showing significant fluctuations. The validation process may be sensitive to the model parameters of certain epochs, but in the long run, this does not affect the overall conclusion.</p>
+<p><strong>Table 3: Comparison between constant learning rate and cosine annealing.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Schedule</th>
+<th style="text-align:center">Train Loss</th>
+<th style="text-align:center">Train Acc</th>
+<th style="text-align:center">Val Loss</th>
+<th style="text-align:center">Val Acc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Constant LR</td>
+<td style="text-align:center">0.0327</td>
+<td style="text-align:center">98.92%</td>
+<td style="text-align:center">1.4974</td>
+<td style="text-align:center">73.06%</td>
+</tr>
+<tr>
+<td>Cosine Annealing</td>
+<td style="text-align:center">0.0160</td>
+<td style="text-align:center">99.47%</td>
+<td style="text-align:center">1.7733</td>
+<td style="text-align:center">71.55%</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/images/food11/figure1-1.png" alt="Training and validation loss and accuracy curves for constant learning rate and cosine annealing over 300 epochs"></p>
+<p><img src="/images/food11/figure1-2.png" alt="Training and validation loss and accuracy curves for constant learning rate and cosine annealing over 300 epochs"></p>
+<h3 id="Analysis-2">Analysis</h3>
+<p>Based on the current experimental results, using Constant LR the model achieved a training loss of 0.0327, training accuracy of 98.92%, and a validation loss of 1.4974 with a validation accuracy of 73.06%. Using Cosine Annealing, the model achieved a training loss of 0.0160, training accuracy of 99.47%, and a validation loss of 1.7733 with a validation accuracy of 71.55%. Cosine annealing performed better on the training set, but its performance on the validation set was inferior to that of constant learning rate. Cosine annealing allows the model to fit the training set more fully, but this stronger fit does not translate into better generalization ability.</p>
+<p>Cosine annealing gradually decreases the learning rate as training progresses, with increasingly smaller update steps in the later stages. This typically helps the model optimize the training objective more finely. However, in this experiment, this resulted in an overfitting tendency within the training set. A constant learning rate maintains a relatively fixed update amplitude, preventing parameters from prematurely entering a fine-fit state and exhibiting better fitting performance under the current conditions.</p>
+<h2 id="Weight-Decay">Weight Decay</h2>
+<h3 id="Introduction-3">Introduction</h3>
+<p>For the loss function <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo stretchy="false">(</mo><mi>w</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">L(w)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">L</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mclose">)</span></span></span></span>, after adding the regularization term <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><mi>λ</mi><mi mathvariant="normal">∥</mi><mi>w</mi><msup><mi mathvariant="normal">∥</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\frac{1}{2}\lambda \|w\|^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">λ</span><span class="mord">∥</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mord"><span class="mord">∥</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> to the weight decay, we get:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>L</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mi>w</mi><mo stretchy="false">)</mo><mo>=</mo><mi>L</mi><mo stretchy="false">(</mo><mi>w</mi><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mi>λ</mi><mi mathvariant="normal">∥</mi><mi>w</mi><msup><mi mathvariant="normal">∥</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L&#x27;(w) = L(w) + \frac{1}{2}\lambda \|w\|^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0519em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">L</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">λ</span><span class="mord">∥</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mord"><span class="mord">∥</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Its gradient descent update formula is:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>w</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>L</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>w</mi><mi>t</mi></msub></mrow></mfrac><mo>−</mo><mi>η</mi><mi>λ</mi><msub><mi>w</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">w_{t+1} = w_t - \eta \frac{\partial L(w_t)}{\partial w_t} - \eta \lambda w_t
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.2083em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.263em;vertical-align:-0.836em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.0556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.0556em;">∂</span><span class="mord mathnormal">L</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="mord mathnormal">λ</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Weight decay directly reduces parameter values during optimization, thereby suppressing excessively large weights and reducing the risk of overfitting. This section uses the optimal learning rate obtained in Section 3 and cosine annealing from Section 4 to test two weight decay coefficients: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">5 \times 10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1 \times 10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> with 300 training epochs for each.</p>
+<h3 id="Results-3">Results</h3>
+<p>The results are shown in Table 4, and Figure 2 shows the corresponding training curves.</p>
+<p>For the loss graph, the orange dashed line for WD = 0.0005 is significantly lower overall and relatively stable in the later stages, generally around 1.0. The red dashed line for WD = 0.0001 is higher overall and shows a clear upward trend in the later stages, eventually approaching 1.8. The red dashed line gradually rises in the later stages. As training continues, the model with WD = 0.0001 becomes increasingly closer to the training set, but its performance on the validation set deteriorates showing a more obvious tendency to overfit.</p>
+<p>For accuracy, the orange dashed line for WD = 0.0005 is generally higher than the red dashed line, stabilizing at approximately 0.78 in the later stages. The red dashed line for WD = 0.0001 stabilizes at approximately 0.71 in the later stages. The larger weight decay (0.0005) results in higher validation accuracy, while the smaller weight decay (0.0001) although almost fully learning the training set, performs significantly worse. Meanwhile, the validation loss in the left graph suddenly increased several times, and the validation accuracy in the right graph suddenly decreased several times. This may be because the validation process itself is more sensitive to the model parameters of certain epochs, but these local fluctuations do not affect the overall trend judgment.</p>
+<p><strong>Table 4: Comparison between two weight decay settings.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Weight Decay</th>
+<th style="text-align:center">Train Loss</th>
+<th style="text-align:center">Train Acc.</th>
+<th style="text-align:center">Val Loss</th>
+<th style="text-align:center">Val Acc.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">5 \times 10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span></td>
+<td style="text-align:center">0.0125</td>
+<td style="text-align:center">99.85%</td>
+<td style="text-align:center">0.9589</td>
+<td style="text-align:center">78.48%</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1 \times 10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span></td>
+<td style="text-align:center">0.0147</td>
+<td style="text-align:center">99.54%</td>
+<td style="text-align:center">1.7228</td>
+<td style="text-align:center">71.05%</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/images/food11/figure2-1.png" alt="Training and validation loss and accuracy curves for two weight decay settings over 300 epochs"></p>
+<p><img src="/images/food11/figure2-2.png" alt="Training and validation loss and accuracy curves for two weight decay settings over 300 epochs"></p>
+<h3 id="Analysis-3">Analysis</h3>
+<p>The results show that both weight decay coefficients performed well on the training set, ultimately improving training accuracy to over 99% and reducing training loss to very low levels. Specifically, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\lambda=5\times10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> yielded the following results: training loss 0.0125, training accuracy 99.85%, validation loss 0.9589, and validation accuracy 78.48%, while <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\lambda=1\times10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> yielded the following results: training loss 0.0147, training accuracy 99.54%, validation loss 1.7228, and validation accuracy 71.05%. Although the difference between the two on the training set was small, the difference on the validation set was significant. <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\lambda=5 \times 10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> significantly outperformed in both validation loss and validation accuracy.</p>
+<p>This result demonstrates that, under the current task and training settings, stronger regularization is more beneficial for generalization. The weaker constraint of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\lambda=1\times10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> on the weights, though allowing the model to fit the training set well, doesn’t adequately suppress parameter size and lead to a tendency for the model to more closely fit the details in the training set, resulting in poor performance on the validation set. Conversely, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\lambda=5\times10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> provides stronger weight constraints, preventing the model from over-relying on certain excessively large parameters during learning, thus reducing the risk of overfitting and ultimately achieving lower loss and higher accuracy on the validation set.</p>
+<h2 id="Data-Augmentation">Data Augmentation</h2>
+<h3 id="Introduction-4">Introduction</h3>
+<p>This section adds a mixup to the existing setup, setting α=0.2 and training for 300 epochs. Mixup is a data augmentation method that generates new training samples by linearly interpolating two input images and their labels. It can improve sample diversity and improve the model’s generalization ability. Its basic form is to linearly interpolate two images and their corresponding labels as Formula 4:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo>=</mo><mi>λ</mi><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="false">)</mo><msub><mi>x</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\tilde{x} = \lambda x_i + (1-\lambda)x_j
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6679em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">x</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">~</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord mathnormal">λ</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal">λ</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>y</mi><mo>~</mo></mover><mo>=</mo><mi>λ</mi><msub><mi>y</mi><mi>i</mi></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="false">)</mo><msub><mi>y</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\tilde{y} = \lambda y_i + (1-\lambda)y_j
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8623em;vertical-align:-0.1944em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">~</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">λ</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal">λ</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>∼</mo><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi></mrow><mo stretchy="false">(</mo><mi>α</mi><mo separator="true">,</mo><mi>α</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\lambda \sim \mathrm{Beta}(\alpha,\alpha)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathrm">Beta</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mclose">)</span></span></span></span> and when <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\alpha=0.2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.2</span></span></span></span>, Beta is more likely to be distributed around 0 and 1. Many mixed samples are still closer to one of the original samples, but some samples will more obviously mix the information of the two classes. Figure 3 shows the corresponding distribution.</p>
+<p><img src="/images/food11/figure3.png" alt="Probability density function of the Beta distribution"></p>
+<p>The curve is high near 0 and 1, and low in the middle, around 0.5. That is when <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\alpha=0.2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.2</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span></span></span></span> is more likely to approach 0 or 1, and less likely to fall in the middle.</p>
+<h3 id="Results-4">Results</h3>
+<p>The comparison between the baseline and mixup is summarized in Table 5 and Figure 4 shows the corresponding training curves.</p>
+<p><strong>Table 5: Comparison between the baseline and mixup training.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th style="text-align:center">Train Loss</th>
+<th style="text-align:center">Train Acc.</th>
+<th style="text-align:center">Val Loss</th>
+<th style="text-align:center">Val Acc.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No Mixup (baseline)</td>
+<td style="text-align:center">0.0129</td>
+<td style="text-align:center">99.80%</td>
+<td style="text-align:center">1.0964</td>
+<td style="text-align:center">76.03%</td>
+</tr>
+<tr>
+<td>With Mixup (<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\alpha = 0.2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.2</span></span></span></span>)</td>
+<td style="text-align:center">0.4634</td>
+<td style="text-align:center">89.02%</td>
+<td style="text-align:center">1.1720</td>
+<td style="text-align:center">76.38%</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/images/food11/figure4-1.png" alt="Training and validation loss and accuracy curves for the baseline model and the mixup model over 300 epochs"></p>
+<p><img src="/images/food11/figure4-2.png" alt="Training and validation loss and accuracy curves for the baseline model and the mixup model over 300 epochs"></p>
+<p>The blue solid line (No Mixup training) indicates that the training accuracy eventually approaches 100%, while the green solid line (With Mixup training) shows a significantly lower training accuracy, hovering around 89%. The loss graph also reflects this, with the training loss for mixup training being significantly higher than the baseline. The two validation accuracy curves are very close, with the final validation accuracy for mixup training being slightly higher.</p>
+<h3 id="Analysis-4">Analysis</h3>
+<p>The experimental results show that the baseline without mixup achieved the following in the last epoch: training loss 0.0129, training accuracy 99.80%, validation loss 1.0964, and validation accuracy 76.03%. With mixup, the model achieved the following results in the last epoch: training loss 0.4634, training accuracy 89.02%, validation loss 1.1720, and validation accuracy 76.38%. Furthermore, the mixup model used for final evaluation on the test set achieved a test accuracy of 79.18%.</p>
+<p>The results indicate that mixup slightly worsens training set performance, but may provide more robust validation and test set performance. Adding mixup reduced training accuracy from nearly 100% to around 89%, and the training loss was significantly higher. Mixup itself makes the training task more difficult, actively suppressing the model’s over-memorization of the training set.</p>
+<p>However, from a generalization perspective, the effect of mixup is positive. Although its final validation loss is slightly higher than the baseline, and the validation accuracy is only slightly higher (76.38% vs. 76.03%), the improvement is not significant. However, this indicates that despite a significant decrease in training set fitting, validation set performance did not decline; in fact, it slightly improved. This suggests that the mixup did indeed play a regularization role to some extent, sacrificing some training set fitting ability in exchange for slightly better generalization performance.</p>
+<p>With the α=0.2 setting, since λ∼Beta(0.2,0.2), the mixing coefficient will mostly be closer to 0 or 1. Therefore, many generated samples still resemble one of the original categories, only with a small amount of information from another category added. This mixup strength is relatively mild, preventing the training samples from becoming overly distorted, thus allowing the model to maintain good learning performance. At the same time, it is sufficient to increase the diversity of training samples, mitigating the risk of overfitting. Therefore, while the improvement is not particularly large, the direction is reasonable.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deep-learning/" rel="tag"># deep learning</a>
+              <a href="/tags/image-classification/" rel="tag"># image classification</a>
+              <a href="/tags/hyperparameter-tuning/" rel="tag"># hyperparameter tuning</a>
+              <a href="/tags/EfficientNet/" rel="tag"># EfficientNet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/02/safety-evaluation-generative-driving-videos/" rel="prev" title="Safety Evaluation of Generative Driving Videos">
+                  <i class="fa fa-angle-left"></i> Safety Evaluation of Generative Driving Videos
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/02/revisiting-frskd-self-knowledge-distillation/" rel="next" title="Revisiting FRSKD: Curriculum Augmentation, Mask-Aware Distillation, and Efficient Attention for Self-Knowledge Distillation">
+                  Revisiting FRSKD: Curriculum Augmentation, Mask-Aware Distillation, and Efficient Attention for Self-Knowledge Distillation <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

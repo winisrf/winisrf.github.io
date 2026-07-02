@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Introduction In recent years generative driving video models developed quickly. It can generate driving scenes and it is very useful for autonomous driving, because it can be used in simulation, testi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Safety Evaluation of Generative Driving Videos">
+<meta property="og:url" content="http://example.com/2026/07/02/safety-evaluation-generative-driving-videos/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="Introduction In recent years generative driving video models developed quickly. It can generate driving scenes and it is very useful for autonomous driving, because it can be used in simulation, testi">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-02T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-01T23:01:23.437Z">
+<meta property="article:author" content="winis">
+<meta property="article:tag" content="LLM evaluation">
+<meta property="article:tag" content="autonomous driving">
+<meta property="article:tag" content="generative video">
+<meta property="article:tag" content="machine learning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/07/02/safety-evaluation-generative-driving-videos/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/02/safety-evaluation-generative-driving-videos/","path":"2026/07/02/safety-evaluation-generative-driving-videos/","title":"Safety Evaluation of Generative Driving Videos"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Safety Evaluation of Generative Driving Videos | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Literature-Review"><span class="nav-number">2.</span> <span class="nav-text">Literature Review</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dataset-and-Problem-Setting"><span class="nav-number">3.</span> <span class="nav-text">Dataset and Problem Setting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Methodology"><span class="nav-number">4.</span> <span class="nav-text">Methodology</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Scoring-scheme"><span class="nav-number">4.1.</span> <span class="nav-text">Scoring scheme</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Human-evaluation"><span class="nav-number">4.2.</span> <span class="nav-text">Human evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Automated-evaluation"><span class="nav-number">4.3.</span> <span class="nav-text">Automated evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reproducibility"><span class="nav-number">4.4.</span> <span class="nav-text">Reproducibility</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Result-and-Analysis"><span class="nav-number">5.</span> <span class="nav-text">Result and Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dataset-Composition-and-Human-Benchmarking"><span class="nav-number">5.1.</span> <span class="nav-text">Dataset Composition and Human Benchmarking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Statistical-Analysis-of-Error-Types-and-Frequencies"><span class="nav-number">5.2.</span> <span class="nav-text">Statistical Analysis of Error Types and Frequencies</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparing-Automated-and-Human-Evaluation"><span class="nav-number">5.3.</span> <span class="nav-text">Comparing Automated and Human Evaluation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Performance-disparity-between-models"><span class="nav-number">5.3.1.</span> <span class="nav-text">Performance disparity between models</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Agreement-and-Correlation"><span class="nav-number">5.3.2.</span> <span class="nav-text">Agreement and Correlation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Limitation-of-Prompt-Based-Evaluation"><span class="nav-number">5.4.</span> <span class="nav-text">Limitation of Prompt-Based Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Common-Failure-Patterns-in-Generated-Driving-Video-Model"><span class="nav-number">5.5.</span> <span class="nav-text">Common Failure Patterns in Generated Driving Video Model</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">6.</span> <span class="nav-text">Conclusion</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Key-Findings"><span class="nav-number">6.1.</span> <span class="nav-text">Key Findings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Safety-Risk-of-Generative-Driving-Models"><span class="nav-number">6.2.</span> <span class="nav-text">Safety Risk of Generative Driving Models</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Directions-for-Improvement"><span class="nav-number">6.3.</span> <span class="nav-text">Directions for Improvement</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">We laughed and kept saying"see u soon",but inside we both knew we would never see each other again.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/02/safety-evaluation-generative-driving-videos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="We laughed and kept saying"see u soon",but inside we both knew we would never see each other again.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Safety Evaluation of Generative Driving Videos | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Safety Evaluation of Generative Driving Videos
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-07-02 12:00:00 / Modified: 07:01:23" itemprop="dateCreated datePublished" datetime="2026-07-02T12:00:00+08:00">2026-07-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Research/" itemprop="url" rel="index"><span itemprop="name">Research</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Introduction">Introduction</h2>
+<p>In recent years generative driving video models developed quickly. It can generate driving scenes and it is very useful for autonomous driving, because it can be used in simulation, testing, data generation and so on. Generating real driving data often cost more money, more time consuming and sometimes it is hard to collect some dangerous or unusual scenes, so generative driving video models become more and more essential in real life. Safety and reliability are very important in autonomous driving because temporary inconsistent, semantic and logical errors can mislead later testing and interpretation. This project aims to use the provided video dataset and emphasize on analyzing the safety issues and behaviours in the generated videos. Through identify, categorize and evaluate this problems, we study whether these generated videos are reliable. Our group project has 3 main parts: define and identify unsafe cases, evaluate them with human and automated methods.</p>
+<h2 id="Literature-Review">Literature Review</h2>
+<p>Generative video models have recently become an important research direction, and autonomous driving is one of their most promising application areas. GAIA-1 is a representative example of this line of work. It formulates autonomous driving as a generative world modeling problem and uses video, text, and action inputs to generate realistic driving scenarios with detailed control over ego-vehicle behavior and scene features (Hu et al., 2023). This shows that generative world models can support future prediction, simulation, and simulated data generation for autonomous driving, rather than only producing visually realistic videos. However, GAIA-1 mainly focuses on generation quality, controllability, and future scene modeling, and does not directly address detailed safety evaluation of generated driving videos.</p>
+<p>As driving world models continue to develop, evaluation has become increasingly important. DrivingGen argues that the field still lacks a well-designed benchmark for generative driving world models (Zhou et al., 2026). Existing evaluations are often incomplete because generic video metrics cannot fully capture the requirements of driving scenarios. In particular, they often fail to measure safety-critical imaging factors, trajectory plausibility, temporal consistency, agent-level consistency, and controllability under ego conditioning. In order to solve this problem, DrivingGen proposes a benchmark that evaluates generated driving videos from both visual and robotics perspectives, it covers whether it aligns with the real scenario, whether it is continuous, if the paths are generated correctly, and consistency in whether it works as expected. Its results also reveal a clear limitation of current approaches: some models produce visually appealing videos but fail to preserve physical consistency, while others has better performance in following how the objects move but generate weaker image quality. This suggests that generated driving videos cannot be judged only by general visual realism metrics. It also highlights agent-level consistency, especially abnormal disappearance of surrounding agents, which is critical for realism and safety in driving videos.</p>
+<p>A more safety-focused perspective is provided by <em>Are AI-Generated Driving Videos Ready for Autonomous Driving? A Diagnostic Evaluation Framework</em>. This paper directly discussed whether AI-generated driving videos can be used in autonomous driving as a reliable source (Xiang et al., 2025). It discovered some typical mistakes in AI-generated driving videos such as physically implausible motion, traffic semantic violations and visual artifacts. It categorized these problems systematically into 2 dimensions: spatiotemporal realism and semantic and behavioral realism. And most importantly, the paper shows that these problems are not only visual flaws, they can also harm later tasks such as detecting the objects, tracking the objects, and separating each object. The authors find that blindly using raw AI-generated driving videos may reduce model performance, while filtering them with a driving-aware evaluator improves results. This suggests that although AI-generated driving videos can work at a larger scale and cost less, they require proper quality control before they can be safely used in autonomous driving pipelines.</p>
+<p>Recent work on LLM-based evaluation methods provides a more direct foundation for automated assessment. <em>LLMs-as-Judges: A Comprehensive Survey on LLM-based Evaluation Methods</em> summarizes the idea of using large language models as evaluators to judge the quality, relevance, and effectiveness of generated outputs based on defined criteria (Li et al., 2024). The survey shows that LLM judges are flexible, can work on large scale, and are able to provide natural language explanations. These are attractive traits compared with costly human evaluation or fixed automatic metrics. It also reviews several method settings, such as single-LLM, multi-LLM, and human-AI collaborative evaluation, as well as pointwise, pairwise, and listwise judging (Li et al., 2024). In the meanwhile, this work points out LLM-based evaluation can still be sensitive to prompt, and it might have differences, even possible to have hallucination, or lack sufficient knowledge in a professional field. These limitations suggest that although LLM-based evaluation is promising for generated driving videos, it should still be used carefully and compared with human judgments.</p>
+<p>The existing papers have pushed forward this progress from different angles, some focus on generative driving models, some focus on driving-specific benchmarks, some studied failure modes and safety risks, others discussed LLM-based evaluation methods. Although these are all valuable work, they still can’t fix the problem in consistency evaluation and solve generated driving videos’ safety issue. It still lacks a more driving-aware evaluation framework and a more systematic way of identifying unsafe behaviors. This gap motivates our project to discover a clearer way to identify error types and compare the automated evaluation and human judgments in order to improve the evaluation framework.</p>
+<h2 id="Dataset-and-Problem-Setting">Dataset and Problem Setting</h2>
+<p>The dataset used in this project consists of 100 multi-view driving video clips, derived from a nuScenes-style autonomous driving scenario collection. Each clip is 2 seconds long, sampled at 4 frames per second, yielding 8 frames per video. Each frame is arranged as three panels: the top panel shows the real ground-truth footage from six surround-view cameras (front-left, front, front-right, back-right, back, back-left), the middle panel displays a 3D bounding-box overlay, and the bottom panel shows the model-generated footage for the same six views.</p>
+<p>Following the project brief, the dataset contains both clean samples and unsafe samples, with the expectation that roughly 30% of clips exhibit semantic errors, logical inconsistencies, or unsafe driving decisions. After human annotation, the realized distribution of our dataset was 40 safe samples and 60 samples with at least one safety-relevant issue, giving an unsafe rate of 60%. This higher rate likely reflects the richness of the fine-grained taxonomy we used.</p>
+<p>The evaluation task is to identify whether the generated footage in each clip contains safety-relevant defects compared to the ground-truth reference, and to characterize those defects along three levels of analysis specified by the project brief:</p>
+<ol>
+<li>
+<p><strong>Semantic-level issues</strong>: concern the correctness of traffic-relevant elements within a single frame. Examples include missing or hallucinated vehicles and pedestrians, corrupted or illegible road signs, distorted lane markings, and objects that switch types between rendered instances.</p>
+</li>
+<li>
+<p><strong>Logical-level issues</strong>: concern physical and temporal consistency across the 8 frames. Examples include rigid bodies that warp or melt as the camera passes, objects that flicker or texture-boil, and shadows or reflections that fail to track their source.</p>
+</li>
+<li>
+<p><strong>Decision-level issues</strong>: concern the behavior implied by the generated footage for the ego vehicle or surrounding agents. Examples include ego motion that does not match the ground-truth motion, agents making physically impossible maneuvers, and collision-risk geometries.</p>
+</li>
+</ol>
+<p>The goal of the project is to develop evaluation criteria, conduct both human and automated evaluation on the 100 clips, and compare the two methods to characterize the reliability of LLM-based safety assessment.</p>
+<h2 id="Methodology">Methodology</h2>
+<p>Our evaluation framework has three components: a fine-grained taxonomy of safety issues, a continuous scoring scheme that supports graded severity rather than binary labels, and a two-stage evaluation procedure combining human annotation with LLM-based automated evaluation.</p>
+<h3 id="Scoring-scheme">Scoring scheme</h3>
+<p>Building on the three-level structure from the project brief, we refined each level into a set of concrete sub-categories. The final taxonomy contains 18 sub-categories: six semantic (e.g. object_disappearance, signage_corruption), six logical (e.g. rigid_body_warping, temporal_flicker, occlusion_failure), and six decision (e.g. boundary_breach, collision_risk, motion_mismatch). Fine-grained sub-categories make individual failure modes identifiable during analysis and reduce annotator ambiguity compared to a flat three-class scheme.</p>
+<p>Each individual issue receives a score on a discrete 0.0 to 1.0 scale, where 0.0 denotes no issue, 0.2 very minor, 0.4 moderate, 0.6 clearly unsafe, 0.8 severe, and 1.0 critical. For each video, we compute three category scores: semantic_score, logical_score, decision_score. The maximum issue score within that category is the overall score, and a final_score as the mean of the three category scores. Using the maximum within a category prevents a single severe issue from being diluted by smaller issues in the same level, while averaging across levels keeps the final score sensitive to whether safety problems are concentrated or spread across multiple aspects of the scene.</p>
+<h3 id="Human-evaluation">Human evaluation</h3>
+<p>We jointly annotated the 100 clips. A 20-clip calibration round was performed first: we annotated the same 20 videos independently and reconciled disagreements to align interpretations of the sub-categories and the severity scale. The remaining 80 videos were then divided among the team. All annotations were consolidated into a single JSON dataset using a conversion script that computes semantic_score, logical_score, decision_score, and final_score from the spreadsheet.</p>
+<h3 id="Automated-evaluation">Automated evaluation</h3>
+<p>For automated evaluation we used Gemini 2.5 Flash-Lite, which accepts short videos natively without frame extraction. Each video was passed to the model with a single structured system prompt: (a) explained the three-panel layout and instructed the model to evaluate only the bottom row, (b) defined the 18 sub-categories, © reproduced the 0.0–1.0 scoring scale, and (d) included several few-shot calibration examples spanning fully safe, single-issue, mixed, and severe multi-category cases. The model was instructed to return only a valid JSON object containing the three category scores, the final score, a list of structured issue entries, and a short natural-language reason.</p>
+<p>Prompt design followed two iterations. The initial prompt produced a strong safe bias: 94 of 100 videos scored 0.0, missing most human-identified issues. We attributed this to the framing of our few-shot examples, which implicitly suggested a conservative default. We revised the prompt to adopt a stricter mindset: the opening now states that generative models frequently produce artifacts and that the job of evaluator is to find issues rather than grant benefit of the doubt. We added a “FLAG these and DO NOT FLAG these” section listing concrete minimum scores for common issue types (e.g. a missing pedestrian scores ≥ 0.4, a warped vehicle ≥ 0.6), replaced a fully safe example with one containing a minor logical issue, and warned against defaulting to the safe pattern. This revised prompt was used for the final evaluation run.</p>
+<h3 id="Reproducibility">Reproducibility</h3>
+<p>The full pipeline, including Excel-to-JSON conversion, prompt templates, video upload, Gemini API calls with retry logic for transient 429/500/503 errors, and persistent progress saving, is implemented as a Colab notebook. The resulting dataset file contains every video’s human labels, Gemini scores, raw model output, and structured issue list, enabling the comparative analysis presented in the following section.</p>
+<h2 id="Result-and-Analysis">Result and Analysis</h2>
+<p>The following analysis compares the performance of human annotation and automated LLM generated evaluations on the provided dataset of 100 driving video samples. The contrast between generated annotations and human labeling can help to understand the limitations posed by generative driving models and assess their reliability in terms of safety.</p>
+<h3 id="Dataset-Composition-and-Human-Benchmarking">Dataset Composition and Human Benchmarking</h3>
+<p>The dataset was tested on 3 versions, V1, V2 and V3. From the human annotations, it was identified that the dataset contains 60 samples labeled as safe and 40 samples labeled as unsafe. From the unsafe videos, there were 118 distinct issue that could be identified which amounted to about 2 issues per unsafe sample. Therefore, this suggests that generative failure seldom occurs in isolation, rather, a single unsafe video is more likely to have multiple simultaneous defects.</p>
+<h3 id="Statistical-Analysis-of-Error-Types-and-Frequencies">Statistical Analysis of Error Types and Frequencies</h3>
+<p>Human-labeled issues were categorized as semantic (60.2%), logical (30.5%), and decision-level (9.3%). The dominance of semantic issues highlights that while the current diffusion-based generators maintain coherence, they fail under adversarial conditions. Having over 30% logical errors confirm that temporal consistency is a significant challenge. The decision errors are rarer so it can be concluded that they are generated with tighter guidelines.</p>
+<p>The most common problem is Object Disappearance, which happens in almost half of all unsafe samples and makes up 24.6% of all problems. These “attention dropouts,” along with Object Hallucination (2.5%), show that the object registry is not being kept up to date. Lane Discontinuity (12.7%) and Signage Corruption (8.5%) are very dangerous for planners who work downstream. Also, 23% of errors are caused by Temporal Flicker and Rigid Body Warping, which show up as “boiling” textures or shapes that change. Failures like Collision Risk and Shadow Inconsistency are very rare, but they are still very important because they could cause big problems in real-world use.</p>
+<p><strong>Table 1: Human-labelled issue sub-category frequency across 100 samples.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sub-Category</th>
+<th>Error Category</th>
+<th style="text-align:center">Human Count</th>
+<th style="text-align:center">% of Total Issues</th>
+<th style="text-align:center">% of Unsafe Samples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object Disappearance</td>
+<td>Semantic</td>
+<td style="text-align:center">29</td>
+<td style="text-align:center">24.6%</td>
+<td style="text-align:center">48.3%</td>
+</tr>
+<tr>
+<td>Lane Discontinuity</td>
+<td>Semantic</td>
+<td style="text-align:center">15</td>
+<td style="text-align:center">12.7%</td>
+<td style="text-align:center">25.0%</td>
+</tr>
+<tr>
+<td>Temporal Flicker</td>
+<td>Logical</td>
+<td style="text-align:center">15</td>
+<td style="text-align:center">12.7%</td>
+<td style="text-align:center">25.0%</td>
+</tr>
+<tr>
+<td>Rigid Body Warping</td>
+<td>Logical</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">10.2%</td>
+<td style="text-align:center">20.0%</td>
+</tr>
+<tr>
+<td>Class Mutation</td>
+<td>Semantic</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">10.2%</td>
+<td style="text-align:center">20.0%</td>
+</tr>
+<tr>
+<td>Signage Corruption</td>
+<td>Semantic</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">8.5%</td>
+<td style="text-align:center">16.7%</td>
+</tr>
+<tr>
+<td>Agent Irrationality</td>
+<td>Decision</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">5.1%</td>
+<td style="text-align:center">10.0%</td>
+</tr>
+<tr>
+<td>Occlusion Failure</td>
+<td>Semantic</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">5.1%</td>
+<td style="text-align:center">10.0%</td>
+</tr>
+<tr>
+<td>Object Hallucination</td>
+<td>Semantic</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">2.5%</td>
+<td style="text-align:center">5.0%</td>
+</tr>
+<tr>
+<td>Braking Latency</td>
+<td>Decision</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">1.7%</td>
+<td style="text-align:center">3.3%</td>
+</tr>
+<tr>
+<td>Other (5 types)</td>
+<td>Mixed</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">6.8%</td>
+<td style="text-align:center">–</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td></td>
+<td style="text-align:center"><strong>118</strong></td>
+<td style="text-align:center"><strong>100%</strong></td>
+<td style="text-align:center">–</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Comparing-Automated-and-Human-Evaluation">Comparing Automated and Human Evaluation</h3>
+<p>We compared human annotations with three LLM based automated evaluation using Gemini 2.5 model family models: Flash-Lite (V1/V2) and Flash (V3).</p>
+<p><strong>Table 2: Confusion Matrix for V2 (Best Overall).</strong></p>
+<table>
+<thead>
+<tr>
+<th>Actual \ Predicted</th>
+<th style="text-align:center">Safe</th>
+<th style="text-align:center">Unsafe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Safe</strong></td>
+<td style="text-align:center">30</td>
+<td style="text-align:center">8</td>
+</tr>
+<tr>
+<td><strong>Unsafe</strong></td>
+<td style="text-align:center">22</td>
+<td style="text-align:center">38</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 3: Confusion Matrix for V3 (Flash Model).</strong></p>
+<table>
+<thead>
+<tr>
+<th>Actual \ Predicted</th>
+<th style="text-align:center">Safe</th>
+<th style="text-align:center">Unsafe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Safe</strong></td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">34</td>
+</tr>
+<tr>
+<td><strong>Unsafe</strong></td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">55</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Performance-disparity-between-models">Performance disparity between models</h4>
+<p>The performance of models is quite different between the versions. V2 model achieved the highest accuracy of 70% and precision of 83%. It did so by maintaining low false-positive rate by correctly identifying safety risks. On the other hand, model V3 had the highest recall of 92% but did so by over reporting minor flickers as critical safety risks thus resulting in the lowest accuracy of 61%.</p>
+<p>In comparison to the human annotation average score of 0.188, automated models displayed considerable bias. Flash-Lite model was overly cautious, marking scores of 0.107 and 0.095 by identifying fewer critical issues. In comparison, Flash was more liberal, achieving a score of 0.288, approximately 53% greater than manual annotation, possibly due to “false alarms” concerning subtle artifacts that can be overlooked.</p>
+<p><strong>Table 4: Metric Distribution and Performance across Different Evaluators.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Evaluator</th>
+<th style="text-align:center">Accuracy</th>
+<th style="text-align:center">Precision</th>
+<th style="text-align:center">Recall</th>
+<th style="text-align:center">F1-Score</th>
+<th style="text-align:center">Mean Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Human Consensus</td>
+<td style="text-align:center">–</td>
+<td style="text-align:center">–</td>
+<td style="text-align:center">–</td>
+<td style="text-align:center">–</td>
+<td style="text-align:center">0.188</td>
+</tr>
+<tr>
+<td>V1 (Flash-Lite)</td>
+<td style="text-align:center">68.5%</td>
+<td style="text-align:center">73.3%</td>
+<td style="text-align:center">73.2%</td>
+<td style="text-align:center">73%</td>
+<td style="text-align:center">0.095</td>
+</tr>
+<tr>
+<td>V2 (Flash-Lite)</td>
+<td style="text-align:center">70.0%</td>
+<td style="text-align:center">82.6%</td>
+<td style="text-align:center">63.3%</td>
+<td style="text-align:center">71.7%</td>
+<td style="text-align:center">0.107</td>
+</tr>
+<tr>
+<td>V3 (Flash)</td>
+<td style="text-align:center">61.1%</td>
+<td style="text-align:center">61.8%</td>
+<td style="text-align:center">91.7%</td>
+<td style="text-align:center">73.8%</td>
+<td style="text-align:center">0.288</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Agreement-and-Correlation">Agreement and Correlation</h4>
+<p>While V2 model achieved a peak accuracy of 70%, Pearson correlations shows as moderate (0.284–0.374) highlighting a gap between simple classification and severity tracking. The Semantic issues reached the highest correlation in V2 (r = 0.420), as prompt-based evaluation catches object-level errors well.</p>
+<p>In contrast, the correlation for logical issues was poor (r = 0.064 to 0.173), implying that physical plausibility and temporal consistency are difficult to judge from static frames. In particular, the correlation of decision issues was near zero or negative (V3: r = −0.087), confirming that current VLMs cannot reliably evaluate complex behavioral logic yet.</p>
+<p><strong>Table 5: Pearson correlation between human and automated scores per dimension and version.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th style="text-align:center">V1 (Flash-Lite)</th>
+<th style="text-align:center">V2 (Flash-Lite)</th>
+<th style="text-align:center">V3 (Flash)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Final Score</td>
+<td style="text-align:center">0.284</td>
+<td style="text-align:center">0.374</td>
+<td style="text-align:center">0.370</td>
+</tr>
+<tr>
+<td>Semantic</td>
+<td style="text-align:center">0.344</td>
+<td style="text-align:center">0.420</td>
+<td style="text-align:center">0.294</td>
+</tr>
+<tr>
+<td>Logical</td>
+<td style="text-align:center">0.064</td>
+<td style="text-align:center">0.083</td>
+<td style="text-align:center">0.173</td>
+</tr>
+<tr>
+<td>Decision</td>
+<td style="text-align:center">0.000</td>
+<td style="text-align:center">0.000</td>
+<td style="text-align:center">−0.087</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Limitation-of-Prompt-Based-Evaluation">Limitation of Prompt-Based Evaluation</h3>
+<p>While prompt-based LLM evaluation provides a scalable and transparent way to grade model performance, our analysis across three model runs shows three critical bottlenecks:</p>
+<p><strong>a. Temporal Blind Spot.</strong> The models find it difficult to detect logical errors from static frames containing no 3D spatial data. Thus, the models are unable to perceive motion discontinuities and geometric inconsistencies in the video leading to safety concerns.</p>
+<p><strong>b. Prompting Sensitivity.</strong> We observe a jump from 68% to 70% using the same model (Flash-lite) with a different prompt. Therefore, model accuracy depends on prompt phrasing rather than scene understanding for reasoning and outcome.</p>
+<p><strong>c. Failure in Counterfactual Reasoning.</strong> By relying on frame-by-frame visuals, the current VLMs lack reasoning to evaluate intentions or behavior, thus resulting in the near-zero correlation (r ≈ 0) observed in decision error categories.</p>
+<h3 id="Common-Failure-Patterns-in-Generated-Driving-Video-Model">Common Failure Patterns in Generated Driving Video Model</h3>
+<p>Analysis of model outputs identifies three recurring failures that undermine the safety of generated driving environments:</p>
+<p><strong>a. Object Persistence Failures.</strong> The most frequent issue is the inability to maintain a consistent object registry, this shows as object disappearances (29 instances) or hallucinations (3 instances). The models frequently vanish existing objects or generates new ones, especially affecting small entities such as distant pedestrians and cyclists.</p>
+<p><strong>b. Temporal Incoherence.</strong> Because of a lack of temporal memory, videos exhibit rigid body warping (12 instances) and temporal flicker (15 instances), causing “boiling” textures and morphing silhouettes. In particular, the V3 evaluator demonstrated a higher sensitivity to these changes than humans, showing that automated tools can excel in detecting subtle stability errors.</p>
+<p><strong>c. Semantic Label Drift.</strong> This category involves category mutation or environmental cue corruption, including class mutation (12 instances) and signage corruption (10 instances). The latter presents extreme risk, as models may generate plausible but semantically incorrect content, such as a green light when a stop is required.</p>
+<h2 id="Conclusion">Conclusion</h2>
+<h3 id="Key-Findings">Key Findings</h3>
+<p>This project designed and applied a systematic safety evaluation framework for generative autonomous driving video models, operating on a 100-sample dataset with human annotated labels as ground truth. Three evaluation runs using two variants of the Gemini 2.5 model family revealed a consistent pattern that automated prompt-based evaluators capture the presence and rough magnitude of semantic errors reasonably well, but substantially underperform compare to humans in detecting logical and decision-level failures. The best automated agreement with human labels was 70% (V2, Gemini Flash-Lite), while the strongest model (V3, Gemini Flash) achieved only 61% agreement despite producing the richest per-issue descriptions as a consequence of inflated false positive rates.</p>
+<p>The human label analysis established that semantic errors account for more than 60% of all safety issues in generative driving videos, with object disappearance being the single most frequent failure mode. Decision-level errors are rare in the current dataset but disproportionately high in safety impact, warranting a dedicated evaluation strategies.</p>
+<h3 id="Safety-Risk-of-Generative-Driving-Models">Safety Risk of Generative Driving Models</h3>
+<p>“Silent data corruption” poses a critical risk in that if generative models are used for training, errors in lane markings or signage may be ingested as ground truth, causing catastrophic downstream learning failures. Multi-view inconsistency are bad for camera based systems as video that looks to be locally plausible but is geometrically inconsistent across views can corrupt 3D perception modules, thus leading to faulty depth and localization estimates. Additionally, current VLMs are not able to detect decision-level errors indicating that they cannot serve as safety enforcers yet. Consequently, human or physics-based oversight is essential to certify that generated scenarios exhibit realistic, legally compliant driving decisions.</p>
+<h3 id="Directions-for-Improvement">Directions for Improvement</h3>
+<p>To enhance the robustness of evaluations and the safety of generative models, the following aspects can be examined:</p>
+<ul>
+<li><strong>Hybrid Evaluation Pipelines:</strong> Physics based systems can be combined with and act as logic checkers for VLM models so as to verify real world constraints.</li>
+<li><strong>Refined Assessment Logic:</strong> Chain-of-thought prompting and structured rubrics with calibrated severity metrics can be used to align automated score with human annotation. Also, fine-tuning lightweight VLMs on annotated safety data may further improve correlation.</li>
+<li><strong>Model Robustness:</strong> Can implement temporal memory or attention and explicit consistency losses during generation to enforce object persistence and multi-view geometry. Additionally, adversarial data augmentation could be used to mitigate issues such as signage corruption.</li>
+</ul>
+<h2 id="References">References</h2>
+<ol>
+<li>Hu, A., Russell, L., Yeo, H., Murez, Z., Fedoseev, G., Kendall, A., Shotton, J., &amp; Corrado, G. (2023). <em>GAIA-1: A generative world model for autonomous driving</em>. arXiv. <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2309.17080">https://doi.org/10.48550/arXiv.2309.17080</a></li>
+<li>Zhou, Y., Shao, H., Wang, L., Zong, Z., Li, H., &amp; Waslander, S. L. (2026). <em>DrivingGen: A comprehensive benchmark for generative video world models in autonomous driving</em>. arXiv. <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2601.01528">https://doi.org/10.48550/arXiv.2601.01528</a></li>
+<li>Xiang, X., Rastogi, A., &amp; Zhang, J. (2025). <em>Are AI-generated driving videos ready for autonomous driving? A diagnostic evaluation framework</em>. arXiv.</li>
+<li>Li, H., Dong, Q., Chen, J., Su, H., Zhou, Y., Ai, Q., Ye, Z., &amp; Liu, Y. (2024). <em>LLMs-as-Judges: A comprehensive survey on LLM-based evaluation methods</em>. arXiv preprint arXiv:2412.05579.</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
+              <a href="/tags/autonomous-driving/" rel="tag"># autonomous driving</a>
+              <a href="/tags/generative-video/" rel="tag"># generative video</a>
+              <a href="/tags/LLM-evaluation/" rel="tag"># LLM evaluation</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/01/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-angle-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/02/hyperparameter-tuning-food11/" rel="next" title="Hyperparameter Tuning Analysis for Food-11 Image Classification">
+                  Hyperparameter Tuning Analysis for Food-11 Image Classification <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1385,7 +1385,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #d4af28;
+    background: #75121c;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2903,4 +2903,14 @@ header.header {
   .comments {
     padding: 10px 12px;
   }
+}
+.post-body,
+.post-title,
+.post-body h1,
+.post-body h2,
+.post-body h3,
+.post-body h4,
+.post-body h5,
+.post-body h6 {
+  font-family: "Computer Modern Serif", Georgia, serif;
 }
