@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Abstract Retrieval-Augmented Generation (RAG) grounds large language model (LLM) answers in external evidence, but the quality of retrieved context depends heavily on how source documents are split in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How Text Chunking Strategy Affects Retrieval-Augmented Generation Quality">
+<meta property="og:url" content="http://example.com/2026/01/01/rag-chunking-strategy-quality/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="Abstract Retrieval-Augmented Generation (RAG) grounds large language model (LLM) answers in external evidence, but the quality of retrieved context depends heavily on how source documents are split in">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-12-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-03T14:55:52.475Z">
+<meta property="article:author" content="winis">
+<meta property="article:tag" content="LLM evaluation">
+<meta property="article:tag" content="LangChain">
+<meta property="article:tag" content="RAG">
+<meta property="article:tag" content="retrieval-augmented generation">
+<meta property="article:tag" content="text chunking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/01/01/rag-chunking-strategy-quality/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/01/01/rag-chunking-strategy-quality/","path":"2026/01/01/rag-chunking-strategy-quality/","title":"How Text Chunking Strategy Affects Retrieval-Augmented Generation Quality"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>How Text Chunking Strategy Affects Retrieval-Augmented Generation Quality | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction"><span class="nav-number">2.</span> <span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Related-Work"><span class="nav-number">3.</span> <span class="nav-text">2. Related Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Approach"><span class="nav-number">4.</span> <span class="nav-text">3. Approach</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Pipeline-Overview"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 Pipeline Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Experimental-Variable-Two-Splitters"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 Experimental Variable: Two Splitters</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Controlled-Parameters"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 Controlled Parameters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Experiments"><span class="nav-number">5.</span> <span class="nav-text">4. Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Data"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 Data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Evaluation-Method"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 Evaluation Method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Model-Settings"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 Model Settings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Results"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Analysis"><span class="nav-number">6.</span> <span class="nav-text">5. Analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Conclusion"><span class="nav-number">7.</span> <span class="nav-text">6. Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Appendix-Team-Contributions"><span class="nav-number">9.</span> <span class="nav-text">Appendix: Team Contributions</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/01/01/rag-chunking-strategy-quality/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="How Text Chunking Strategy Affects Retrieval-Augmented Generation Quality | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          How Text Chunking Strategy Affects Retrieval-Augmented Generation Quality
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="2026-01-01T00:00:00+08:00">2026-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-03 22:55:52" itemprop="dateModified" datetime="2026-07-03T22:55:52+08:00">2026-07-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Abstract">Abstract</h2>
+<p>Retrieval-Augmented Generation (RAG) grounds large language model (LLM) answers in external evidence, but the quality of retrieved context depends heavily on how source documents are split into chunks. This design choice is often treated as an afterthought despite its direct impact on what the LLM sees at inference time. We present a controlled experiment that isolates text chunking strategy as the sole independent variable in an end-to-end RAG pipeline. Using 195 question–answer pairs drawn from the MS MARCO passage-ranking dataset and a 688 KB general-knowledge corpus, we compare two LangChain splitters — fixed-size character splitting and recursive character splitting — while holding all other parameters constant: the same embedding model (all-MiniLM-L6-v2), the same vector store (ChromaDB), the same chunk size (512 characters) and overlap (50 characters), the same top-k retrieval (k=5), and the same GPT-based answer generator and judge. The recursive splitter achieves 59.0% accuracy (115/195) versus 53.8% (105/195) for the fixed splitter, a gain of +5.2 percentage points. Average quality scores (1–5 scale) improve from 3.15 to 3.29. Agreement analysis shows the recursive splitter wins 22 questions that the fixed splitter loses, while the reverse occurs for only 12 questions. The quality distribution is strikingly bimodal: answers are either clearly correct (quality 4–5) or clearly wrong (quality 1–2), suggesting that retrieval — not generation — is the primary bottleneck. Our results confirm that preserving paragraph and sentence boundaries during chunking yields more semantically coherent chunks that embed and retrieve more reliably.</p>
+<h2 id="1-Introduction">1. Introduction</h2>
+<p>Large language models have demonstrated remarkable text generation capabilities, yet they can produce factually incorrect or outdated information when relying solely on parametric knowledge. Retrieval-Augmented Generation (RAG) addresses this limitation by augmenting the LLM’s input with relevant passages retrieved from an external knowledge base, grounding its answers in verifiable evidence.</p>
+<p>A typical RAG pipeline involves several stages: the source corpus is split into chunks, each chunk is embedded into a dense vector, the vectors are indexed in a vector store, and at query time the most similar chunks are retrieved and fed to the LLM as context for answer generation. Among these stages, the chunking strategy — how the raw text is divided into segments — is a critical yet often under-examined design decision. Naive fixed-size splitting divides text at arbitrary character boundaries, potentially cutting sentences or paragraphs mid-word. In contrast, recursive character splitting attempts to respect natural text boundaries by first trying to split on paragraph breaks, then sentence breaks, then word breaks, falling back to character-level splitting only when necessary.</p>
+<p>In this work, we isolate chunking strategy as the only variable in a complete RAG pipeline. We hold constant the corpus, embedding model, vector store, chunk size, overlap, retrieval depth, answer-generation LLM, and evaluation method. This controlled setup allows us to attribute any performance difference directly to the splitter. We evaluate on 195 MS MARCO questions using GPT-as-judge and find that the recursive splitter achieves a +5.2 percentage-point accuracy improvement over the fixed splitter.</p>
+<h2 id="2-Related-Work">2. Related Work</h2>
+<p><strong>Retrieval-Augmented Generation.</strong> Lewis et al. (2020) introduced the RAG framework, combining a pre-trained sequence-to-sequence model with a neural retriever to generate knowledge-grounded responses. Their work demonstrated that retrieval augmentation significantly improves performance on knowledge-intensive NLP tasks compared to purely parametric approaches.</p>
+<p><strong>Text Chunking Strategies.</strong> The LangChain framework provides several text splitters for document preprocessing. The CharacterTextSplitter splits text at fixed character intervals regardless of content, while the RecursiveCharacterTextSplitter uses a hierarchy of separators to split at the most semantically meaningful boundary available. Industry best-practice guides from Pinecone and Weaviate emphasize that chunk boundaries significantly affect retrieval quality.</p>
+<p><strong>Embedding Models.</strong> Reimers and Gurevych (2019) introduced Sentence-BERT, a modification of BERT that produces semantically meaningful sentence embeddings suitable for cosine similarity search. The all-MiniLM-L6-v2 variant provides a strong balance between embedding quality and computational efficiency with 384-dimensional output vectors.</p>
+<p><strong>LLM-as-Judge Evaluation.</strong> Zheng et al. (2023) demonstrated that strong LLMs can serve as automated evaluators, achieving high agreement with human judgments. We adopt this approach for scalable evaluation of answer quality across our 195-question test set.</p>
+<p><strong>MS MARCO.</strong> Nguyen et al. (2016) introduced the MS MARCO dataset, a large-scale reading comprehension and question-answering benchmark based on real Bing queries. We use a subset of 195 question–answer pairs as our evaluation set.</p>
+<h2 id="3-Approach">3. Approach</h2>
+<h3 id="3-1-Pipeline-Overview">3.1 Pipeline Overview</h3>
+<p>Our RAG pipeline consists of seven stages: (1) Corpus Loading — load all text files using LangChain’s DirectoryLoader; (2) Chunking — split documents using one of two splitter strategies; (3) Embedding — encode each chunk into a 384-dim vector using all-MiniLM-L6-v2; (4) Indexing — store vectors in ChromaDB; (5) Retrieval — retrieve the top-5 most similar chunks per question; (6) Answer Generation — prompt GPT with retrieved chunks as context; (7) Evaluation — GPT-as-judge produces correctness (0/1), quality (1–5), and a free-text justification.</p>
+<h3 id="3-2-Experimental-Variable-Two-Splitters">3.2 Experimental Variable: Two Splitters</h3>
+<p>The only parameter that differs between conditions is the splitter. The fixed-size splitter (CharacterTextSplitter) is configured with <code>separator=&quot;&quot;</code>, <code>chunk_size=512</code>, and <code>chunk_overlap=50</code>. It divides text purely by character count, ignoring semantic boundaries, and produced 1486 chunks from the corpus.</p>
+<p>The recursive splitter (RecursiveCharacterTextSplitter) is configured with the same <code>chunk_size</code> and <code>chunk_overlap</code>, using the default separator hierarchy <code>[&quot;\n\n&quot;, &quot;\n&quot;, &quot; &quot;, &quot;&quot;]</code>. It first attempts to split on double newlines (paragraph boundaries), then single newlines, then spaces, falling back to character-level splitting only for passages with no whitespace. It produced 2113 chunks from the corpus.</p>
+<p>The recursive splitter produces more chunks because it respects natural boundaries rather than forcing exact 512-character segments. Each chunk tends to be a complete paragraph or group of sentences, whereas fixed chunks frequently break mid-sentence.</p>
+<h3 id="3-3-Controlled-Parameters">3.3 Controlled Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Embedding model</td>
+<td>all-MiniLM-L6-v2 (384-dim)</td>
+</tr>
+<tr>
+<td>Chunk size</td>
+<td>512 characters</td>
+</tr>
+<tr>
+<td>Chunk overlap</td>
+<td>50 characters</td>
+</tr>
+<tr>
+<td>Vector store</td>
+<td>ChromaDB (persistent)</td>
+</tr>
+<tr>
+<td>Similarity metric</td>
+<td>Cosine similarity</td>
+</tr>
+<tr>
+<td>Top-k retrieval</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Answer LLM</td>
+<td>GPT (OpenAI API)</td>
+</tr>
+<tr>
+<td>Judge LLM</td>
+<td>GPT (OpenAI API)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-Experiments">4. Experiments</h2>
+<h3 id="4-1-Data">4.1 Data</h3>
+<p>We use a subset of the MS MARCO passage-ranking dataset comprising 195 question–answer pairs with ground-truth answers. The questions span diverse topics including medical science, history, geography, daily life, popular culture, and finance. The corpus is a single collection of text files totaling 688 KB and 3266 lines, covering a broad range of topics to serve as the retrieval knowledge base.</p>
+<h3 id="4-2-Evaluation-Method">4.2 Evaluation Method</h3>
+<p>We employ GPT-as-judge automatic evaluation with three output dimensions: Binary correctness — the judge compares the generated answer against the ground-truth and assigns 1 (correct) or 0 (incorrect); Quality score — an integer from 1 (worst) to 5 (best) reflecting completeness, accuracy, and relevance; Judge reasoning — a free-text explanation justifying the scores. This is a fully automatic pipeline with no human annotation. While LLM-as-judge evaluation has known limitations (Zheng et al., 2023), it enables consistent evaluation across all 195 questions under both conditions.</p>
+<h3 id="4-3-Model-Settings">4.3 Model Settings</h3>
+<p>The experimental settings are summarized in Section 3.3. Both the answer generation and judging steps use GPT via the OpenAI API. The embedding model all-MiniLM-L6-v2 produces 384-dimensional vectors optimized for semantic similarity tasks.</p>
+<h3 id="4-4-Results">4.4 Results</h3>
+<p><strong>Table 1: Main Results.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align:center">Fixed Splitter</th>
+<th style="text-align:center">Recursive Splitter</th>
+<th style="text-align:center">Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td style="text-align:center">105/195 (53.8%)</td>
+<td style="text-align:center">115/195 (59.0%)</td>
+<td style="text-align:center">+5.2 pp</td>
+</tr>
+<tr>
+<td>Avg Quality (1–5)</td>
+<td style="text-align:center">3.15</td>
+<td style="text-align:center">3.29</td>
+<td style="text-align:center">+0.14</td>
+</tr>
+<tr>
+<td>Quality = 5 count</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">65</td>
+<td style="text-align:center">+8</td>
+</tr>
+<tr>
+<td>Quality = 1 count</td>
+<td style="text-align:center">45</td>
+<td style="text-align:center">47</td>
+<td style="text-align:center">+2</td>
+</tr>
+</tbody>
+</table>
+<p>The recursive splitter outperforms the fixed splitter by +5.2 percentage points in accuracy and +0.14 in average quality score. The number of top-quality answers (score 5) increases from 57 to 65, an improvement of 14%.</p>
+<p><strong>Table 2: Quality Score Distribution.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Quality Score</th>
+<th style="text-align:center">Fixed</th>
+<th style="text-align:center">Recursive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 (worst)</td>
+<td style="text-align:center">45</td>
+<td style="text-align:center">47</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">29</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">48</td>
+<td style="text-align:center">49</td>
+</tr>
+<tr>
+<td>5 (best)</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">65</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align:center"><strong>195</strong></td>
+<td style="text-align:center"><strong>195</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The distribution is strikingly bimodal. Quality scores of 3 are extremely rare (3 and 5 respectively), while the bulk of answers cluster at either the low end (1–2) or the high end (4–5). This pattern suggests a binary dynamic: when the pipeline retrieves relevant context, the LLM produces a high-quality answer; when it does not, the answer fails entirely.</p>
+<p><strong>Table 3: Agreement Analysis.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Outcome</th>
+<th style="text-align:center">Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Both correct</td>
+<td style="text-align:center">93</td>
+</tr>
+<tr>
+<td>Both wrong</td>
+<td style="text-align:center">68</td>
+</tr>
+<tr>
+<td>Only recursive correct</td>
+<td style="text-align:center">22</td>
+</tr>
+<tr>
+<td>Only fixed correct</td>
+<td style="text-align:center">12</td>
+</tr>
+</tbody>
+</table>
+<p>Of the 195 questions, the two splitters agree on 161 (82.6%). The recursive splitter wins on 22 questions where fixed fails, while the fixed splitter wins on only 12 — a net advantage of 10 questions for the recursive approach.</p>
+<h2 id="5-Analysis">5. Analysis</h2>
+<p>To understand when and why each splitter succeeds or fails, we examine specific examples from each outcome category.</p>
+<p><strong>Recursive wins, fixed loses (22 cases).</strong> Question q_5 asks “what causes genetic alterations in normal cells”; the ground truth references the loss of cell adhesion. The fixed splitter’s answer mentions only mutations and carcinogens (quality 2, incorrect), while the recursive splitter correctly identifies genetic alterations as changes to DNA (quality 4, correct). Inspection suggests the recursive splitter preserves a complete paragraph containing the relevant context, whereas the fixed splitter cuts the passage mid-sentence. Similarly, question q_15 (“what is Tom Cruise doing now”) yields an answer about selling property under the fixed splitter (incorrect) but a correct answer mentioning Rebecca Ferguson under the recursive splitter, because the recursive chunk keeps the complete paragraph intact. Question q_22 (“what is treatment for jaundice”) fails entirely under the fixed splitter (“I cannot answer”), but the recursive splitter retrieves a chunk containing phototherapy information and answers correctly.</p>
+<p><strong>Fixed wins, recursive loses (12 cases).</strong> Question q_10 (“cost to file bankruptcy in virginia”) is answered correctly by the fixed splitter (quality 4) with the exact figure of $306, but the recursive splitter includes an incorrect Chapter 13 cost and receives quality 3 (incorrect). Question q_18 (“What Does Lop means”) is correctly answered as “Lack of Prosecution” by the fixed splitter (quality 5), but the recursive splitter returns an unrelated dictionary definition (quality 1). In these cases, the fixed splitter’s chunks happen to isolate the answer within a compact passage, while the recursive splitter over-segments or includes misleading context.</p>
+<p><strong>Both fail (68 cases).</strong> Many involve questions where the corpus likely lacks a closely matching passage. For instance, questions about niche topics (q_17: “what is baseball twine made of”, q_24: “what is a purified phytochemical”) result in “I cannot answer” from both splitters, indicating corpus coverage gaps rather than chunking failures.</p>
+<p><strong>Bimodal quality pattern.</strong> Across both conditions, quality scores 1–3 correspond almost exclusively to incorrect answers, while 4–5 correspond to correct answers. This clean separation confirms that the LLM either has good context and produces a strong answer, or has poor context and fails entirely. The generation step adds little noise — the bottleneck is retrieval.</p>
+<h2 id="6-Conclusion">6. Conclusion</h2>
+<p>This study demonstrates that text chunking strategy has a measurable impact on RAG pipeline quality. In a controlled experiment where only the splitter varies, the recursive character splitter achieves 59.0% accuracy compared to 53.8% for the fixed-size splitter, an improvement of +5.2 percentage points. The key mechanism is that the recursive splitter preserves paragraph and sentence boundaries, producing semantically self-contained chunks that embed more faithfully and retrieve more reliably.</p>
+<p>The bimodal quality distribution highlights that retrieval — not generation — is the primary bottleneck. When relevant context is retrieved, GPT produces accurate answers; when it is not, the system fails regardless of the splitter used.</p>
+<p><strong>Limitations.</strong> Our experiment uses a single corpus, a single embedding model, a single chunk size, and English-language questions only. The GPT-as-judge evaluation, while scalable, introduces subjectivity that human evaluation could mitigate. The relatively small test set (195 questions) limits statistical power for fine-grained comparisons.</p>
+<p><strong>Future Work.</strong> Several directions could extend this research: (1) semantic chunking methods that split by topic or discourse structure; (2) varying chunk sizes (256, 512, 1024) to study the interaction between chunk size and splitter type; (3) comparing different embedding models (e.g., BGE, E5, Cohere); and (4) incorporating human evaluation to validate the LLM-as-judge results.</p>
+<h2 id="References">References</h2>
+<ol>
+<li>Lewis, P., Perez, E., Piktus, A., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. Advances in Neural Information Processing Systems, 33, 9459–9474.</li>
+<li>Reimers, N. &amp; Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. Proceedings of EMNLP 2019.</li>
+<li>Zheng, L., Chiang, W.-L., Sheng, Y., et al. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. Advances in Neural Information Processing Systems, 36.</li>
+<li>Nguyen, T., Rosenberg, M., Song, X., et al. (2016). MS MARCO: A Human Generated MAchine Reading COmprehension Dataset. arXiv preprint arXiv:1611.09268.</li>
+<li>LangChain Documentation. Text Splitters. <a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/data_connection/document_transformers/">https://python.langchain.com/docs/modules/data_connection/document_transformers/</a></li>
+<li>ChromaDB Documentation. <a target="_blank" rel="noopener" href="https://docs.trychroma.com/">https://docs.trychroma.com/</a></li>
+</ol>
+<h2 id="Appendix-Team-Contributions">Appendix: Team Contributions</h2>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Student ID</th>
+<th>Role</th>
+<th>Contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Liu Naihuan</td>
+<td>G2502734G</td>
+<td>A: Corpus &amp; Questions</td>
+<td>Collected and cleaned the MS MARCO corpus; prepared 195 QA pairs with ground-truth answers (33%)</td>
+</tr>
+<tr>
+<td>Xi Lu</td>
+<td>G2503237B</td>
+<td>B: Retrieval Pipeline</td>
+<td>Built the retrieval pipeline: chunking, embedding, ChromaDB indexing, and retrieval (33%)</td>
+</tr>
+<tr>
+<td>Wang Xin</td>
+<td>G2510726A</td>
+<td>C: Evaluation &amp; Judging</td>
+<td>Implemented the answer generation and LLM-as-judge evaluation pipeline; computed all scores (33%)</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM-evaluation/" rel="tag"># LLM evaluation</a>
+              <a href="/tags/retrieval-augmented-generation/" rel="tag"># retrieval-augmented generation</a>
+              <a href="/tags/RAG/" rel="tag"># RAG</a>
+              <a href="/tags/text-chunking/" rel="tag"># text chunking</a>
+              <a href="/tags/LangChain/" rel="tag"># LangChain</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/01/01/revisiting-frskd-self-knowledge-distillation/" rel="next" title="Revisiting FRSKD: Curriculum Augmentation, Mask-Aware Distillation, and Efficient Attention for Self-Knowledge Distillation">
+                  Revisiting FRSKD: Curriculum Augmentation, Mask-Aware Distillation, and Efficient Attention for Self-Knowledge Distillation <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
