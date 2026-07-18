@@ -147,7 +147,7 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
@@ -459,384 +459,6 @@
 <p>The results indicate that mixup slightly worsens training set performance, but may provide more robust validation and test set performance. Adding mixup reduced training accuracy from nearly 100% to around 89%, and the training loss was significantly higher. Mixup itself makes the training task more difficult, actively suppressing the model’s over-memorization of the training set.</p>
 <p>However, from a generalization perspective, the effect of mixup is positive. Although its final validation loss is slightly higher than the baseline, and the validation accuracy is only slightly higher (76.38% vs. 76.03%), the improvement is not significant. However, this indicates that despite a significant decrease in training set fitting, validation set performance did not decline; in fact, it slightly improved. This suggests that the mixup did indeed play a regularization role to some extent, sacrificing some training set fitting ability in exchange for slightly better generalization performance.</p>
 <p>With the α=0.2 setting, since λ∼Beta(0.2,0.2), the mixing coefficient will mostly be closer to 0 or 1. Therefore, many generated samples still resemble one of the original categories, only with a small amount of information from another category added. This mixup strength is relatively mild, preventing the training samples from becoming overly distorted, thus allowing the model to maintain good learning performance. At the same time, it is sufficient to increase the diversity of training samples, mitigating the risk of overfitting. Therefore, while the improvement is not particularly large, the direction is reasonable.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/01/01/confidence-aware-prosst-proteingym/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="winis">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Time to rest">
-      <meta itemprop="description" content="至于俗世流言，诸位请便。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Time to rest">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/01/confidence-aware-prosst-proteingym/" class="post-title-link" itemprop="url">Confidence-Aware ProSST for Zero-Shot Mutation Effect Prediction on ProteinGym</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2026-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="2026-01-01T00:00:00+08:00">2026-01-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-07-19 02:07:57" itemprop="dateModified" datetime="2026-07-19T02:07:57+08:00">2026-07-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Archive/" itemprop="url" rel="index"><span itemprop="name">Archive</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Abstract">Abstract</h2>
-<p>ProSST (NeurIPS 2024) improves protein mutation effect prediction by adding a quantized structural channel to a protein language model, but it treats all structural tokens as equally reliable. This project asks whether residue-level AlphaFold pLDDT can improve zero-shot scoring on ProteinGym by modulating that channel at inference time or at score level. We study three embedding-side variants: hard masking below a pLDDT threshold, soft scaling by pLDDT/100, and a learned sigmoid gate trained with a frozen-backbone masked-language-model objective. On 217 ProteinGym assays, our ProSST-2048 reproduction reaches mean Spearman 0.5225 (95% CI [0.500, 0.545]), slightly above the paper’s reported 0.504. None of the direct confidence-aware variants improves over this baseline: hard masking at τ = 50/70/90 yields 0.5203 / 0.5177 / 0.4832, soft weighting yields 0.5203, and learned gating yields 0.5218. We then evaluate score-level confidence conditioning on the 214-assay intersection where ProSST-128, ProSST-512, ProSST-2048, and ESM-2 scores are all available. A flat stacked ensemble reaches 0.5569, and a confidence-conditioned gated ensemble further improves this to 0.5631 (95% CI [0.542, 0.585]). The largest gain appears in the lowest-confidence quartile, which rises from 0.4918 to 0.5138. These results suggest a sharper conclusion: simple residue-wise confidence modulation does not improve ProSST at the embedding stage, but confidence is still useful when it controls how different predictors are combined at the assay level.</p>
-<h2 id="1-Introduction">1. Introduction</h2>
-<h3 id="1-1-Problem-and-Motivation">1.1 Problem and Motivation</h3>
-<p>Structure-aware protein language models often outperform sequence-only models for mutation effect prediction because they can condition on local geometry in addition to sequence context. ProSST is a recent example: it discretizes local structure into tokens and injects them through disentangled sequence–structure attention. The practical weakness of this setup is that predicted structures are not uniformly reliable. AlphaFold’s pLDDT varies considerably across residues and proteins, especially in flexible or poorly constrained regions.</p>
-<p>This motivates a natural question: if structural confidence is already available, can we use it to improve ProSST’s zero-shot mutation scores? The idea is attractive because it promises a lightweight improvement without retraining the full backbone. It is also scientifically useful even if it fails: if pLDDT-aware modulation does not help, that tells us something non-trivial about how ProSST already encodes structure reliability.</p>
-<h3 id="1-2-Why-The-Problem-Is-Difficult">1.2 Why The Problem Is Difficult</h3>
-<p>The challenge is not just to add confidence, but to add it at the right level. pLDDT is a coarse scalar confidence proxy, while ProSST’s structure vocabulary and attention machinery are already learned representations of local geometry. An overly simple rule may overwrite useful signal rather than refine it. Negative results are also easy to misread unless the baseline is reproduced on the same assay set and statistical uncertainty is reported.</p>
-<h3 id="1-3-Contributions">1.3 Contributions</h3>
-<ul>
-<li>We implement three confidence-aware ProSST variants that modulate the shared structure embedding tensor before the encoder.</li>
-<li>We reproduce ProSST-2048 on 217 ProteinGym assays with bootstrap confidence intervals and pLDDT-quartile analysis.</li>
-<li>We show that all three direct pLDDT-aware variants fail to improve zero-shot performance, with aggressive masking causing large regressions.</li>
-<li>We introduce a confidence-conditioned score-level ensemble that uses pLDDT to gate the relative contribution of multiple predictors and improves over a flat stacked ensemble on the 214-assay overlap.</li>
-<li>We document an evaluation protocol that treats sequence–confidence alignment as a hard requirement, preventing silent distortion of confidence-aware inputs.</li>
-</ul>
-<h2 id="2-Related-Work-Background">2. Related Work / Background</h2>
-<h3 id="2-1-Protein-Language-Models">2.1 Protein Language Models</h3>
-<p>Sequence-only protein language models such as ESM-1b and ESM-2 learn from large protein corpora with masked-language modeling. Structure-aware models extend this by injecting predicted or derived structural information. SaProt couples each amino acid with a Foldseek 3Di token. ProSST instead learns a discrete structure vocabulary through vector quantization and uses disentangled attention between sequence and structure streams [1]. These approaches typically assume that the structure channel is always trustworthy.</p>
-<h3 id="2-2-Structural-Confidence">2.2 Structural Confidence</h3>
-<p>AlphaFold’s pLDDT is the standard per-residue confidence estimate for predicted structures [3, 4]. It is commonly used for filtering low-confidence regions, but it is less clear whether it can be profitably fused into a pretrained structure-aware language model at inference time. This project tests exactly that narrow but meaningful question.</p>
-<h2 id="3-Approach">3. Approach</h2>
-<h3 id="3-1-Baseline-ProSST">3.1 Baseline: ProSST</h3>
-<p>ProSST embeds amino-acid tokens and structure tokens into two hidden-state streams. A key architectural detail is that the structure embedding tensor is created once and then reused by every encoder layer through disentangled sequence–structure attention. This makes the embedding stage a natural intervention point: one transformation affects all layers while preserving the original backbone.</p>
-<h3 id="3-2-Confidence-Aware-Variants">3.2 Confidence-Aware Variants</h3>
-<p>Let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">s_i \in \mathbb{R}^d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span></span></span> be the structure embedding at residue <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> and let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>100</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">p_i \in [0, 100]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">100</span><span class="mclose">]</span></span></span></span> be the aligned pLDDT score.</p>
-<p><strong>V1 Hard Masking.</strong></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>s</mi><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>s</mi><mi>i</mi></msub><mo>⋅</mo><mn mathvariant="bold">1</mn><mo stretchy="false">[</mo><msub><mi>p</mi><mi>i</mi></msub><mo>≥</mo><mi>τ</mi><mo stretchy="false">]</mo><mo separator="true">,</mo><mspace width="2em"/><mi>τ</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>50</mn><mo separator="true">,</mo><mn>70</mn><mo separator="true">,</mo><mn>90</mn><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">s_i&#x27; = s_i \cdot \mathbf{1}[p_i \geq \tau], \qquad \tau \in \{50, 70, 90\}.
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0489em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5945em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathbf">1</span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">50</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">70</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">90</span><span class="mclose">}</span><span class="mord">.</span></span></span></span></span></p>
-<p><strong>V2 Soft Weighting.</strong></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>s</mi><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>s</mi><mi>i</mi></msub><mo>⋅</mo><mo stretchy="false">(</mo><msub><mi>p</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>100</mn><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">s_i&#x27; = s_i \cdot (p_i / 100).
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0489em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5945em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/100</span><span class="mclose">)</span><span class="mord">.</span></span></span></span></span></p>
-<p><strong>V3 Learned Gate.</strong></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>=</mo><mi>σ</mi><mo stretchy="false">(</mo><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">P</mi></mrow><mo stretchy="false">(</mo><mo stretchy="false">[</mo><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>p</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>100</mn><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="2em"/><msubsup><mi>s</mi><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>g</mi><mi>i</mi></msub><mo>⋅</mo><msub><mi>s</mi><mi>i</mi></msub><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">g_i = \sigma(\mathrm{MLP}([h_i, p_i/100])), \qquad s_i&#x27; = g_i \cdot s_i,
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0519em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathrm">MLP</span></span><span class="mopen">([</span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/100</span><span class="mclose">]))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span></span></span></span></span></p>
-<p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">h_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the amino-acid hidden state. The MLP adds roughly 200k parameters. The ProSST backbone is frozen and only the gate is trained.</p>
-<h3 id="3-3-Confidence-Conditioned-Score-Level-Ensemble">3.3 Confidence-Conditioned Score-Level Ensemble</h3>
-<p>The embedding-side interventions above test whether pLDDT can improve a single pretrained structure-aware model. We also study a different hypothesis: confidence may be more useful for deciding <em>which predictor to trust</em> than for directly rewriting a predictor’s internal representation. To test this, we combine five score channels available on the shared 214-assay subset: the structure streams from ProSST-128, ProSST-512, and ProSST-2048, the sequence-only stream from ProSST-2048, and ESM-2-650M.</p>
-<p>Let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>k</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f_k(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span> denote the score assigned by channel <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span> to mutant <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span>, and let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>p</mi><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\bar{p}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7622em;vertical-align:-0.1944em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">p</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span></span></span></span> be the mean pLDDT of the corresponding protein. A flat ensemble uses fixed non-negative weights <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">w_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> with <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>k</mi></msub><msub><mi>w</mi><mi>k</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_k w_k = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0497em;vertical-align:-0.2997em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1864em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>:</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>F</mi><mrow><mi mathvariant="normal">f</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><msub><mi>w</mi><mi>k</mi></msub><msub><mi>f</mi><mi>k</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">F_{\mathrm{flat}}(x) = \sum_k w_k f_k(x).
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">flat</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3521em;vertical-align:-1.3021em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8479em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3021em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord">.</span></span></span></span></span></p>
-<p>The confidence-conditioned ensemble replaces each fixed weight by a gated weight,</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mover accent="true"><mi>w</mi><mo>ˉ</mo></mover><mi>k</mi></msub><mo stretchy="false">(</mo><mover accent="true"><mi>p</mi><mo>ˉ</mo></mover><mo stretchy="false">)</mo><mo>=</mo><msub><mi>w</mi><mi>k</mi></msub><mo>⋅</mo><mi>σ</mi><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><mo stretchy="false">(</mo><mover accent="true"><mi>p</mi><mo>ˉ</mo></mover><mo>−</mo><msub><mi>p</mi><mrow><mn>0</mn><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><msub><mi>T</mi><mi>k</mi></msub><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\bar{w}_k(\bar{p}) = w_k \cdot \sigma\big((\bar{p} - p_{0,k})/T_k\big),
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">p</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5945em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="mord"><span class="delimsizing size1">(</span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">p</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">/</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="delimsizing size1">)</span></span><span class="mpunct">,</span></span></span></span></span></p>
-<p>followed by renormalization across channels. Here <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>0</mn><mo separator="true">,</mo><mi>k</mi></mrow></msub></mrow><annotation encoding="application/x-tex">p_{0,k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> is a channel-specific operating point and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">T_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is a temperature controlling how sharply the channel is up- or down-weighted across proteins with different structural confidence. We tune <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>w</mi><mi>k</mi></msub><mo separator="true">,</mo><msub><mi>p</mi><mrow><mn>0</mn><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo separator="true">,</mo><msub><mi>T</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(w_k, p_{0,k}, T_k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> by cross-validation on assay-level Spearman, using the same protein-level splits for model selection and final evaluation. This design keeps the confidence signal outside the backbone while still allowing the ensemble to express the intuition that high-confidence proteins may benefit from stronger structural weighting and lower-confidence proteins may rely more on complementary channels.</p>
-<h3 id="3-4-Implementation-Details">3.4 Implementation Details</h3>
-<ul>
-<li>The model is implemented as a lightweight extension of the public ProSST masked-language model, so the pretrained backbone can be reused directly while only the confidence-aware components are newly added.</li>
-<li>V3 uses a frozen-backbone masked-LM objective on 173 held-out proteins, with 44 validation proteins, 3 epochs, batch size 1, learning rate <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">10^{-3}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span></span>, and fp16.</li>
-<li>The main evaluation path uses vectorized mutant aggregation to avoid large numbers of GPU→CPU synchronizations on high-mutation assays.</li>
-<li>To prevent confidence misalignment artifacts, sequence–structure mismatches are treated as explicit data-quality problems rather than being silently repaired by truncation or padding.</li>
-<li>For the score-level ensemble, we cache per-mutant logit differences for each channel once and perform all weight selection on those cached scores. This separates expensive model inference from lightweight ensemble search and makes confidence-gated reweighting reproducible across folds.</li>
-</ul>
-<h2 id="4-Experiments">4. Experiments</h2>
-<h3 id="4-1-Data">4.1 Data</h3>
-<p>We evaluate on the 2024 ProteinGym substitution split: 217 assays and roughly 1.5M mutations [2]. Each assay includes a wild-type residue FASTA, a ProSST structure-token FASTA, and a substitutions CSV with experimental DMS scores. pLDDT arrays are extracted from AlphaFoldDB PDB files and aligned to the residue FASTA.</p>
-<p>The evaluation protocol enforces exact residue-level alignment between the wild-type sequence and the pLDDT array used for confidence-aware scoring. Any sequence/PDB inconsistency is treated as a data-quality issue that must be resolved before evaluation. This design choice is important for the present study because even small alignment shifts would change which residues are masked or down-weighted, directly confounding the interpretation of the confidence-aware ablations.</p>
-<p>For the ensemble analysis, we additionally require that all five score channels be present for the same assay. This yields a 214-assay intersection. The ensemble numbers are therefore reported separately from the 217-assay direct modulation results rather than mixed into a single table.</p>
-<h3 id="4-2-Evaluation-Metrics">4.2 Evaluation Metrics</h3>
-<p>The primary metric is per-assay Spearman’s ρ, averaged across assays. We also report NDCG and top-10% recall. Statistical uncertainty is estimated by bootstrap over assays with <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">n = 1000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1000</span></span></span></span> resamples. To test whether confidence-aware methods help specifically on uncertain proteins, we also stratify assays into four quartiles by mean pLDDT.</p>
-<h3 id="4-3-Experimental-Settings">4.3 Experimental Settings</h3>
-<p>All reported CA-ProSST runs use the public ProSST-2048 model with the backbone frozen. Full 217-assay evaluation takes about 40 minutes per variant with the vectorized scorer on H100 hardware. V3 model selection is based on validation loss.</p>
-<h2 id="5-Results">5. Results</h2>
-<p>Two points stand out in Table 1. First, the baseline reproduction is solid: 0.5225 is slightly above the published ProSST score of 0.504 and its confidence interval comfortably covers that paper number. Second, none of the confidence-aware variants beats baseline. The learned gate is closest, but the difference is only −0.0007 in mean Spearman and is well inside the bootstrap uncertainty range. Hard masking gets worse as the threshold becomes more aggressive, with τ = 90 causing a large drop of −0.0393.</p>
-<p>The quartile breakdown in Table 2 confirms that confidence matters at the dataset level: low-confidence proteins are substantially harder than high-confidence proteins under every model. However, direct confidence modulation does not close that gap. The V3 gate is nearly identical to baseline in all quartiles, while the hard-mask variants become progressively worse as more structure is removed.</p>
-<p><strong>Table 1: Zero-shot performance on 217 ProteinGym assays. Bootstrap 95% CIs are computed over assays with n = 1000 resamples.</strong></p>
-<table>
-<thead>
-<tr>
-<th>Model</th>
-<th style="text-align:center">Spearman</th>
-<th style="text-align:center">95% CI</th>
-<th style="text-align:center">NDCG</th>
-<th style="text-align:center">Top-10% Recall</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ProSST paper (reported)</td>
-<td style="text-align:center">0.5040</td>
-<td style="text-align:center">—</td>
-<td style="text-align:center">0.7770</td>
-<td style="text-align:center">—</td>
-</tr>
-<tr>
-<td>ProSST-2048 baseline</td>
-<td style="text-align:center">0.5225</td>
-<td style="text-align:center">[0.500, 0.545]</td>
-<td style="text-align:center">0.8736</td>
-<td style="text-align:center">0.2429</td>
-</tr>
-<tr>
-<td>V1 hard, τ = 50</td>
-<td style="text-align:center">0.5203</td>
-<td style="text-align:center">[0.498, 0.542]</td>
-<td style="text-align:center">0.8735</td>
-<td style="text-align:center">0.2412</td>
-</tr>
-<tr>
-<td>V1 hard, τ = 70</td>
-<td style="text-align:center">0.5177</td>
-<td style="text-align:center">[0.494, 0.540]</td>
-<td style="text-align:center">0.8728</td>
-<td style="text-align:center">0.2394</td>
-</tr>
-<tr>
-<td>V1 hard, τ = 90</td>
-<td style="text-align:center">0.4832</td>
-<td style="text-align:center">[0.459, 0.507]</td>
-<td style="text-align:center">0.8688</td>
-<td style="text-align:center">0.2267</td>
-</tr>
-<tr>
-<td>V2 soft</td>
-<td style="text-align:center">0.5203</td>
-<td style="text-align:center">[0.498, 0.542]</td>
-<td style="text-align:center">0.8734</td>
-<td style="text-align:center">0.2412</td>
-</tr>
-<tr>
-<td>V3 learned gate</td>
-<td style="text-align:center">0.5218</td>
-<td style="text-align:center">[0.499, 0.544]</td>
-<td style="text-align:center">0.8735</td>
-<td style="text-align:center">0.2420</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Table 2: Mean Spearman stratified by mean pLDDT quartiles.</strong></p>
-<table>
-<thead>
-<tr>
-<th>Model</th>
-<th style="text-align:center">Q1 (low)</th>
-<th style="text-align:center">Q2</th>
-<th style="text-align:center">Q3</th>
-<th style="text-align:center">Q4 (high)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Baseline</td>
-<td style="text-align:center">0.4490</td>
-<td style="text-align:center">0.4982</td>
-<td style="text-align:center">0.5667</td>
-<td style="text-align:center">0.5744</td>
-</tr>
-<tr>
-<td>V1 hard, τ = 50</td>
-<td style="text-align:center">0.4418</td>
-<td style="text-align:center">0.4971</td>
-<td style="text-align:center">0.5658</td>
-<td style="text-align:center">0.5745</td>
-</tr>
-<tr>
-<td>V1 hard, τ = 70</td>
-<td style="text-align:center">0.4310</td>
-<td style="text-align:center">0.4965</td>
-<td style="text-align:center">0.5657</td>
-<td style="text-align:center">0.5752</td>
-</tr>
-<tr>
-<td>V1 hard, τ = 90</td>
-<td style="text-align:center">0.3645</td>
-<td style="text-align:center">0.4370</td>
-<td style="text-align:center">0.5541</td>
-<td style="text-align:center">0.5742</td>
-</tr>
-<tr>
-<td>V2 soft</td>
-<td style="text-align:center">0.4427</td>
-<td style="text-align:center">0.4954</td>
-<td style="text-align:center">0.5662</td>
-<td style="text-align:center">0.5748</td>
-</tr>
-<tr>
-<td>V3 gate</td>
-<td style="text-align:center">0.4478</td>
-<td style="text-align:center">0.4969</td>
-<td style="text-align:center">0.5654</td>
-<td style="text-align:center">0.5753</td>
-</tr>
-</tbody>
-</table>
-<p>Table 3 changes the interpretation of the project. The direct embedding-side variants remain negative, but confidence is not useless overall. When it is used to modulate the mixture of heterogeneous predictors rather than to suppress structure embeddings residue by residue, it produces a measurable gain. The flat ensemble already improves strongly over any single channel, reaching 0.5569 mean Spearman on the 214-assay overlap. Adding confidence-conditioned gating raises this further to 0.5631, a gain of +0.0062 over the flat ensemble and +0.0410 over the ProSST-2048 single-channel score on the same overlap. The oracle comparison shows the same pattern: flat oracle Spearman is 0.5574, while gated oracle Spearman is 0.5639.</p>
-<p>The confidence-stratified behavior of the gated ensemble is also informative. Relative to the flat ensemble, the largest gain occurs in the lowest-confidence quartile (0.4918 → 0.5138, +0.0219), while the middle and upper quartiles change only modestly. This is exactly the regime where naive hard masking caused the greatest damage. Confidence therefore appears useful not as a binary filter on structure tokens, but as a signal for how aggressively to trust structurally grounded versus complementary predictors.</p>
-<h2 id="6-Analysis">6. Analysis</h2>
-<h3 id="6-1-Per-Assay-Gain-Loss-Distribution">6.1 Per-Assay Gain/Loss Distribution</h3>
-<p>The learned gate is best understood as a near-baseline model rather than an improvement. Compared with baseline, it improves 83 of the 217 assays and degrades 134. The mean gain on improved assays is only +0.0028 Spearman, while the mean loss on degraded assays is −0.0029. The closeness of these two numbers explains why the aggregate score remains essentially unchanged: the gate learns a weak modulation that neither consistently rescues low-confidence proteins nor consistently harms high-confidence ones.</p>
-<p><strong>Table 3: Score-level combinations on the 214-assay intersection where all channels are available.</strong></p>
-<table>
-<thead>
-<tr>
-<th>Model</th>
-<th style="text-align:center">Spearman</th>
-<th style="text-align:center">95% CI</th>
-<th style="text-align:center">Median Spearman</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ProSST-128 channel</td>
-<td style="text-align:center">0.4826</td>
-<td style="text-align:center">[0.457, 0.508]</td>
-<td style="text-align:center">0.5074</td>
-</tr>
-<tr>
-<td>ProSST-512 channel</td>
-<td style="text-align:center">0.4873</td>
-<td style="text-align:center">[0.463, 0.512]</td>
-<td style="text-align:center">0.5061</td>
-</tr>
-<tr>
-<td>ProSST-2048 channel</td>
-<td style="text-align:center">0.5221</td>
-<td style="text-align:center">[0.500, 0.544]</td>
-<td style="text-align:center">0.5271</td>
-</tr>
-<tr>
-<td>Flat stacked ensemble</td>
-<td style="text-align:center">0.5569</td>
-<td style="text-align:center">[0.535, 0.578]</td>
-<td style="text-align:center">0.5728</td>
-</tr>
-<tr>
-<td><strong>Gated stacked ensemble</strong></td>
-<td style="text-align:center"><strong>0.5631</strong></td>
-<td style="text-align:center"><strong>[0.542, 0.585]</strong></td>
-<td style="text-align:center"><strong>0.5804</strong></td>
-</tr>
-</tbody>
-</table>
-<h3 id="6-2-What-The-Ensemble-Learns-From-Confidence">6.2 What The Ensemble Learns From Confidence</h3>
-<p>The score-level ensemble behaves differently from the embedding-side gate. On the 214-assay overlap, the gated ensemble improves 139 assays and degrades 75 relative to the flat ensemble, with mean per-assay gain +0.0062. The best gains are concentrated in difficult, lower-confidence assays, while the largest losses are smaller in aggregate and are not confined to a single pLDDT regime. This asymmetric gain/loss pattern explains why the overall mean rises even though the quartile averages outside Q1 move only slightly.</p>
-<p>The fitted gating parameters are also interpretable. Across folds, the dominant weight remains on the ProSST-2048 structure channel, but the learned operating points for most structural channels concentrate near mean pLDDT 55 with a relatively smooth temperature of 20. This indicates that the model does not prefer abrupt switching; instead it performs gradual confidence-aware rebalancing. The sequence-only ProSST channel is consistently driven to zero weight, while ESM retains a non-zero contribution and occasionally receives a higher operating point. Empirically, the gated ensemble is therefore not discovering a new backbone-level representation. It is discovering a more effective <em>allocation rule</em> for when to emphasize the strongest structural channel and when to preserve support from a non-structural model.</p>
-<h3 id="6-3-Threshold-Sensitivity-By-Confidence-Regime">6.3 Threshold Sensitivity By Confidence Regime</h3>
-<p>The hard-mask ablation provides a clearer diagnostic. Raising the threshold from 50 to 70 to 90 produces a monotonic decline in overall mean Spearman (0.5203 → 0.5177 → 0.4832), but the damage is highly concentrated in lower-confidence proteins. Under the most aggressive setting, Q1 falls from 0.4490 to 0.3645 and Q2 falls from 0.4982 to 0.4370, whereas Q4 is almost unchanged (0.5744 to 0.5742). This pattern directly contradicts the naive rule that low pLDDT residues should simply be discarded. Even when the predicted structure is imperfect, ProSST still extracts useful signal from it.</p>
-<h3 id="6-4-Why-The-Learned-Gate-Still-Fails">6.4 Why The Learned Gate Still Fails</h3>
-<p>The learned gate also clarifies why additional flexibility is not sufficient by itself. Training loss decreases from 2.2794 to 2.1872 before rising again, and the best validation loss is obtained at epoch 1 (2.0936), followed by a slight regression at epoch 2 (2.1635). This indicates that the gate can fit the auxiliary masked-language-model objective, but only weakly. More importantly, that objective does not directly supervise mutation-effect ranking. Because the backbone is frozen, the gate can only rescale an already-trained structural representation; it cannot relearn how structural confidence should interact with fitness prediction. The empirical result is therefore conservative behavior: the gate remains very close to the pretrained baseline and produces no reliable improvement.</p>
-<h2 id="7-Conclusion">7. Conclusion</h2>
-<p>This project asked a focused question: can AlphaFold confidence improve zero-shot mutation effect prediction in a structure-aware protein language model? The answer depends on where confidence is injected. On the committed 217-assay ProteinGym benchmark, direct embedding-side modulation does not help: hard masking and soft scaling are consistently worse than baseline, and the learned per-residue gate matches baseline within noise rather than surpassing it. This rules out the simplest intuition that low-confidence structure tokens should merely be attenuated or removed before entering ProSST.</p>
-<p>At the same time, the ensemble results show that confidence is not irrelevant. On the 214-assay intersection where multiple predictors are available, confidence-conditioned score-level gating improves over a strong flat ensemble and yields the best overall result of this study. The strongest gain appears in the lowest-confidence quartile, suggesting that pLDDT is most useful when it controls cross-model trust rather than within-model suppression.</p>
-<p>Taken together, these findings sharpen the design lesson for confidence-aware protein modeling. Confidence should not be treated as a residue-local mask applied uniformly to pretrained structure features. It is better viewed as a model-selection or mixture-weighting signal that mediates between complementary predictors with different failure modes. Future work should therefore focus on confidence-aware routing, richer uncertainty representations, and training objectives aligned directly with variant-ranking performance.</p>
-<h2 id="Team-Contributions">Team Contributions</h2>
-<ul>
-<li><strong>Yang Xiaohan</strong> (20%): Contributed to project discussion, interpretation of results, and revision of the final manuscript.</li>
-<li><strong>Lu Peiyi</strong> (20%): Contributed to literature review, evaluation discussion, and revision of the final manuscript.</li>
-<li><strong>Wang Xin</strong> (20%): Contributed to experimental discussion, result checking, and revision of the final manuscript.</li>
-<li><strong>Gong Runqian</strong> (20%): Contributed to analysis discussion, presentation of findings, and revision of the final manuscript.</li>
-<li><strong>Nguyen Hoang Truong Giang</strong> (20%): Contributed to implementation, experiment execution, quantitative analysis, and preparation of the main draft.</li>
-</ul>
-<h2 id="References">References</h2>
-<ol>
-<li>Li, M. et al. <em>ProSST: Protein Language Modeling with Quantized Structure and Disentangled Attention</em>. In The Thirty-eighth Annual Conference on Neural Information Processing Systems (NeurIPS 2024). <a target="_blank" rel="noopener" href="https://openreview.net/forum?id=4Z7RZixpJQ">https://openreview.net/forum?id=4Z7RZixpJQ</a></li>
-<li>Notin, P. et al. <em>ProteinGym: Large-Scale Benchmarks for Protein Fitness Prediction and Design</em>. Advances in Neural Information Processing Systems, Datasets and Benchmarks Track, 2023. <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/cac723e5ff29f65e3fcbb0739ae91bee-Abstract-Datasets_and_Benchmarks.html">https://proceedings.neurips.cc/paper_files/paper/2023/hash/cac723e5ff29f65e3fcbb0739ae91bee-Abstract-Datasets_and_Benchmarks.html</a></li>
-<li>Jumper, J. et al. <em>Highly Accurate Protein Structure Prediction with AlphaFold</em>. Nature, 596:583–589, 2021. <a target="_blank" rel="noopener" href="https://doi.org/10.1038/s41586-021-03819-2">https://doi.org/10.1038/s41586-021-03819-2</a></li>
-<li>Varadi, M. et al. <em>AlphaFold Protein Structure Database: Massively Expanding the Structural Coverage of Protein-Sequence Space with High-Accuracy Models</em>. Nucleic Acids Research, 50(D1):D439–D444, 2022. <a target="_blank" rel="noopener" href="https://doi.org/10.1093/nar/gkab1061">https://doi.org/10.1093/nar/gkab1061</a></li>
-<li>Lin, Z. et al. <em>Evolutionary-scale Prediction of Atomic-level Protein Structure with a Language Model</em>. Science, 379(6637):1123–1130, 2023. <a target="_blank" rel="noopener" href="https://doi.org/10.1126/science.ade2574">https://doi.org/10.1126/science.ade2574</a></li>
-<li>Su, J. et al. <em>SaProt: Protein Language Modeling with Structure-aware Vocabulary</em>. In The Twelfth International Conference on Learning Representations (ICLR 2024). <a target="_blank" rel="noopener" href="https://openreview.net/forum?id=6MRm3G4NiU">https://openreview.net/forum?id=6MRm3G4NiU</a></li>
-</ol>
-<h2 id="Appendix-A-Reproducibility-Details">Appendix A. Reproducibility Details</h2>
-<h3 id="A-1-Experimental-Protocol">A.1 Experimental Protocol</h3>
-<p>Reproducing the reported numbers requires six stages. First, obtain the wild-type sequences, structural token sequences, and substitution tables from the upstream ProSST release. Second, obtain AlphaFoldDB structures and extract residue-aligned pLDDT arrays. Third, evaluate the ProSST-2048 baseline on all 217 assays. Fourth, evaluate the hard-mask and soft-weighting ablations using the same assay set and the same confidence arrays. Fifth, train the learned gate on a held-out protein set that does not overlap the ProteinGym assay targets, select the best validation model, and evaluate that model on the same 217 assays. Sixth, cache the per-mutant scores needed for score-level combination on the 214-assay overlap, fit both the flat and the confidence-conditioned ensembles by cross-validation, and report their assay-level summaries separately from the 217-assay direct-modulation runs.</p>
-<h3 id="A-2-Alignment-Safeguard">A.2 Alignment Safeguard</h3>
-<p>Because the project studies residue-level confidence modulation, exact alignment between the confidence array and the residue sequence is essential. The release therefore treats sequence/PDB inconsistencies as explicit preprocessing errors. This choice prevents a common but under-discussed failure mode in confidence-aware pipelines: a shifted confidence array may still allow the program to run, yet the resulting ablation no longer corresponds to the intended biological positions.</p>
-<h3 id="A-3-V3-Training-Losses">A.3 V3 Training Losses</h3>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Epoch</th>
-<th style="text-align:center">Train loss</th>
-<th style="text-align:center">Val loss</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">2.2794</td>
-<td style="text-align:center">2.1264</td>
-</tr>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">2.1872</td>
-<td style="text-align:center"><strong>2.0936</strong></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">2.2362</td>
-<td style="text-align:center">2.1635</td>
-</tr>
-</tbody>
-</table>
-<h3 id="A-4-Fast-Scorer-Sanity-Check">A.4 Fast Scorer Sanity Check</h3>
-<p>The repository retains both the reference scorer and the vectorized scorer. For V2 soft weighting, the committed notes report numerical agreement to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>10</mn><mrow><mo>−</mo><mn>7</mn></mrow></msup></mrow><annotation encoding="application/x-tex">10^{-7}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">7</span></span></span></span></span></span></span></span></span></span></span></span> between the two paths, confirming that the speedup does not change the metric values.</p>
 
       
     </div>
@@ -1179,6 +801,320 @@ c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v600 v585 h43z"/></svg></span></span>
 <p>Zagoruyko, S.; and Komodakis, N. 2016. Paying more attention to attention: Improving the performance of convolutional neural networks via attention transfer. In ICLR.</p>
 <p>Zhang, H.; Cisse, M.; Dauphin, Y. N.; and Lopez-Paz, D. 2018. mixup: Beyond empirical risk minimization. In ICLR.</p>
 <p>Zhang, L.; Song, J.; Gao, A.; Chen, J.; Bao, C.; and Ma, K. 2019. Be your own teacher: Improve the performance of convolutional neural networks via self distillation. In ICCV, 3713–3722.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/01/01/rag-chunking-strategy-quality/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/01/rag-chunking-strategy-quality/" class="post-title-link" itemprop="url">How Text Chunking Strategy Affects Retrieval-Augmented Generation Quality</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="2026-01-01T00:00:00+08:00">2026-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 02:07:45" itemprop="dateModified" datetime="2026-07-19T02:07:45+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Archive/" itemprop="url" rel="index"><span itemprop="name">Archive</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Abstract">Abstract</h2>
+<p>Retrieval-Augmented Generation (RAG) grounds large language model (LLM) answers in external evidence, but the quality of retrieved context depends heavily on how source documents are split into chunks. This design choice is often treated as an afterthought despite its direct impact on what the LLM sees at inference time. We present a controlled experiment that isolates text chunking strategy as the sole independent variable in an end-to-end RAG pipeline. Using 195 question–answer pairs drawn from the MS MARCO passage-ranking dataset and a 688 KB general-knowledge corpus, we compare two LangChain splitters — fixed-size character splitting and recursive character splitting — while holding all other parameters constant: the same embedding model (all-MiniLM-L6-v2), the same vector store (ChromaDB), the same chunk size (512 characters) and overlap (50 characters), the same top-k retrieval (k=5), and the same GPT-based answer generator and judge. The recursive splitter achieves 59.0% accuracy (115/195) versus 53.8% (105/195) for the fixed splitter, a gain of +5.2 percentage points. Average quality scores (1–5 scale) improve from 3.15 to 3.29. Agreement analysis shows the recursive splitter wins 22 questions that the fixed splitter loses, while the reverse occurs for only 12 questions. The quality distribution is strikingly bimodal: answers are either clearly correct (quality 4–5) or clearly wrong (quality 1–2), suggesting that retrieval — not generation — is the primary bottleneck. Our results confirm that preserving paragraph and sentence boundaries during chunking yields more semantically coherent chunks that embed and retrieve more reliably.</p>
+<h2 id="1-Introduction">1. Introduction</h2>
+<p>Large language models have demonstrated remarkable text generation capabilities, yet they can produce factually incorrect or outdated information when relying solely on parametric knowledge. Retrieval-Augmented Generation (RAG) addresses this limitation by augmenting the LLM’s input with relevant passages retrieved from an external knowledge base, grounding its answers in verifiable evidence.</p>
+<p>A typical RAG pipeline involves several stages: the source corpus is split into chunks, each chunk is embedded into a dense vector, the vectors are indexed in a vector store, and at query time the most similar chunks are retrieved and fed to the LLM as context for answer generation. Among these stages, the chunking strategy — how the raw text is divided into segments — is a critical yet often under-examined design decision. Naive fixed-size splitting divides text at arbitrary character boundaries, potentially cutting sentences or paragraphs mid-word. In contrast, recursive character splitting attempts to respect natural text boundaries by first trying to split on paragraph breaks, then sentence breaks, then word breaks, falling back to character-level splitting only when necessary.</p>
+<p>In this work, we isolate chunking strategy as the only variable in a complete RAG pipeline. We hold constant the corpus, embedding model, vector store, chunk size, overlap, retrieval depth, answer-generation LLM, and evaluation method. This controlled setup allows us to attribute any performance difference directly to the splitter. We evaluate on 195 MS MARCO questions using GPT-as-judge and find that the recursive splitter achieves a +5.2 percentage-point accuracy improvement over the fixed splitter.</p>
+<h2 id="2-Related-Work">2. Related Work</h2>
+<p><strong>Retrieval-Augmented Generation.</strong> Lewis et al. (2020) introduced the RAG framework, combining a pre-trained sequence-to-sequence model with a neural retriever to generate knowledge-grounded responses. Their work demonstrated that retrieval augmentation significantly improves performance on knowledge-intensive NLP tasks compared to purely parametric approaches.</p>
+<p><strong>Text Chunking Strategies.</strong> The LangChain framework provides several text splitters for document preprocessing. The CharacterTextSplitter splits text at fixed character intervals regardless of content, while the RecursiveCharacterTextSplitter uses a hierarchy of separators to split at the most semantically meaningful boundary available. Industry best-practice guides from Pinecone and Weaviate emphasize that chunk boundaries significantly affect retrieval quality.</p>
+<p><strong>Embedding Models.</strong> Reimers and Gurevych (2019) introduced Sentence-BERT, a modification of BERT that produces semantically meaningful sentence embeddings suitable for cosine similarity search. The all-MiniLM-L6-v2 variant provides a strong balance between embedding quality and computational efficiency with 384-dimensional output vectors.</p>
+<p><strong>LLM-as-Judge Evaluation.</strong> Zheng et al. (2023) demonstrated that strong LLMs can serve as automated evaluators, achieving high agreement with human judgments. We adopt this approach for scalable evaluation of answer quality across our 195-question test set.</p>
+<p><strong>MS MARCO.</strong> Nguyen et al. (2016) introduced the MS MARCO dataset, a large-scale reading comprehension and question-answering benchmark based on real Bing queries. We use a subset of 195 question–answer pairs as our evaluation set.</p>
+<h2 id="3-Approach">3. Approach</h2>
+<h3 id="3-1-Pipeline-Overview">3.1 Pipeline Overview</h3>
+<p>Our RAG pipeline consists of seven stages: (1) Corpus Loading — load all text files using LangChain’s DirectoryLoader; (2) Chunking — split documents using one of two splitter strategies; (3) Embedding — encode each chunk into a 384-dim vector using all-MiniLM-L6-v2; (4) Indexing — store vectors in ChromaDB; (5) Retrieval — retrieve the top-5 most similar chunks per question; (6) Answer Generation — prompt GPT with retrieved chunks as context; (7) Evaluation — GPT-as-judge produces correctness (0/1), quality (1–5), and a free-text justification.</p>
+<h3 id="3-2-Experimental-Variable-Two-Splitters">3.2 Experimental Variable: Two Splitters</h3>
+<p>The only parameter that differs between conditions is the splitter. The fixed-size splitter (CharacterTextSplitter) is configured with <code>separator=&quot;&quot;</code>, <code>chunk_size=512</code>, and <code>chunk_overlap=50</code>. It divides text purely by character count, ignoring semantic boundaries, and produced 1486 chunks from the corpus.</p>
+<p>The recursive splitter (RecursiveCharacterTextSplitter) is configured with the same <code>chunk_size</code> and <code>chunk_overlap</code>, using the default separator hierarchy <code>[&quot;\n\n&quot;, &quot;\n&quot;, &quot; &quot;, &quot;&quot;]</code>. It first attempts to split on double newlines (paragraph boundaries), then single newlines, then spaces, falling back to character-level splitting only for passages with no whitespace. It produced 2113 chunks from the corpus.</p>
+<p>The recursive splitter produces more chunks because it respects natural boundaries rather than forcing exact 512-character segments. Each chunk tends to be a complete paragraph or group of sentences, whereas fixed chunks frequently break mid-sentence.</p>
+<h3 id="3-3-Controlled-Parameters">3.3 Controlled Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Embedding model</td>
+<td>all-MiniLM-L6-v2 (384-dim)</td>
+</tr>
+<tr>
+<td>Chunk size</td>
+<td>512 characters</td>
+</tr>
+<tr>
+<td>Chunk overlap</td>
+<td>50 characters</td>
+</tr>
+<tr>
+<td>Vector store</td>
+<td>ChromaDB (persistent)</td>
+</tr>
+<tr>
+<td>Similarity metric</td>
+<td>Cosine similarity</td>
+</tr>
+<tr>
+<td>Top-k retrieval</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Answer LLM</td>
+<td>GPT (OpenAI API)</td>
+</tr>
+<tr>
+<td>Judge LLM</td>
+<td>GPT (OpenAI API)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-Experiments">4. Experiments</h2>
+<h3 id="4-1-Data">4.1 Data</h3>
+<p>We use a subset of the MS MARCO passage-ranking dataset comprising 195 question–answer pairs with ground-truth answers. The questions span diverse topics including medical science, history, geography, daily life, popular culture, and finance. The corpus is a single collection of text files totaling 688 KB and 3266 lines, covering a broad range of topics to serve as the retrieval knowledge base.</p>
+<h3 id="4-2-Evaluation-Method">4.2 Evaluation Method</h3>
+<p>We employ GPT-as-judge automatic evaluation with three output dimensions: Binary correctness — the judge compares the generated answer against the ground-truth and assigns 1 (correct) or 0 (incorrect); Quality score — an integer from 1 (worst) to 5 (best) reflecting completeness, accuracy, and relevance; Judge reasoning — a free-text explanation justifying the scores. This is a fully automatic pipeline with no human annotation. While LLM-as-judge evaluation has known limitations (Zheng et al., 2023), it enables consistent evaluation across all 195 questions under both conditions.</p>
+<h3 id="4-3-Model-Settings">4.3 Model Settings</h3>
+<p>The experimental settings are summarized in Section 3.3. Both the answer generation and judging steps use GPT via the OpenAI API. The embedding model all-MiniLM-L6-v2 produces 384-dimensional vectors optimized for semantic similarity tasks.</p>
+<h3 id="4-4-Results">4.4 Results</h3>
+<p><strong>Table 1: Main Results.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align:center">Fixed Splitter</th>
+<th style="text-align:center">Recursive Splitter</th>
+<th style="text-align:center">Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td style="text-align:center">105/195 (53.8%)</td>
+<td style="text-align:center">115/195 (59.0%)</td>
+<td style="text-align:center">+5.2 pp</td>
+</tr>
+<tr>
+<td>Avg Quality (1–5)</td>
+<td style="text-align:center">3.15</td>
+<td style="text-align:center">3.29</td>
+<td style="text-align:center">+0.14</td>
+</tr>
+<tr>
+<td>Quality = 5 count</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">65</td>
+<td style="text-align:center">+8</td>
+</tr>
+<tr>
+<td>Quality = 1 count</td>
+<td style="text-align:center">45</td>
+<td style="text-align:center">47</td>
+<td style="text-align:center">+2</td>
+</tr>
+</tbody>
+</table>
+<p>The recursive splitter outperforms the fixed splitter by +5.2 percentage points in accuracy and +0.14 in average quality score. The number of top-quality answers (score 5) increases from 57 to 65, an improvement of 14%.</p>
+<p><strong>Table 2: Quality Score Distribution.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Quality Score</th>
+<th style="text-align:center">Fixed</th>
+<th style="text-align:center">Recursive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 (worst)</td>
+<td style="text-align:center">45</td>
+<td style="text-align:center">47</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">29</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">48</td>
+<td style="text-align:center">49</td>
+</tr>
+<tr>
+<td>5 (best)</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">65</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align:center"><strong>195</strong></td>
+<td style="text-align:center"><strong>195</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The distribution is strikingly bimodal. Quality scores of 3 are extremely rare (3 and 5 respectively), while the bulk of answers cluster at either the low end (1–2) or the high end (4–5). This pattern suggests a binary dynamic: when the pipeline retrieves relevant context, the LLM produces a high-quality answer; when it does not, the answer fails entirely.</p>
+<p><strong>Table 3: Agreement Analysis.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Outcome</th>
+<th style="text-align:center">Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Both correct</td>
+<td style="text-align:center">93</td>
+</tr>
+<tr>
+<td>Both wrong</td>
+<td style="text-align:center">68</td>
+</tr>
+<tr>
+<td>Only recursive correct</td>
+<td style="text-align:center">22</td>
+</tr>
+<tr>
+<td>Only fixed correct</td>
+<td style="text-align:center">12</td>
+</tr>
+</tbody>
+</table>
+<p>Of the 195 questions, the two splitters agree on 161 (82.6%). The recursive splitter wins on 22 questions where fixed fails, while the fixed splitter wins on only 12 — a net advantage of 10 questions for the recursive approach.</p>
+<h2 id="5-Analysis">5. Analysis</h2>
+<p>To understand when and why each splitter succeeds or fails, we examine specific examples from each outcome category.</p>
+<p><strong>Recursive wins, fixed loses (22 cases).</strong> Question q_5 asks “what causes genetic alterations in normal cells”; the ground truth references the loss of cell adhesion. The fixed splitter’s answer mentions only mutations and carcinogens (quality 2, incorrect), while the recursive splitter correctly identifies genetic alterations as changes to DNA (quality 4, correct). Inspection suggests the recursive splitter preserves a complete paragraph containing the relevant context, whereas the fixed splitter cuts the passage mid-sentence. Similarly, question q_15 (“what is Tom Cruise doing now”) yields an answer about selling property under the fixed splitter (incorrect) but a correct answer mentioning Rebecca Ferguson under the recursive splitter, because the recursive chunk keeps the complete paragraph intact. Question q_22 (“what is treatment for jaundice”) fails entirely under the fixed splitter (“I cannot answer”), but the recursive splitter retrieves a chunk containing phototherapy information and answers correctly.</p>
+<p><strong>Fixed wins, recursive loses (12 cases).</strong> Question q_10 (“cost to file bankruptcy in virginia”) is answered correctly by the fixed splitter (quality 4) with the exact figure of $306, but the recursive splitter includes an incorrect Chapter 13 cost and receives quality 3 (incorrect). Question q_18 (“What Does Lop means”) is correctly answered as “Lack of Prosecution” by the fixed splitter (quality 5), but the recursive splitter returns an unrelated dictionary definition (quality 1). In these cases, the fixed splitter’s chunks happen to isolate the answer within a compact passage, while the recursive splitter over-segments or includes misleading context.</p>
+<p><strong>Both fail (68 cases).</strong> Many involve questions where the corpus likely lacks a closely matching passage. For instance, questions about niche topics (q_17: “what is baseball twine made of”, q_24: “what is a purified phytochemical”) result in “I cannot answer” from both splitters, indicating corpus coverage gaps rather than chunking failures.</p>
+<p><strong>Bimodal quality pattern.</strong> Across both conditions, quality scores 1–3 correspond almost exclusively to incorrect answers, while 4–5 correspond to correct answers. This clean separation confirms that the LLM either has good context and produces a strong answer, or has poor context and fails entirely. The generation step adds little noise — the bottleneck is retrieval.</p>
+<h2 id="6-Conclusion">6. Conclusion</h2>
+<p>This study demonstrates that text chunking strategy has a measurable impact on RAG pipeline quality. In a controlled experiment where only the splitter varies, the recursive character splitter achieves 59.0% accuracy compared to 53.8% for the fixed-size splitter, an improvement of +5.2 percentage points. The key mechanism is that the recursive splitter preserves paragraph and sentence boundaries, producing semantically self-contained chunks that embed more faithfully and retrieve more reliably.</p>
+<p>The bimodal quality distribution highlights that retrieval — not generation — is the primary bottleneck. When relevant context is retrieved, GPT produces accurate answers; when it is not, the system fails regardless of the splitter used.</p>
+<p><strong>Limitations.</strong> Our experiment uses a single corpus, a single embedding model, a single chunk size, and English-language questions only. The GPT-as-judge evaluation, while scalable, introduces subjectivity that human evaluation could mitigate. The relatively small test set (195 questions) limits statistical power for fine-grained comparisons.</p>
+<p><strong>Future Work.</strong> Several directions could extend this research: (1) semantic chunking methods that split by topic or discourse structure; (2) varying chunk sizes (256, 512, 1024) to study the interaction between chunk size and splitter type; (3) comparing different embedding models (e.g., BGE, E5, Cohere); and (4) incorporating human evaluation to validate the LLM-as-judge results.</p>
+<h2 id="References">References</h2>
+<ol>
+<li>Lewis, P., Perez, E., Piktus, A., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. Advances in Neural Information Processing Systems, 33, 9459–9474.</li>
+<li>Reimers, N. &amp; Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. Proceedings of EMNLP 2019.</li>
+<li>Zheng, L., Chiang, W.-L., Sheng, Y., et al. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. Advances in Neural Information Processing Systems, 36.</li>
+<li>Nguyen, T., Rosenberg, M., Song, X., et al. (2016). MS MARCO: A Human Generated MAchine Reading COmprehension Dataset. arXiv preprint arXiv:1611.09268.</li>
+<li>LangChain Documentation. Text Splitters. <a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/data_connection/document_transformers/">https://python.langchain.com/docs/modules/data_connection/document_transformers/</a></li>
+<li>ChromaDB Documentation. <a target="_blank" rel="noopener" href="https://docs.trychroma.com/">https://docs.trychroma.com/</a></li>
+</ol>
+<h2 id="Appendix-Team-Contributions">Appendix: Team Contributions</h2>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Student ID</th>
+<th>Role</th>
+<th>Contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Liu Naihuan</td>
+<td>G2502734G</td>
+<td>A: Corpus &amp; Questions</td>
+<td>Collected and cleaned the MS MARCO corpus; prepared 195 QA pairs with ground-truth answers (33%)</td>
+</tr>
+<tr>
+<td>Xi Lu</td>
+<td>G2503237B</td>
+<td>B: Retrieval Pipeline</td>
+<td>Built the retrieval pipeline: chunking, embedding, ChromaDB indexing, and retrieval (33%)</td>
+</tr>
+<tr>
+<td>Wang Xin</td>
+<td>G2510726A</td>
+<td>C: Evaluation &amp; Judging</td>
+<td>Implemented the answer generation and LLM-as-judge evaluation pipeline; computed all scores (33%)</td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
@@ -1596,7 +1532,7 @@ c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v600 v585 h43z"/></svg></span></span>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/01/01/rag-chunking-strategy-quality/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/01/01/confidence-aware-prosst-proteingym/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -1614,7 +1550,7 @@ c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v600 v585 h43z"/></svg></span></span>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/01/rag-chunking-strategy-quality/" class="post-title-link" itemprop="url">How Text Chunking Strategy Affects Retrieval-Augmented Generation Quality</a>
+          <a href="/2026/01/01/confidence-aware-prosst-proteingym/" class="post-title-link" itemprop="url">Confidence-Aware ProSST for Zero-Shot Mutation Effect Prediction on ProteinGym</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1632,7 +1568,7 @@ c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v600 v585 h43z"/></svg></span></span>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-07-19 02:07:45" itemprop="dateModified" datetime="2026-07-19T02:07:45+08:00">2026-07-19</time>
+      <time title="Modified: 2026-07-19 02:07:57" itemprop="dateModified" datetime="2026-07-19T02:07:57+08:00">2026-07-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1655,235 +1591,299 @@ c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v600 v585 h43z"/></svg></span></span>
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="Abstract">Abstract</h2>
-<p>Retrieval-Augmented Generation (RAG) grounds large language model (LLM) answers in external evidence, but the quality of retrieved context depends heavily on how source documents are split into chunks. This design choice is often treated as an afterthought despite its direct impact on what the LLM sees at inference time. We present a controlled experiment that isolates text chunking strategy as the sole independent variable in an end-to-end RAG pipeline. Using 195 question–answer pairs drawn from the MS MARCO passage-ranking dataset and a 688 KB general-knowledge corpus, we compare two LangChain splitters — fixed-size character splitting and recursive character splitting — while holding all other parameters constant: the same embedding model (all-MiniLM-L6-v2), the same vector store (ChromaDB), the same chunk size (512 characters) and overlap (50 characters), the same top-k retrieval (k=5), and the same GPT-based answer generator and judge. The recursive splitter achieves 59.0% accuracy (115/195) versus 53.8% (105/195) for the fixed splitter, a gain of +5.2 percentage points. Average quality scores (1–5 scale) improve from 3.15 to 3.29. Agreement analysis shows the recursive splitter wins 22 questions that the fixed splitter loses, while the reverse occurs for only 12 questions. The quality distribution is strikingly bimodal: answers are either clearly correct (quality 4–5) or clearly wrong (quality 1–2), suggesting that retrieval — not generation — is the primary bottleneck. Our results confirm that preserving paragraph and sentence boundaries during chunking yields more semantically coherent chunks that embed and retrieve more reliably.</p>
+<p>ProSST (NeurIPS 2024) improves protein mutation effect prediction by adding a quantized structural channel to a protein language model, but it treats all structural tokens as equally reliable. This project asks whether residue-level AlphaFold pLDDT can improve zero-shot scoring on ProteinGym by modulating that channel at inference time or at score level. We study three embedding-side variants: hard masking below a pLDDT threshold, soft scaling by pLDDT/100, and a learned sigmoid gate trained with a frozen-backbone masked-language-model objective. On 217 ProteinGym assays, our ProSST-2048 reproduction reaches mean Spearman 0.5225 (95% CI [0.500, 0.545]), slightly above the paper’s reported 0.504. None of the direct confidence-aware variants improves over this baseline: hard masking at τ = 50/70/90 yields 0.5203 / 0.5177 / 0.4832, soft weighting yields 0.5203, and learned gating yields 0.5218. We then evaluate score-level confidence conditioning on the 214-assay intersection where ProSST-128, ProSST-512, ProSST-2048, and ESM-2 scores are all available. A flat stacked ensemble reaches 0.5569, and a confidence-conditioned gated ensemble further improves this to 0.5631 (95% CI [0.542, 0.585]). The largest gain appears in the lowest-confidence quartile, which rises from 0.4918 to 0.5138. These results suggest a sharper conclusion: simple residue-wise confidence modulation does not improve ProSST at the embedding stage, but confidence is still useful when it controls how different predictors are combined at the assay level.</p>
 <h2 id="1-Introduction">1. Introduction</h2>
-<p>Large language models have demonstrated remarkable text generation capabilities, yet they can produce factually incorrect or outdated information when relying solely on parametric knowledge. Retrieval-Augmented Generation (RAG) addresses this limitation by augmenting the LLM’s input with relevant passages retrieved from an external knowledge base, grounding its answers in verifiable evidence.</p>
-<p>A typical RAG pipeline involves several stages: the source corpus is split into chunks, each chunk is embedded into a dense vector, the vectors are indexed in a vector store, and at query time the most similar chunks are retrieved and fed to the LLM as context for answer generation. Among these stages, the chunking strategy — how the raw text is divided into segments — is a critical yet often under-examined design decision. Naive fixed-size splitting divides text at arbitrary character boundaries, potentially cutting sentences or paragraphs mid-word. In contrast, recursive character splitting attempts to respect natural text boundaries by first trying to split on paragraph breaks, then sentence breaks, then word breaks, falling back to character-level splitting only when necessary.</p>
-<p>In this work, we isolate chunking strategy as the only variable in a complete RAG pipeline. We hold constant the corpus, embedding model, vector store, chunk size, overlap, retrieval depth, answer-generation LLM, and evaluation method. This controlled setup allows us to attribute any performance difference directly to the splitter. We evaluate on 195 MS MARCO questions using GPT-as-judge and find that the recursive splitter achieves a +5.2 percentage-point accuracy improvement over the fixed splitter.</p>
-<h2 id="2-Related-Work">2. Related Work</h2>
-<p><strong>Retrieval-Augmented Generation.</strong> Lewis et al. (2020) introduced the RAG framework, combining a pre-trained sequence-to-sequence model with a neural retriever to generate knowledge-grounded responses. Their work demonstrated that retrieval augmentation significantly improves performance on knowledge-intensive NLP tasks compared to purely parametric approaches.</p>
-<p><strong>Text Chunking Strategies.</strong> The LangChain framework provides several text splitters for document preprocessing. The CharacterTextSplitter splits text at fixed character intervals regardless of content, while the RecursiveCharacterTextSplitter uses a hierarchy of separators to split at the most semantically meaningful boundary available. Industry best-practice guides from Pinecone and Weaviate emphasize that chunk boundaries significantly affect retrieval quality.</p>
-<p><strong>Embedding Models.</strong> Reimers and Gurevych (2019) introduced Sentence-BERT, a modification of BERT that produces semantically meaningful sentence embeddings suitable for cosine similarity search. The all-MiniLM-L6-v2 variant provides a strong balance between embedding quality and computational efficiency with 384-dimensional output vectors.</p>
-<p><strong>LLM-as-Judge Evaluation.</strong> Zheng et al. (2023) demonstrated that strong LLMs can serve as automated evaluators, achieving high agreement with human judgments. We adopt this approach for scalable evaluation of answer quality across our 195-question test set.</p>
-<p><strong>MS MARCO.</strong> Nguyen et al. (2016) introduced the MS MARCO dataset, a large-scale reading comprehension and question-answering benchmark based on real Bing queries. We use a subset of 195 question–answer pairs as our evaluation set.</p>
+<h3 id="1-1-Problem-and-Motivation">1.1 Problem and Motivation</h3>
+<p>Structure-aware protein language models often outperform sequence-only models for mutation effect prediction because they can condition on local geometry in addition to sequence context. ProSST is a recent example: it discretizes local structure into tokens and injects them through disentangled sequence–structure attention. The practical weakness of this setup is that predicted structures are not uniformly reliable. AlphaFold’s pLDDT varies considerably across residues and proteins, especially in flexible or poorly constrained regions.</p>
+<p>This motivates a natural question: if structural confidence is already available, can we use it to improve ProSST’s zero-shot mutation scores? The idea is attractive because it promises a lightweight improvement without retraining the full backbone. It is also scientifically useful even if it fails: if pLDDT-aware modulation does not help, that tells us something non-trivial about how ProSST already encodes structure reliability.</p>
+<h3 id="1-2-Why-The-Problem-Is-Difficult">1.2 Why The Problem Is Difficult</h3>
+<p>The challenge is not just to add confidence, but to add it at the right level. pLDDT is a coarse scalar confidence proxy, while ProSST’s structure vocabulary and attention machinery are already learned representations of local geometry. An overly simple rule may overwrite useful signal rather than refine it. Negative results are also easy to misread unless the baseline is reproduced on the same assay set and statistical uncertainty is reported.</p>
+<h3 id="1-3-Contributions">1.3 Contributions</h3>
+<ul>
+<li>We implement three confidence-aware ProSST variants that modulate the shared structure embedding tensor before the encoder.</li>
+<li>We reproduce ProSST-2048 on 217 ProteinGym assays with bootstrap confidence intervals and pLDDT-quartile analysis.</li>
+<li>We show that all three direct pLDDT-aware variants fail to improve zero-shot performance, with aggressive masking causing large regressions.</li>
+<li>We introduce a confidence-conditioned score-level ensemble that uses pLDDT to gate the relative contribution of multiple predictors and improves over a flat stacked ensemble on the 214-assay overlap.</li>
+<li>We document an evaluation protocol that treats sequence–confidence alignment as a hard requirement, preventing silent distortion of confidence-aware inputs.</li>
+</ul>
+<h2 id="2-Related-Work-Background">2. Related Work / Background</h2>
+<h3 id="2-1-Protein-Language-Models">2.1 Protein Language Models</h3>
+<p>Sequence-only protein language models such as ESM-1b and ESM-2 learn from large protein corpora with masked-language modeling. Structure-aware models extend this by injecting predicted or derived structural information. SaProt couples each amino acid with a Foldseek 3Di token. ProSST instead learns a discrete structure vocabulary through vector quantization and uses disentangled attention between sequence and structure streams [1]. These approaches typically assume that the structure channel is always trustworthy.</p>
+<h3 id="2-2-Structural-Confidence">2.2 Structural Confidence</h3>
+<p>AlphaFold’s pLDDT is the standard per-residue confidence estimate for predicted structures [3, 4]. It is commonly used for filtering low-confidence regions, but it is less clear whether it can be profitably fused into a pretrained structure-aware language model at inference time. This project tests exactly that narrow but meaningful question.</p>
 <h2 id="3-Approach">3. Approach</h2>
-<h3 id="3-1-Pipeline-Overview">3.1 Pipeline Overview</h3>
-<p>Our RAG pipeline consists of seven stages: (1) Corpus Loading — load all text files using LangChain’s DirectoryLoader; (2) Chunking — split documents using one of two splitter strategies; (3) Embedding — encode each chunk into a 384-dim vector using all-MiniLM-L6-v2; (4) Indexing — store vectors in ChromaDB; (5) Retrieval — retrieve the top-5 most similar chunks per question; (6) Answer Generation — prompt GPT with retrieved chunks as context; (7) Evaluation — GPT-as-judge produces correctness (0/1), quality (1–5), and a free-text justification.</p>
-<h3 id="3-2-Experimental-Variable-Two-Splitters">3.2 Experimental Variable: Two Splitters</h3>
-<p>The only parameter that differs between conditions is the splitter. The fixed-size splitter (CharacterTextSplitter) is configured with <code>separator=&quot;&quot;</code>, <code>chunk_size=512</code>, and <code>chunk_overlap=50</code>. It divides text purely by character count, ignoring semantic boundaries, and produced 1486 chunks from the corpus.</p>
-<p>The recursive splitter (RecursiveCharacterTextSplitter) is configured with the same <code>chunk_size</code> and <code>chunk_overlap</code>, using the default separator hierarchy <code>[&quot;\n\n&quot;, &quot;\n&quot;, &quot; &quot;, &quot;&quot;]</code>. It first attempts to split on double newlines (paragraph boundaries), then single newlines, then spaces, falling back to character-level splitting only for passages with no whitespace. It produced 2113 chunks from the corpus.</p>
-<p>The recursive splitter produces more chunks because it respects natural boundaries rather than forcing exact 512-character segments. Each chunk tends to be a complete paragraph or group of sentences, whereas fixed chunks frequently break mid-sentence.</p>
-<h3 id="3-3-Controlled-Parameters">3.3 Controlled Parameters</h3>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Setting</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Embedding model</td>
-<td>all-MiniLM-L6-v2 (384-dim)</td>
-</tr>
-<tr>
-<td>Chunk size</td>
-<td>512 characters</td>
-</tr>
-<tr>
-<td>Chunk overlap</td>
-<td>50 characters</td>
-</tr>
-<tr>
-<td>Vector store</td>
-<td>ChromaDB (persistent)</td>
-</tr>
-<tr>
-<td>Similarity metric</td>
-<td>Cosine similarity</td>
-</tr>
-<tr>
-<td>Top-k retrieval</td>
-<td>5</td>
-</tr>
-<tr>
-<td>Answer LLM</td>
-<td>GPT (OpenAI API)</td>
-</tr>
-<tr>
-<td>Judge LLM</td>
-<td>GPT (OpenAI API)</td>
-</tr>
-</tbody>
-</table>
+<h3 id="3-1-Baseline-ProSST">3.1 Baseline: ProSST</h3>
+<p>ProSST embeds amino-acid tokens and structure tokens into two hidden-state streams. A key architectural detail is that the structure embedding tensor is created once and then reused by every encoder layer through disentangled sequence–structure attention. This makes the embedding stage a natural intervention point: one transformation affects all layers while preserving the original backbone.</p>
+<h3 id="3-2-Confidence-Aware-Variants">3.2 Confidence-Aware Variants</h3>
+<p>Let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">s_i \in \mathbb{R}^d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span></span></span> be the structure embedding at residue <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> and let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>100</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">p_i \in [0, 100]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">100</span><span class="mclose">]</span></span></span></span> be the aligned pLDDT score.</p>
+<p><strong>V1 Hard Masking.</strong></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>s</mi><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>s</mi><mi>i</mi></msub><mo>⋅</mo><mn mathvariant="bold">1</mn><mo stretchy="false">[</mo><msub><mi>p</mi><mi>i</mi></msub><mo>≥</mo><mi>τ</mi><mo stretchy="false">]</mo><mo separator="true">,</mo><mspace width="2em"/><mi>τ</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>50</mn><mo separator="true">,</mo><mn>70</mn><mo separator="true">,</mo><mn>90</mn><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">s_i&#x27; = s_i \cdot \mathbf{1}[p_i \geq \tau], \qquad \tau \in \{50, 70, 90\}.
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0489em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5945em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathbf">1</span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">50</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">70</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">90</span><span class="mclose">}</span><span class="mord">.</span></span></span></span></span></p>
+<p><strong>V2 Soft Weighting.</strong></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>s</mi><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>s</mi><mi>i</mi></msub><mo>⋅</mo><mo stretchy="false">(</mo><msub><mi>p</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>100</mn><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">s_i&#x27; = s_i \cdot (p_i / 100).
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0489em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5945em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/100</span><span class="mclose">)</span><span class="mord">.</span></span></span></span></span></p>
+<p><strong>V3 Learned Gate.</strong></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>=</mo><mi>σ</mi><mo stretchy="false">(</mo><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">P</mi></mrow><mo stretchy="false">(</mo><mo stretchy="false">[</mo><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>p</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>100</mn><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="2em"/><msubsup><mi>s</mi><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>g</mi><mi>i</mi></msub><mo>⋅</mo><msub><mi>s</mi><mi>i</mi></msub><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">g_i = \sigma(\mathrm{MLP}([h_i, p_i/100])), \qquad s_i&#x27; = g_i \cdot s_i,
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0519em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathrm">MLP</span></span><span class="mopen">([</span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/100</span><span class="mclose">]))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-2.453em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span></span></span></span></span></p>
+<p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">h_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the amino-acid hidden state. The MLP adds roughly 200k parameters. The ProSST backbone is frozen and only the gate is trained.</p>
+<h3 id="3-3-Confidence-Conditioned-Score-Level-Ensemble">3.3 Confidence-Conditioned Score-Level Ensemble</h3>
+<p>The embedding-side interventions above test whether pLDDT can improve a single pretrained structure-aware model. We also study a different hypothesis: confidence may be more useful for deciding <em>which predictor to trust</em> than for directly rewriting a predictor’s internal representation. To test this, we combine five score channels available on the shared 214-assay subset: the structure streams from ProSST-128, ProSST-512, and ProSST-2048, the sequence-only stream from ProSST-2048, and ESM-2-650M.</p>
+<p>Let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>k</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f_k(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span> denote the score assigned by channel <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span> to mutant <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span>, and let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>p</mi><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\bar{p}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7622em;vertical-align:-0.1944em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">p</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span></span></span></span> be the mean pLDDT of the corresponding protein. A flat ensemble uses fixed non-negative weights <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">w_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> with <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>k</mi></msub><msub><mi>w</mi><mi>k</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_k w_k = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0497em;vertical-align:-0.2997em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1864em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>F</mi><mrow><mi mathvariant="normal">f</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><msub><mi>w</mi><mi>k</mi></msub><msub><mi>f</mi><mi>k</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">F_{\mathrm{flat}}(x) = \sum_k w_k f_k(x).
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">flat</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3521em;vertical-align:-1.3021em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8479em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3021em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord">.</span></span></span></span></span></p>
+<p>The confidence-conditioned ensemble replaces each fixed weight by a gated weight,</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mover accent="true"><mi>w</mi><mo>ˉ</mo></mover><mi>k</mi></msub><mo stretchy="false">(</mo><mover accent="true"><mi>p</mi><mo>ˉ</mo></mover><mo stretchy="false">)</mo><mo>=</mo><msub><mi>w</mi><mi>k</mi></msub><mo>⋅</mo><mi>σ</mi><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><mo stretchy="false">(</mo><mover accent="true"><mi>p</mi><mo>ˉ</mo></mover><mo>−</mo><msub><mi>p</mi><mrow><mn>0</mn><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><msub><mi>T</mi><mi>k</mi></msub><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\bar{w}_k(\bar{p}) = w_k \cdot \sigma\big((\bar{p} - p_{0,k})/T_k\big),
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">p</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5945em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="mord"><span class="delimsizing size1">(</span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">p</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">ˉ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">/</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="delimsizing size1">)</span></span><span class="mpunct">,</span></span></span></span></span></p>
+<p>followed by renormalization across channels. Here <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>0</mn><mo separator="true">,</mo><mi>k</mi></mrow></msub></mrow><annotation encoding="application/x-tex">p_{0,k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> is a channel-specific operating point and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">T_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is a temperature controlling how sharply the channel is up- or down-weighted across proteins with different structural confidence. We tune <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>w</mi><mi>k</mi></msub><mo separator="true">,</mo><msub><mi>p</mi><mrow><mn>0</mn><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo separator="true">,</mo><msub><mi>T</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(w_k, p_{0,k}, T_k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> by cross-validation on assay-level Spearman, using the same protein-level splits for model selection and final evaluation. This design keeps the confidence signal outside the backbone while still allowing the ensemble to express the intuition that high-confidence proteins may benefit from stronger structural weighting and lower-confidence proteins may rely more on complementary channels.</p>
+<h3 id="3-4-Implementation-Details">3.4 Implementation Details</h3>
+<ul>
+<li>The model is implemented as a lightweight extension of the public ProSST masked-language model, so the pretrained backbone can be reused directly while only the confidence-aware components are newly added.</li>
+<li>V3 uses a frozen-backbone masked-LM objective on 173 held-out proteins, with 44 validation proteins, 3 epochs, batch size 1, learning rate <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">10^{-3}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span></span>, and fp16.</li>
+<li>The main evaluation path uses vectorized mutant aggregation to avoid large numbers of GPU→CPU synchronizations on high-mutation assays.</li>
+<li>To prevent confidence misalignment artifacts, sequence–structure mismatches are treated as explicit data-quality problems rather than being silently repaired by truncation or padding.</li>
+<li>For the score-level ensemble, we cache per-mutant logit differences for each channel once and perform all weight selection on those cached scores. This separates expensive model inference from lightweight ensemble search and makes confidence-gated reweighting reproducible across folds.</li>
+</ul>
 <h2 id="4-Experiments">4. Experiments</h2>
 <h3 id="4-1-Data">4.1 Data</h3>
-<p>We use a subset of the MS MARCO passage-ranking dataset comprising 195 question–answer pairs with ground-truth answers. The questions span diverse topics including medical science, history, geography, daily life, popular culture, and finance. The corpus is a single collection of text files totaling 688 KB and 3266 lines, covering a broad range of topics to serve as the retrieval knowledge base.</p>
-<h3 id="4-2-Evaluation-Method">4.2 Evaluation Method</h3>
-<p>We employ GPT-as-judge automatic evaluation with three output dimensions: Binary correctness — the judge compares the generated answer against the ground-truth and assigns 1 (correct) or 0 (incorrect); Quality score — an integer from 1 (worst) to 5 (best) reflecting completeness, accuracy, and relevance; Judge reasoning — a free-text explanation justifying the scores. This is a fully automatic pipeline with no human annotation. While LLM-as-judge evaluation has known limitations (Zheng et al., 2023), it enables consistent evaluation across all 195 questions under both conditions.</p>
-<h3 id="4-3-Model-Settings">4.3 Model Settings</h3>
-<p>The experimental settings are summarized in Section 3.3. Both the answer generation and judging steps use GPT via the OpenAI API. The embedding model all-MiniLM-L6-v2 produces 384-dimensional vectors optimized for semantic similarity tasks.</p>
-<h3 id="4-4-Results">4.4 Results</h3>
-<p><strong>Table 1: Main Results.</strong></p>
+<p>We evaluate on the 2024 ProteinGym substitution split: 217 assays and roughly 1.5M mutations [2]. Each assay includes a wild-type residue FASTA, a ProSST structure-token FASTA, and a substitutions CSV with experimental DMS scores. pLDDT arrays are extracted from AlphaFoldDB PDB files and aligned to the residue FASTA.</p>
+<p>The evaluation protocol enforces exact residue-level alignment between the wild-type sequence and the pLDDT array used for confidence-aware scoring. Any sequence/PDB inconsistency is treated as a data-quality issue that must be resolved before evaluation. This design choice is important for the present study because even small alignment shifts would change which residues are masked or down-weighted, directly confounding the interpretation of the confidence-aware ablations.</p>
+<p>For the ensemble analysis, we additionally require that all five score channels be present for the same assay. This yields a 214-assay intersection. The ensemble numbers are therefore reported separately from the 217-assay direct modulation results rather than mixed into a single table.</p>
+<h3 id="4-2-Evaluation-Metrics">4.2 Evaluation Metrics</h3>
+<p>The primary metric is per-assay Spearman’s ρ, averaged across assays. We also report NDCG and top-10% recall. Statistical uncertainty is estimated by bootstrap over assays with <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">n = 1000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1000</span></span></span></span> resamples. To test whether confidence-aware methods help specifically on uncertain proteins, we also stratify assays into four quartiles by mean pLDDT.</p>
+<h3 id="4-3-Experimental-Settings">4.3 Experimental Settings</h3>
+<p>All reported CA-ProSST runs use the public ProSST-2048 model with the backbone frozen. Full 217-assay evaluation takes about 40 minutes per variant with the vectorized scorer on H100 hardware. V3 model selection is based on validation loss.</p>
+<h2 id="5-Results">5. Results</h2>
+<p>Two points stand out in Table 1. First, the baseline reproduction is solid: 0.5225 is slightly above the published ProSST score of 0.504 and its confidence interval comfortably covers that paper number. Second, none of the confidence-aware variants beats baseline. The learned gate is closest, but the difference is only −0.0007 in mean Spearman and is well inside the bootstrap uncertainty range. Hard masking gets worse as the threshold becomes more aggressive, with τ = 90 causing a large drop of −0.0393.</p>
+<p>The quartile breakdown in Table 2 confirms that confidence matters at the dataset level: low-confidence proteins are substantially harder than high-confidence proteins under every model. However, direct confidence modulation does not close that gap. The V3 gate is nearly identical to baseline in all quartiles, while the hard-mask variants become progressively worse as more structure is removed.</p>
+<p><strong>Table 1: Zero-shot performance on 217 ProteinGym assays. Bootstrap 95% CIs are computed over assays with n = 1000 resamples.</strong></p>
 <table>
 <thead>
 <tr>
-<th>Metric</th>
-<th style="text-align:center">Fixed Splitter</th>
-<th style="text-align:center">Recursive Splitter</th>
-<th style="text-align:center">Delta</th>
+<th>Model</th>
+<th style="text-align:center">Spearman</th>
+<th style="text-align:center">95% CI</th>
+<th style="text-align:center">NDCG</th>
+<th style="text-align:center">Top-10% Recall</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Accuracy</td>
-<td style="text-align:center">105/195 (53.8%)</td>
-<td style="text-align:center">115/195 (59.0%)</td>
-<td style="text-align:center">+5.2 pp</td>
+<td>ProSST paper (reported)</td>
+<td style="text-align:center">0.5040</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">0.7770</td>
+<td style="text-align:center">—</td>
 </tr>
 <tr>
-<td>Avg Quality (1–5)</td>
-<td style="text-align:center">3.15</td>
-<td style="text-align:center">3.29</td>
-<td style="text-align:center">+0.14</td>
+<td>ProSST-2048 baseline</td>
+<td style="text-align:center">0.5225</td>
+<td style="text-align:center">[0.500, 0.545]</td>
+<td style="text-align:center">0.8736</td>
+<td style="text-align:center">0.2429</td>
 </tr>
 <tr>
-<td>Quality = 5 count</td>
-<td style="text-align:center">57</td>
-<td style="text-align:center">65</td>
-<td style="text-align:center">+8</td>
+<td>V1 hard, τ = 50</td>
+<td style="text-align:center">0.5203</td>
+<td style="text-align:center">[0.498, 0.542]</td>
+<td style="text-align:center">0.8735</td>
+<td style="text-align:center">0.2412</td>
 </tr>
 <tr>
-<td>Quality = 1 count</td>
-<td style="text-align:center">45</td>
-<td style="text-align:center">47</td>
-<td style="text-align:center">+2</td>
+<td>V1 hard, τ = 70</td>
+<td style="text-align:center">0.5177</td>
+<td style="text-align:center">[0.494, 0.540]</td>
+<td style="text-align:center">0.8728</td>
+<td style="text-align:center">0.2394</td>
+</tr>
+<tr>
+<td>V1 hard, τ = 90</td>
+<td style="text-align:center">0.4832</td>
+<td style="text-align:center">[0.459, 0.507]</td>
+<td style="text-align:center">0.8688</td>
+<td style="text-align:center">0.2267</td>
+</tr>
+<tr>
+<td>V2 soft</td>
+<td style="text-align:center">0.5203</td>
+<td style="text-align:center">[0.498, 0.542]</td>
+<td style="text-align:center">0.8734</td>
+<td style="text-align:center">0.2412</td>
+</tr>
+<tr>
+<td>V3 learned gate</td>
+<td style="text-align:center">0.5218</td>
+<td style="text-align:center">[0.499, 0.544]</td>
+<td style="text-align:center">0.8735</td>
+<td style="text-align:center">0.2420</td>
 </tr>
 </tbody>
 </table>
-<p>The recursive splitter outperforms the fixed splitter by +5.2 percentage points in accuracy and +0.14 in average quality score. The number of top-quality answers (score 5) increases from 57 to 65, an improvement of 14%.</p>
-<p><strong>Table 2: Quality Score Distribution.</strong></p>
+<p><strong>Table 2: Mean Spearman stratified by mean pLDDT quartiles.</strong></p>
 <table>
 <thead>
 <tr>
-<th>Quality Score</th>
-<th style="text-align:center">Fixed</th>
-<th style="text-align:center">Recursive</th>
+<th>Model</th>
+<th style="text-align:center">Q1 (low)</th>
+<th style="text-align:center">Q2</th>
+<th style="text-align:center">Q3</th>
+<th style="text-align:center">Q4 (high)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1 (worst)</td>
-<td style="text-align:center">45</td>
-<td style="text-align:center">47</td>
+<td>Baseline</td>
+<td style="text-align:center">0.4490</td>
+<td style="text-align:center">0.4982</td>
+<td style="text-align:center">0.5667</td>
+<td style="text-align:center">0.5744</td>
 </tr>
 <tr>
-<td>2</td>
-<td style="text-align:center">42</td>
-<td style="text-align:center">29</td>
+<td>V1 hard, τ = 50</td>
+<td style="text-align:center">0.4418</td>
+<td style="text-align:center">0.4971</td>
+<td style="text-align:center">0.5658</td>
+<td style="text-align:center">0.5745</td>
 </tr>
 <tr>
-<td>3</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">5</td>
+<td>V1 hard, τ = 70</td>
+<td style="text-align:center">0.4310</td>
+<td style="text-align:center">0.4965</td>
+<td style="text-align:center">0.5657</td>
+<td style="text-align:center">0.5752</td>
 </tr>
 <tr>
-<td>4</td>
-<td style="text-align:center">48</td>
-<td style="text-align:center">49</td>
+<td>V1 hard, τ = 90</td>
+<td style="text-align:center">0.3645</td>
+<td style="text-align:center">0.4370</td>
+<td style="text-align:center">0.5541</td>
+<td style="text-align:center">0.5742</td>
 </tr>
 <tr>
-<td>5 (best)</td>
-<td style="text-align:center">57</td>
-<td style="text-align:center">65</td>
+<td>V2 soft</td>
+<td style="text-align:center">0.4427</td>
+<td style="text-align:center">0.4954</td>
+<td style="text-align:center">0.5662</td>
+<td style="text-align:center">0.5748</td>
 </tr>
 <tr>
-<td><strong>Total</strong></td>
-<td style="text-align:center"><strong>195</strong></td>
-<td style="text-align:center"><strong>195</strong></td>
+<td>V3 gate</td>
+<td style="text-align:center">0.4478</td>
+<td style="text-align:center">0.4969</td>
+<td style="text-align:center">0.5654</td>
+<td style="text-align:center">0.5753</td>
 </tr>
 </tbody>
 </table>
-<p>The distribution is strikingly bimodal. Quality scores of 3 are extremely rare (3 and 5 respectively), while the bulk of answers cluster at either the low end (1–2) or the high end (4–5). This pattern suggests a binary dynamic: when the pipeline retrieves relevant context, the LLM produces a high-quality answer; when it does not, the answer fails entirely.</p>
-<p><strong>Table 3: Agreement Analysis.</strong></p>
+<p>Table 3 changes the interpretation of the project. The direct embedding-side variants remain negative, but confidence is not useless overall. When it is used to modulate the mixture of heterogeneous predictors rather than to suppress structure embeddings residue by residue, it produces a measurable gain. The flat ensemble already improves strongly over any single channel, reaching 0.5569 mean Spearman on the 214-assay overlap. Adding confidence-conditioned gating raises this further to 0.5631, a gain of +0.0062 over the flat ensemble and +0.0410 over the ProSST-2048 single-channel score on the same overlap. The oracle comparison shows the same pattern: flat oracle Spearman is 0.5574, while gated oracle Spearman is 0.5639.</p>
+<p>The confidence-stratified behavior of the gated ensemble is also informative. Relative to the flat ensemble, the largest gain occurs in the lowest-confidence quartile (0.4918 → 0.5138, +0.0219), while the middle and upper quartiles change only modestly. This is exactly the regime where naive hard masking caused the greatest damage. Confidence therefore appears useful not as a binary filter on structure tokens, but as a signal for how aggressively to trust structurally grounded versus complementary predictors.</p>
+<h2 id="6-Analysis">6. Analysis</h2>
+<h3 id="6-1-Per-Assay-Gain-Loss-Distribution">6.1 Per-Assay Gain/Loss Distribution</h3>
+<p>The learned gate is best understood as a near-baseline model rather than an improvement. Compared with baseline, it improves 83 of the 217 assays and degrades 134. The mean gain on improved assays is only +0.0028 Spearman, while the mean loss on degraded assays is −0.0029. The closeness of these two numbers explains why the aggregate score remains essentially unchanged: the gate learns a weak modulation that neither consistently rescues low-confidence proteins nor consistently harms high-confidence ones.</p>
+<p><strong>Table 3: Score-level combinations on the 214-assay intersection where all channels are available.</strong></p>
 <table>
 <thead>
 <tr>
-<th>Outcome</th>
-<th style="text-align:center">Count</th>
+<th>Model</th>
+<th style="text-align:center">Spearman</th>
+<th style="text-align:center">95% CI</th>
+<th style="text-align:center">Median Spearman</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Both correct</td>
-<td style="text-align:center">93</td>
+<td>ProSST-128 channel</td>
+<td style="text-align:center">0.4826</td>
+<td style="text-align:center">[0.457, 0.508]</td>
+<td style="text-align:center">0.5074</td>
 </tr>
 <tr>
-<td>Both wrong</td>
-<td style="text-align:center">68</td>
+<td>ProSST-512 channel</td>
+<td style="text-align:center">0.4873</td>
+<td style="text-align:center">[0.463, 0.512]</td>
+<td style="text-align:center">0.5061</td>
 </tr>
 <tr>
-<td>Only recursive correct</td>
-<td style="text-align:center">22</td>
+<td>ProSST-2048 channel</td>
+<td style="text-align:center">0.5221</td>
+<td style="text-align:center">[0.500, 0.544]</td>
+<td style="text-align:center">0.5271</td>
 </tr>
 <tr>
-<td>Only fixed correct</td>
-<td style="text-align:center">12</td>
+<td>Flat stacked ensemble</td>
+<td style="text-align:center">0.5569</td>
+<td style="text-align:center">[0.535, 0.578]</td>
+<td style="text-align:center">0.5728</td>
+</tr>
+<tr>
+<td><strong>Gated stacked ensemble</strong></td>
+<td style="text-align:center"><strong>0.5631</strong></td>
+<td style="text-align:center"><strong>[0.542, 0.585]</strong></td>
+<td style="text-align:center"><strong>0.5804</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Of the 195 questions, the two splitters agree on 161 (82.6%). The recursive splitter wins on 22 questions where fixed fails, while the fixed splitter wins on only 12 — a net advantage of 10 questions for the recursive approach.</p>
-<h2 id="5-Analysis">5. Analysis</h2>
-<p>To understand when and why each splitter succeeds or fails, we examine specific examples from each outcome category.</p>
-<p><strong>Recursive wins, fixed loses (22 cases).</strong> Question q_5 asks “what causes genetic alterations in normal cells”; the ground truth references the loss of cell adhesion. The fixed splitter’s answer mentions only mutations and carcinogens (quality 2, incorrect), while the recursive splitter correctly identifies genetic alterations as changes to DNA (quality 4, correct). Inspection suggests the recursive splitter preserves a complete paragraph containing the relevant context, whereas the fixed splitter cuts the passage mid-sentence. Similarly, question q_15 (“what is Tom Cruise doing now”) yields an answer about selling property under the fixed splitter (incorrect) but a correct answer mentioning Rebecca Ferguson under the recursive splitter, because the recursive chunk keeps the complete paragraph intact. Question q_22 (“what is treatment for jaundice”) fails entirely under the fixed splitter (“I cannot answer”), but the recursive splitter retrieves a chunk containing phototherapy information and answers correctly.</p>
-<p><strong>Fixed wins, recursive loses (12 cases).</strong> Question q_10 (“cost to file bankruptcy in virginia”) is answered correctly by the fixed splitter (quality 4) with the exact figure of $306, but the recursive splitter includes an incorrect Chapter 13 cost and receives quality 3 (incorrect). Question q_18 (“What Does Lop means”) is correctly answered as “Lack of Prosecution” by the fixed splitter (quality 5), but the recursive splitter returns an unrelated dictionary definition (quality 1). In these cases, the fixed splitter’s chunks happen to isolate the answer within a compact passage, while the recursive splitter over-segments or includes misleading context.</p>
-<p><strong>Both fail (68 cases).</strong> Many involve questions where the corpus likely lacks a closely matching passage. For instance, questions about niche topics (q_17: “what is baseball twine made of”, q_24: “what is a purified phytochemical”) result in “I cannot answer” from both splitters, indicating corpus coverage gaps rather than chunking failures.</p>
-<p><strong>Bimodal quality pattern.</strong> Across both conditions, quality scores 1–3 correspond almost exclusively to incorrect answers, while 4–5 correspond to correct answers. This clean separation confirms that the LLM either has good context and produces a strong answer, or has poor context and fails entirely. The generation step adds little noise — the bottleneck is retrieval.</p>
-<h2 id="6-Conclusion">6. Conclusion</h2>
-<p>This study demonstrates that text chunking strategy has a measurable impact on RAG pipeline quality. In a controlled experiment where only the splitter varies, the recursive character splitter achieves 59.0% accuracy compared to 53.8% for the fixed-size splitter, an improvement of +5.2 percentage points. The key mechanism is that the recursive splitter preserves paragraph and sentence boundaries, producing semantically self-contained chunks that embed more faithfully and retrieve more reliably.</p>
-<p>The bimodal quality distribution highlights that retrieval — not generation — is the primary bottleneck. When relevant context is retrieved, GPT produces accurate answers; when it is not, the system fails regardless of the splitter used.</p>
-<p><strong>Limitations.</strong> Our experiment uses a single corpus, a single embedding model, a single chunk size, and English-language questions only. The GPT-as-judge evaluation, while scalable, introduces subjectivity that human evaluation could mitigate. The relatively small test set (195 questions) limits statistical power for fine-grained comparisons.</p>
-<p><strong>Future Work.</strong> Several directions could extend this research: (1) semantic chunking methods that split by topic or discourse structure; (2) varying chunk sizes (256, 512, 1024) to study the interaction between chunk size and splitter type; (3) comparing different embedding models (e.g., BGE, E5, Cohere); and (4) incorporating human evaluation to validate the LLM-as-judge results.</p>
+<h3 id="6-2-What-The-Ensemble-Learns-From-Confidence">6.2 What The Ensemble Learns From Confidence</h3>
+<p>The score-level ensemble behaves differently from the embedding-side gate. On the 214-assay overlap, the gated ensemble improves 139 assays and degrades 75 relative to the flat ensemble, with mean per-assay gain +0.0062. The best gains are concentrated in difficult, lower-confidence assays, while the largest losses are smaller in aggregate and are not confined to a single pLDDT regime. This asymmetric gain/loss pattern explains why the overall mean rises even though the quartile averages outside Q1 move only slightly.</p>
+<p>The fitted gating parameters are also interpretable. Across folds, the dominant weight remains on the ProSST-2048 structure channel, but the learned operating points for most structural channels concentrate near mean pLDDT 55 with a relatively smooth temperature of 20. This indicates that the model does not prefer abrupt switching; instead it performs gradual confidence-aware rebalancing. The sequence-only ProSST channel is consistently driven to zero weight, while ESM retains a non-zero contribution and occasionally receives a higher operating point. Empirically, the gated ensemble is therefore not discovering a new backbone-level representation. It is discovering a more effective <em>allocation rule</em> for when to emphasize the strongest structural channel and when to preserve support from a non-structural model.</p>
+<h3 id="6-3-Threshold-Sensitivity-By-Confidence-Regime">6.3 Threshold Sensitivity By Confidence Regime</h3>
+<p>The hard-mask ablation provides a clearer diagnostic. Raising the threshold from 50 to 70 to 90 produces a monotonic decline in overall mean Spearman (0.5203 → 0.5177 → 0.4832), but the damage is highly concentrated in lower-confidence proteins. Under the most aggressive setting, Q1 falls from 0.4490 to 0.3645 and Q2 falls from 0.4982 to 0.4370, whereas Q4 is almost unchanged (0.5744 to 0.5742). This pattern directly contradicts the naive rule that low pLDDT residues should simply be discarded. Even when the predicted structure is imperfect, ProSST still extracts useful signal from it.</p>
+<h3 id="6-4-Why-The-Learned-Gate-Still-Fails">6.4 Why The Learned Gate Still Fails</h3>
+<p>The learned gate also clarifies why additional flexibility is not sufficient by itself. Training loss decreases from 2.2794 to 2.1872 before rising again, and the best validation loss is obtained at epoch 1 (2.0936), followed by a slight regression at epoch 2 (2.1635). This indicates that the gate can fit the auxiliary masked-language-model objective, but only weakly. More importantly, that objective does not directly supervise mutation-effect ranking. Because the backbone is frozen, the gate can only rescale an already-trained structural representation; it cannot relearn how structural confidence should interact with fitness prediction. The empirical result is therefore conservative behavior: the gate remains very close to the pretrained baseline and produces no reliable improvement.</p>
+<h2 id="7-Conclusion">7. Conclusion</h2>
+<p>This project asked a focused question: can AlphaFold confidence improve zero-shot mutation effect prediction in a structure-aware protein language model? The answer depends on where confidence is injected. On the committed 217-assay ProteinGym benchmark, direct embedding-side modulation does not help: hard masking and soft scaling are consistently worse than baseline, and the learned per-residue gate matches baseline within noise rather than surpassing it. This rules out the simplest intuition that low-confidence structure tokens should merely be attenuated or removed before entering ProSST.</p>
+<p>At the same time, the ensemble results show that confidence is not irrelevant. On the 214-assay intersection where multiple predictors are available, confidence-conditioned score-level gating improves over a strong flat ensemble and yields the best overall result of this study. The strongest gain appears in the lowest-confidence quartile, suggesting that pLDDT is most useful when it controls cross-model trust rather than within-model suppression.</p>
+<p>Taken together, these findings sharpen the design lesson for confidence-aware protein modeling. Confidence should not be treated as a residue-local mask applied uniformly to pretrained structure features. It is better viewed as a model-selection or mixture-weighting signal that mediates between complementary predictors with different failure modes. Future work should therefore focus on confidence-aware routing, richer uncertainty representations, and training objectives aligned directly with variant-ranking performance.</p>
+<h2 id="Team-Contributions">Team Contributions</h2>
+<ul>
+<li><strong>Yang Xiaohan</strong> (20%): Contributed to project discussion, interpretation of results, and revision of the final manuscript.</li>
+<li><strong>Lu Peiyi</strong> (20%): Contributed to literature review, evaluation discussion, and revision of the final manuscript.</li>
+<li><strong>Wang Xin</strong> (20%): Contributed to experimental discussion, result checking, and revision of the final manuscript.</li>
+<li><strong>Gong Runqian</strong> (20%): Contributed to analysis discussion, presentation of findings, and revision of the final manuscript.</li>
+<li><strong>Nguyen Hoang Truong Giang</strong> (20%): Contributed to implementation, experiment execution, quantitative analysis, and preparation of the main draft.</li>
+</ul>
 <h2 id="References">References</h2>
 <ol>
-<li>Lewis, P., Perez, E., Piktus, A., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. Advances in Neural Information Processing Systems, 33, 9459–9474.</li>
-<li>Reimers, N. &amp; Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. Proceedings of EMNLP 2019.</li>
-<li>Zheng, L., Chiang, W.-L., Sheng, Y., et al. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. Advances in Neural Information Processing Systems, 36.</li>
-<li>Nguyen, T., Rosenberg, M., Song, X., et al. (2016). MS MARCO: A Human Generated MAchine Reading COmprehension Dataset. arXiv preprint arXiv:1611.09268.</li>
-<li>LangChain Documentation. Text Splitters. <a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/data_connection/document_transformers/">https://python.langchain.com/docs/modules/data_connection/document_transformers/</a></li>
-<li>ChromaDB Documentation. <a target="_blank" rel="noopener" href="https://docs.trychroma.com/">https://docs.trychroma.com/</a></li>
+<li>Li, M. et al. <em>ProSST: Protein Language Modeling with Quantized Structure and Disentangled Attention</em>. In The Thirty-eighth Annual Conference on Neural Information Processing Systems (NeurIPS 2024). <a target="_blank" rel="noopener" href="https://openreview.net/forum?id=4Z7RZixpJQ">https://openreview.net/forum?id=4Z7RZixpJQ</a></li>
+<li>Notin, P. et al. <em>ProteinGym: Large-Scale Benchmarks for Protein Fitness Prediction and Design</em>. Advances in Neural Information Processing Systems, Datasets and Benchmarks Track, 2023. <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/cac723e5ff29f65e3fcbb0739ae91bee-Abstract-Datasets_and_Benchmarks.html">https://proceedings.neurips.cc/paper_files/paper/2023/hash/cac723e5ff29f65e3fcbb0739ae91bee-Abstract-Datasets_and_Benchmarks.html</a></li>
+<li>Jumper, J. et al. <em>Highly Accurate Protein Structure Prediction with AlphaFold</em>. Nature, 596:583–589, 2021. <a target="_blank" rel="noopener" href="https://doi.org/10.1038/s41586-021-03819-2">https://doi.org/10.1038/s41586-021-03819-2</a></li>
+<li>Varadi, M. et al. <em>AlphaFold Protein Structure Database: Massively Expanding the Structural Coverage of Protein-Sequence Space with High-Accuracy Models</em>. Nucleic Acids Research, 50(D1):D439–D444, 2022. <a target="_blank" rel="noopener" href="https://doi.org/10.1093/nar/gkab1061">https://doi.org/10.1093/nar/gkab1061</a></li>
+<li>Lin, Z. et al. <em>Evolutionary-scale Prediction of Atomic-level Protein Structure with a Language Model</em>. Science, 379(6637):1123–1130, 2023. <a target="_blank" rel="noopener" href="https://doi.org/10.1126/science.ade2574">https://doi.org/10.1126/science.ade2574</a></li>
+<li>Su, J. et al. <em>SaProt: Protein Language Modeling with Structure-aware Vocabulary</em>. In The Twelfth International Conference on Learning Representations (ICLR 2024). <a target="_blank" rel="noopener" href="https://openreview.net/forum?id=6MRm3G4NiU">https://openreview.net/forum?id=6MRm3G4NiU</a></li>
 </ol>
-<h2 id="Appendix-Team-Contributions">Appendix: Team Contributions</h2>
+<h2 id="Appendix-A-Reproducibility-Details">Appendix A. Reproducibility Details</h2>
+<h3 id="A-1-Experimental-Protocol">A.1 Experimental Protocol</h3>
+<p>Reproducing the reported numbers requires six stages. First, obtain the wild-type sequences, structural token sequences, and substitution tables from the upstream ProSST release. Second, obtain AlphaFoldDB structures and extract residue-aligned pLDDT arrays. Third, evaluate the ProSST-2048 baseline on all 217 assays. Fourth, evaluate the hard-mask and soft-weighting ablations using the same assay set and the same confidence arrays. Fifth, train the learned gate on a held-out protein set that does not overlap the ProteinGym assay targets, select the best validation model, and evaluate that model on the same 217 assays. Sixth, cache the per-mutant scores needed for score-level combination on the 214-assay overlap, fit both the flat and the confidence-conditioned ensembles by cross-validation, and report their assay-level summaries separately from the 217-assay direct-modulation runs.</p>
+<h3 id="A-2-Alignment-Safeguard">A.2 Alignment Safeguard</h3>
+<p>Because the project studies residue-level confidence modulation, exact alignment between the confidence array and the residue sequence is essential. The release therefore treats sequence/PDB inconsistencies as explicit preprocessing errors. This choice prevents a common but under-discussed failure mode in confidence-aware pipelines: a shifted confidence array may still allow the program to run, yet the resulting ablation no longer corresponds to the intended biological positions.</p>
+<h3 id="A-3-V3-Training-Losses">A.3 V3 Training Losses</h3>
 <table>
 <thead>
 <tr>
-<th>Member</th>
-<th>Student ID</th>
-<th>Role</th>
-<th>Contribution</th>
+<th style="text-align:center">Epoch</th>
+<th style="text-align:center">Train loss</th>
+<th style="text-align:center">Val loss</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Liu Naihuan</td>
-<td>G2502734G</td>
-<td>A: Corpus &amp; Questions</td>
-<td>Collected and cleaned the MS MARCO corpus; prepared 195 QA pairs with ground-truth answers (33%)</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">2.2794</td>
+<td style="text-align:center">2.1264</td>
 </tr>
 <tr>
-<td>Xi Lu</td>
-<td>G2503237B</td>
-<td>B: Retrieval Pipeline</td>
-<td>Built the retrieval pipeline: chunking, embedding, ChromaDB indexing, and retrieval (33%)</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2.1872</td>
+<td style="text-align:center"><strong>2.0936</strong></td>
 </tr>
 <tr>
-<td>Wang Xin</td>
-<td>G2510726A</td>
-<td>C: Evaluation &amp; Judging</td>
-<td>Implemented the answer generation and LLM-as-judge evaluation pipeline; computed all scores (33%)</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2.2362</td>
+<td style="text-align:center">2.1635</td>
 </tr>
 </tbody>
 </table>
+<h3 id="A-4-Fast-Scorer-Sanity-Check">A.4 Fast Scorer Sanity Check</h3>
+<p>The repository retains both the reference scorer and the vectorized scorer. For V2 soft weighting, the committed notes report numerical agreement to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>10</mn><mrow><mo>−</mo><mn>7</mn></mrow></msup></mrow><annotation encoding="application/x-tex">10^{-7}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">7</span></span></span></span></span></span></span></span></span></span></span></span> between the two paths, confirming that the speedup does not change the metric values.</p>
 
       
     </div>

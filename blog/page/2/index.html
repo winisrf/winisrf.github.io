@@ -147,7 +147,7 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
@@ -173,6 +173,307 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90LINUX%E3%80%91%E6%9D%83%E9%99%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/07/18/%E3%80%90LINUX%E3%80%91%E6%9D%83%E9%99%90/" class="post-title-link" itemprop="url">【Linux】权限</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 02:02:44" itemprop="dateModified" datetime="2026-07-19T02:02:44+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>转载自：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/85360587">https://zhuanlan.zhihu.com/p/85360587</a></p>
+<p><font style="color:rgb(25, 27, 31);">LINUX权限，一般用</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=107098436&amp;content_type=Article&amp;match_order=1&amp;q=%E5%85%AB%E8%BF%9B%E5%88%B6&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NjQ2MDgsInEiOiLlhavov5vliLYiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxMDcwOTg0MzYsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.eSM_ogtflPJdwIZoUWJL_zRcpUO5DrOWM_dB_d6kB3Q&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">八进制</font></a><font style="color:rgb(25, 27, 31);">表示。r=4, w=2, x=1, -=0（这也就是用数字设置权限时为何是4代表读，2代表写，1代表执行）</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391877662-64434457-7b08-4e0b-a181-88df8d36e628.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">关于第一位最高位的解释： 上面我们说到了权限表示中后九位的含义，剩下的第一位代表的是文件的类型，类型可以是下面几个中的一个：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d代表的是目录(directroy)</span><br><span class="line">-代表的是文件(regular file)</span><br><span class="line">s代表的是套字文件(socket)</span><br><span class="line">p代表的管道文件(pipe)或命名管道文件(named pipe)</span><br><span class="line">l代表的是符号链接文件(symbolic link)</span><br><span class="line">b代表的是该文件是面向块的设备文件(block-oriented device file)</span><br><span class="line">c代表的是该文件是面向字符的设备文件(charcter-oriented device file)</span><br></pre></td></tr></table></figure>
+<h3 id="font-style-color-rgb-25-27-31-LINUX附加权限-font"><font style="color:rgb(25, 27, 31);">LINUX附加权限</font></h3>
+<p><font style="color:rgb(25, 27, 31);">linux除了设置正常的读写操作权限外，还有关于一类设置也是涉及到权限，叫做Linxu附加权限。包括 SET位权限（suid，sgid）和粘滞位权限（sticky）。</font></p>
+<h4 id="font-style-color-rgb-25-27-31-SET位权限-font"><font style="color:rgb(25, 27, 31);">SET位权限</font></h4>
+<p><font style="color:rgb(25, 27, 31);">suid/sgid是为了使“没有取得特权用户要完成一项必须要有特权才可以执行的任务”而产生的。 一般用于给可执行的程序或脚本文件进行设置，其中SUID表示对属主用户增加SET位权限，SGID表示对属组内用户增加SET位权限。执行文件被设置了SUID、SGID权限后，任何用户执行该文件时，将获得该文件属主、属组账号对应的身份。在许多环境中，suid 和 sgid 很管用，但是不恰当地使用这些位可能使系统的安全遭到破坏。所以应该尽量避免使用SET位权限程序。（passwd 命令是为数不多的必须使用“suid”的命令之一）。</font></p>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">suid(set User ID,set UID)的意思是进程执行一个文件时通常保持进程拥有者的UID。然而，如果设置了可执行文件的suid位，进程就获得了该文件拥有者的UID。</font></li>
+<li><font style="color:rgb(25, 27, 31);">sgid(set Group ID,set GID)意思也是一样，只是把上面的进程拥有者改成</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=107098436&amp;content_type=Article&amp;match_order=1&amp;q=%E8%BF%9B%E7%A8%8B%E7%BB%84&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NjQ2MDgsInEiOiLov5vnqIvnu4QiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxMDcwOTg0MzYsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.gzemp4mP6iVjE2xCZltMQ_ajFRz3sPBatxw9Re0bW5g&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">进程组</font></a><font style="color:rgb(25, 27, 31);">就好了。</font></li>
+</ul>
+<h4 id="font-style-color-rgb-25-27-31-SET位权限表示形式（10位权限）-font"><font style="color:rgb(25, 27, 31);">SET位权限表示形式（10位权限）</font></h4>
+<p><font style="color:rgb(25, 27, 31);">如果一个文件被设置了suid或sgid位，会分别表现在所有者或同组用户的权限的可执行位上；如果文件设置了suid还设置了x（执行）位，则相应的执行位表示为s(小写)。但是，如果没有设置x位，它将表示为S(大写)。如：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、-rwsr-xr-x 表示设置了suid，且拥有者有可执行权限</span><br><span class="line">2、-rwSr--r-- 表示suid被设置，但拥有者没有可执行权限</span><br><span class="line">3、-rwxr-sr-x 表示sgid被设置，且群组用户有可执行权限</span><br><span class="line">4、-rw-r-Sr-- 表示sgid被设置，但群组用户没有可执行权限</span><br></pre></td></tr></table></figure>
+<h4 id="font-style-color-rgb-25-27-31-设置方式-font"><font style="color:rgb(25, 27, 31);">设置方式</font></h4>
+<p><font style="color:rgb(25, 27, 31);">SET位权限可以通过chmod命令设置，给文件加suid和sgid的命令如下(类似于上面chmod赋予一般权限的命令)：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chmod u+s filename 	设置suid位</span><br><span class="line">chmod u-s filename 	去掉suid设置</span><br><span class="line">chmod g+s filename 	设置sgid位</span><br><span class="line">chmod g-s filename 	去掉sgid设置</span><br></pre></td></tr></table></figure>
+<h4 id="font-style-color-rgb-25-27-31-粘滞位权限表示形式（10位权限）-font"><font style="color:rgb(25, 27, 31);">粘滞位权限表示形式（10位权限）</font></h4>
+<p><font style="color:rgb(25, 27, 31);">一个文件或目录被设置了粘滞位权限，会表现在其他组用户的权限的可执行位上。如果文件设置了sticky还设置了x（执行）位，其他组用户的权限的可执行位为t(小写)。但是，如果没有设置x位，它将表示为T(大写)。如：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、-rwsr-xr-t 表示设置了粘滞位且其他用户组有可执行权限</span><br><span class="line">2、-rwSr--r-T 表示设置了粘滞位但其他用户组没有可执行权限</span><br></pre></td></tr></table></figure>
+<h4 id="font-style-color-rgb-25-27-31-设置方式-font-2"><font style="color:rgb(25, 27, 31);">设置方式</font></h4>
+<p><font style="color:rgb(25, 27, 31);">sticky权限同样可以通过</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=107098436&amp;content_type=Article&amp;match_order=7&amp;q=chmod&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NjQ2MDgsInEiOiJjaG1vZCIsInpoaWRhX3NvdXJjZSI6ImVudGl0eSIsImNvbnRlbnRfaWQiOjEwNzA5ODQzNiwiY29udGVudF90eXBlIjoiQXJ0aWNsZSIsIm1hdGNoX29yZGVyIjo3LCJ6ZF90b2tlbiI6bnVsbH0.4pj_a2PCc-180XLxhQMVE3rAEIz81opSQdMjkhT7UwU&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">chmod</font></a><font style="color:rgb(25, 27, 31);">命令设置：</font></p>
+<p><font style="color:rgb(83, 88, 97);">chmod +t &lt;文件列表…&gt;</font></p>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">suid 的八进制数字是4</font></li>
+<li><font style="color:rgb(25, 27, 31);">sgid 的八进制数字代表数字是 2</font></li>
+<li><font style="color:rgb(25, 27, 31);">sticky 位八进制数字代表数字是1</font></li>
+</ul>
+<h3 id="font-style-color-rgb-25-27-31-权限的掩码-font"><font style="color:rgb(25, 27, 31);">权限的掩码</font></h3>
+<p><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=107098436&amp;content_type=Article&amp;match_order=1&amp;q=umask&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NjQ2MDgsInEiOiJ1bWFzayIsInpoaWRhX3NvdXJjZSI6ImVudGl0eSIsImNvbnRlbnRfaWQiOjEwNzA5ODQzNiwiY29udGVudF90eXBlIjoiQXJ0aWNsZSIsIm1hdGNoX29yZGVyIjoxLCJ6ZF90b2tlbiI6bnVsbH0.kqne5IgVceS_p-55FkVlejmx1N2LCy7Uf8NyVU3Ml9g&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">umask</font></a><font style="color:rgb(25, 27, 31);">是用来指定&quot;目前用户在新建文件或者目录时候的权限默认值&quot;。</font></p>
+<p><font style="color:rgb(25, 27, 31);">在linux下我们查看的方式有两种，一种可以直接输入umask，就可以看到数字形态的权限设置分数，一种则是加-S（Symbolic）参数，就能以符号类型的方式来显示出权限了，如下图：</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391877229-d99d5ae5-e12b-4574-8b70-f17ad3eed778.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">目录和文件的默认权限属性是不同的，因为对于一个目录来说它的x权限也就是执行权限是很重要的，进入目录等操作都是需要目录具有执行权限的，而对于文件来说，一般情况都是用于数据的记录操作，所以一般不需要执行权限。从而，在linux下默认的情况是这样的：</font></p>
+<p><font style="color:rgb(25, 27, 31);">▶</font><font style="color:rgb(25, 27, 31);"> 如果用户创建的是目录，则默认所有权限都开放，为777，默认为：drwxrwxrwx</font></p>
+<p><font style="color:rgb(25, 27, 31);">▶</font><font style="color:rgb(25, 27, 31);"> 如果创建的是文件，默认没有x权限，那么就只有r、w两项，最大值为666，默认为：-rw-rw-rw-</font></p>
+<p><font style="color:rgb(25, 27, 31);">那么之前所说的拿走的权限就是这里这个默认值要减掉的权限，r、w、x分别是4、2、1，要拿掉读权限就输入4，拿掉写权限就输入2，以此类推。</font></p>
+<p><font style="color:rgb(25, 27, 31);">再看上图，umask为022，也就是说，对于当前用户没有拿掉权限，group用户和other用户都被拿走了w权限，所以此时如果用户进行创建目录和文件的时候，默认权限是会进行如下的减法操作：</font></p>
+<p><strong><font style="color:rgb(25, 27, 31);">新建文件：</font></strong><font style="color:rgb(25, 27, 31);">666-022=644；</font></p>
+<p><strong><font style="color:rgb(25, 27, 31);">新建目录：</font></strong><font style="color:rgb(25, 27, 31);">777-022=755.</font></p>
+<p><font style="color:rgb(25, 27, 31);">所以，目录的默认权限是rwxr-xr-x（755），文件的默认权限是-rw-r–r–（644）。</font></p>
+<h4 id="font-style-color-rgb-25-27-31-权限掩码的设置-font"><font style="color:rgb(25, 27, 31);">权限掩码的设置</font></h4>
+<p><font style="color:rgb(25, 27, 31);">Umask的设置只需要在umask命令后加想要拿掉的权限数字就行，Linux下的etc/profile和etc/bashrc中都有默认的umask设置，vim打开文件后，可以看到根据不同的uid设置了不同的umask，那如果实在etc/profile中修改，只有在重新登录用户的时候才会发生改变，而在etc/bashrc中修改的话要是切换目录就会发生改变，因为profile是在登录用户的时候调用的，而bashrc是在打开一个shell时候调用。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391877773-aeea4630-8fc9-4f10-850d-2802968658fc.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">一般情况下，是不建议这么修改的，我们如果要设置的话就直接用umask命令做更改就行。</font></p>
+<p><font style="color:rgb(25, 27, 31);"></font></p>
+<p><font style="color:rgb(25, 27, 31);">另外，在</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=107098436&amp;content_type=Article&amp;match_order=2&amp;q=%E6%9D%83%E9%99%90%E6%8E%A9%E7%A0%81&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NjQ2MDgsInEiOiLmnYPpmZDmjqnnoIEiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxMDcwOTg0MzYsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MiwiemRfdG9rZW4iOm51bGx9.zh78WUsEBqE7OYtXdotsPbatY9Fi3wsFaU1dmbz-mbg&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">权限掩码</font></a><font style="color:rgb(25, 27, 31);">方面关于root用户和普通用户的区别，我切换到普通用户查看一下umask，如下图：</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391877265-486a1498-a736-4c33-b088-16c338eb9c89.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">可以看到确实和root用户下不一样，此时的umask是0002，也就是说默认拿掉的权限少了。这是linux系统基于安全的考虑，对于一般用户身份，保留了用户组的写权限，而root 用户下是拿掉了这项权限的。</font></p>
+<p><font style="color:rgb(25, 27, 31);">上面在计算创建的文件和目录的默认权限的时候，我写的是这样的：666-022=644；777-022=755.，但这并不是做了对应数字的加减，刚刚看到数字相减的结果和最后验证的结果是一样的，但这只是巧合而已。</font></p>
+<p><font style="color:rgb(25, 27, 31);">我们知道上面的每一个数字是代表着某一个用户对于文件或者目录有没有读、写、执行权限的衡量，比如6，代表了rw-，即只有读和写权限，是421中4+2的结果，所以并不是一个十进制数，我们在计算的时候并不能直接以十进制相减来计算。</font></p>
+<p><font style="color:rgb(25, 27, 31);">我们只要知道421分别对应rwx，在计算的过程中用rwx来算就行了，或者就用八进制计算。</font></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Java%E3%80%91JDBC%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/07/18/%E3%80%90Java%E3%80%91JDBC%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" class="post-title-link" itemprop="url">【Java】JDBC数据库连接池</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 01:56:16" itemprop="dateModified" datetime="2026-07-19T01:56:16+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43520450/article/details/107231118">https://blog.csdn.net/weixin_43520450/article/details/107231118</a></p>
+<h3 id="一、JDBC数据库连接池的必要性">一、JDBC数据库连接池的必要性</h3>
+<p>1、在使用开发基于数据库的web程序时，传统的模式基本是按以下步骤：</p>
+<p>（1）在主程序（如servlet、beans）中建立数据库连接<br>
+（2）进行sql操作<br>
+（3）断开数据库连接</p>
+<p>2、这种模式开发，存在的问题:</p>
+<p>（1）普通的JDBC数据库连接使用 DriverManager 来获取，每次向数据库建立连接的时候都要将 Connection加载到内存中，再验证用户名和密码(得花费0.05s～1s的时间)。需要数据库连接的时候，就向数据库要求一个，执行完成后再断开连接。这样的方式将<code>会消耗大量的资源和时间</code>。数据库的连接资源并没有得到很好的重复利用。若同时有几百人甚至几千人在线，频繁的进行数据库连接操作将占用很多的系统资源，严重的甚至会造成服务器的崩溃。<br>
+（2）<code>对于每一次数据库连接，使用完后都得断开。</code>否则，如果程序出现异常而未能关闭，将会导致数据库系统中的内存泄漏，最终将导致重启数据库。（回忆：何为Java的内存泄漏？）<br>
+（3）这种开发<code>不能控制被创建的连接对象数</code>，系统资源会被毫无顾及的分配出去，如连接过多，也可能导致内存泄漏，服务器崩溃。</p>
+<h3 id="二、数据库连接池技术">二、数据库连接池技术</h3>
+<p>为解决传统开发中的数据库连接问题，可以采用数据库连接池技术。</p>
+<p>1、数据库连接池的基本思想：<br>
+就是为数据库连接建立一个“缓冲池”。预先在缓冲池中放入一定数量的连接，当需要建立数据库连接时，只需从“缓冲池”中取出一个，使用完毕之后再放回去。</p>
+<p>数据库连接池负责<code>分配</code>、<code>管理</code>和<code>释放</code>数据库连接，它<code>允许应用程序重复使用一个现有的数据库连接，而不是重新建立一个</code>。</p>
+<p>数据库连接池在初始化时将创建一定数量的数据库连接放到连接池中，这些<code>数据库连接的数量是由最小数据库连接数来设定的</code>。无论这些数据库连接是否被使用，连接池都将一直保证至少拥有这么多的连接数量。连接池的<code>最大数据库连接数量限定了这个连接池能占有的最大连接数</code>，当应用程序向连接池请求的连接数超过最大连接数量时，这些请求将被加入到等待队列中。</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391559471-e5526af8-a3cd-465a-bc4d-76140379f302.png" alt=""><br>
+2、数据库连接池的工作原理：</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560155-f3b35d19-1a20-46bf-9a4a-898a2e4dedad.png" alt=""><br>
+3、数据库连接池技术的优点：</p>
+<p>（1）<code>资源重用</code><br>
+由于数据库连接得以重用，避免了频繁创建，释放连接引起的大量性能开销。在减少系统消耗的基础上，另一方面也增加了系统运行环境的平稳性。</p>
+<p>（2）<code>更快的系统反应速度</code><br>
+数据库连接池在初始化过程中，往往已经创建了若干数据库连接置于连接池中备用。此时连接的初始化工作均已完成。对于业务请求处理而言，直接利用现有可用连接，避免了数据库连接初始化和释放过程的时间开销，从而减少了系统的响应时间</p>
+<p>（3）<code>新的资源分配手段</code><br>
+对于多应用共享同一数据库的系统而言，可在应用层通过数据库连接池的配置，实现某一应用最大可用数据库连接数的限制，避免某一应用独占所有的数据库资源</p>
+<p>（4）<code>统一的连接管理，避免数据库连接泄漏</code><br>
+在较为完善的数据库连接池实现中，可根据预先的占用超时设定，强制回收被占用连接，从而避免了常规数据库连接操作中可能出现的资源泄露</p>
+<h3 id="三、多种开源的数据库连接池">三、多种开源的数据库连接池</h3>
+<p>1、JDBC 的数据库连接池使用 javax.sql .DataSource 来表示，DataSource 只是一个接口，该接口通常由服务器(Weblogic, WebSphere, Tomcat)提供实现，也有一些开源组织提供实现：</p>
+<p>（1）DBCP 是Apache提供的数据库连接池。tomcat服务器自带dbcp数据库连接池。速度相对c3p0较快，但因自身存在BUG，Hibernate3已不再提供支持。</p>
+<p>（2）C3P0 是一个开源组织提供的一个数据库连接池，速度相对较慢，稳定性还可以，hibernate官方推荐使用。</p>
+<p>（3）Proxool 是sourceforge下的一个开源项目数据库连接池，有监控连接池状态的功能，稳定性较c3p0差一点.</p>
+<p>（4）BoneCP 是一个开源组织提供的数据库连接池，速度快。</p>
+<p>（5）Druid 是阿里提供的数据库连接池，据说是集DBCP 、C3P0 、Proxool优点于一身的数据库连接池，但是速度不确定是否有BoneCP快。</p>
+<p>2、DataSource 通常被称为数据源，它包含连接池和连接池管理两个部分，习惯上也经常把 DataSource 称为连接池</p>
+<p>3、DataSource用来取代DriverManager来获取Connection，获取速度快，同时可以大幅度提高数据库访问速度。</p>
+<p>特别注意：</p>
+<p>（1）数据源和数据库连接不同，<code>数据源无需创建多个</code>，它是产生数据库连接的工厂，因此整个应用只需要一个数据源即可。<br>
+（2）当数据库访问结束后，程序还是像以前一样关闭数据库连接：conn.close();<br>
+但conn.close()并没有关闭数据库的物理连接，它仅仅把数据库连接释放，归还给了数据库连接池。</p>
+<h4 id="3-1-C3P0数据库连接池">3.1 C3P0数据库连接池</h4>
+<p>（1）获取连接的方式一：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//使用C3P0数据库连接池的方式，获取数据库的连接：不推荐</span><br><span class="line">public static Connection getConnection1() throws Exception&#123;</span><br><span class="line">	ComboPooledDataSource cpds = new ComboPooledDataSource();</span><br><span class="line">	cpds.setDriverClass(&quot;com.mysql.jdbc.Driver&quot;); </span><br><span class="line">	cpds.setJdbcUrl(&quot;jdbc:mysql://localhost:3306/test&quot;);</span><br><span class="line">	cpds.setUser(&quot;root&quot;);</span><br><span class="line">	cpds.setPassword(&quot;abc123&quot;);</span><br><span class="line">		</span><br><span class="line">//	cpds.setMaxPoolSize(100);</span><br><span class="line">	</span><br><span class="line">	Connection conn = cpds.getConnection();</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（2）获取连接的方式二：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//使用C3P0数据库连接池的配置文件方式，获取数据库的连接：推荐</span><br><span class="line">private static DataSource cpds = new ComboPooledDataSource(&quot;helloc3p0&quot;);</span><br><span class="line">public static Connection getConnection2() throws SQLException&#123;</span><br><span class="line">	Connection conn = cpds.getConnection();</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，src下的配置文件为：（<code>c3p0-config.xml</code>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;c3p0-config&gt;</span><br><span class="line">	&lt;named-config name=&quot;helloc3p0&quot;&gt;</span><br><span class="line">		&lt;!-- 获取连接的4个基本信息 --&gt;</span><br><span class="line">		&lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;</span><br><span class="line">		&lt;property name=&quot;password&quot;&gt;abc123&lt;/property&gt;</span><br><span class="line">		&lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql:///test&lt;/property&gt;</span><br><span class="line">		&lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;!-- 涉及到数据库连接池的管理的相关属性的设置 --&gt;</span><br><span class="line">		&lt;!-- 若数据库中连接数不足时, 一次向数据库服务器申请多少个连接 --&gt;</span><br><span class="line">		&lt;property name=&quot;acquireIncrement&quot;&gt;5&lt;/property&gt;</span><br><span class="line">		&lt;!-- 初始化数据库连接池时连接的数量 --&gt;</span><br><span class="line">		&lt;property name=&quot;initialPoolSize&quot;&gt;5&lt;/property&gt;</span><br><span class="line">		&lt;!-- 数据库连接池中的最小的数据库连接数 --&gt;</span><br><span class="line">		&lt;property name=&quot;minPoolSize&quot;&gt;5&lt;/property&gt;</span><br><span class="line">		&lt;!-- 数据库连接池中的最大的数据库连接数 --&gt;</span><br><span class="line">		&lt;property name=&quot;maxPoolSize&quot;&gt;10&lt;/property&gt;</span><br><span class="line">		&lt;!-- C3P0 数据库连接池可以维护的 Statement 的个数 --&gt;</span><br><span class="line">		&lt;property name=&quot;maxStatements&quot;&gt;20&lt;/property&gt;</span><br><span class="line">		&lt;!-- 每个连接同时可以使用的 Statement 对象的个数 --&gt;</span><br><span class="line">		&lt;property name=&quot;maxStatementsPerConnection&quot;&gt;5&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">	&lt;/named-config&gt;</span><br><span class="line">&lt;/c3p0-config&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-DBCP数据库连接池">3.2 DBCP数据库连接池</h4>
+<p>1、DBCP 是 Apache 软件基金组织下的开源连接池实现，该连接池依赖该组织下的另一个开源系统：<code>Common-pool</code>。如需使用该连接池实现，应在系统中增加如下两个 jar 文件：</p>
+<p>Commons-dbcp.jar：连接池的实现<br>
+Commons-pool.jar：连接池实现的依赖库</p>
+<p>2、<code>Tomcat 的连接池正是采用该连接池来实现的</code>。该数据库连接池既可以与应用服务器整合使用，也可由应用程序独立使用。</p>
+<p>3、数据源和数据库连接不同，<code>数据源无需创建多个</code>，它是产生数据库连接的工厂，因此整个应用只需要一个数据源即可。</p>
+<p>4、当数据库访问结束后，程序还是像以前一样关闭数据库连接：conn.close(); 但<code>上面的代码并没有关闭数据库的物理连接，它仅仅把数据库连接释放，归还给了数据库连接池</code>。</p>
+<p>配置属性说明：</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560196-df0d5f4c-04e2-4ce6-a406-ad4087b21d2d.png" alt=""><br>
+（1）获取连接方式一：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static Connection getConnection3() throws Exception &#123;</span><br><span class="line">	BasicDataSource source = new BasicDataSource();</span><br><span class="line">		</span><br><span class="line">	source.setDriverClassName(&quot;com.mysql.jdbc.Driver&quot;);</span><br><span class="line">	source.setUrl(&quot;jdbc:mysql:///test&quot;);</span><br><span class="line">	source.setUsername(&quot;root&quot;);</span><br><span class="line">	source.setPassword(&quot;abc123&quot;);</span><br><span class="line">		</span><br><span class="line">	//</span><br><span class="line">	source.setInitialSize(10);</span><br><span class="line">		</span><br><span class="line">	Connection conn = source.getConnection();</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（2）获取连接方式二：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//使用dbcp数据库连接池的配置文件方式，获取数据库的连接：推荐</span><br><span class="line">private static DataSource source = null;</span><br><span class="line">static&#123;</span><br><span class="line">	try &#123;</span><br><span class="line">		Properties pros = new Properties();</span><br><span class="line">		</span><br><span class="line">		InputStream is = DBCPTest.class.getClassLoader().getResourceAsStream(&quot;dbcp.properties&quot;);</span><br><span class="line">			</span><br><span class="line">		pros.load(is);</span><br><span class="line">		//根据提供的BasicDataSourceFactory创建对应的DataSource对象</span><br><span class="line">		source = BasicDataSourceFactory.createDataSource(pros);</span><br><span class="line">	&#125; catch (Exception e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">&#125;</span><br><span class="line">public static Connection getConnection4() throws Exception &#123;</span><br><span class="line">		</span><br><span class="line">	Connection conn = source.getConnection();</span><br><span class="line">	</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，src下的配置文件为：（<code>dbcp.properties</code>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">driverClassName=com.mysql.jdbc.Driver</span><br><span class="line">url=jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true&amp;useServerPrepStmts=false</span><br><span class="line">username=root</span><br><span class="line">password=abc123</span><br><span class="line"></span><br><span class="line">initialSize=10</span><br><span class="line">#...</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-Druid（德鲁伊）数据库连接池">3.3 Druid（德鲁伊）数据库连接池</h4>
+<p>Druid是阿里巴巴开源平台上一个数据库连接池实现，它结合了C3P0、DBCP、Proxool等DB池的优点，同时加入了日志监控，可以很好的监控DB池连接和SQL的执行情况，可以说是针对监控而生的DB连接池，可以说是<code>目前最好的连接池之一</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import java.sql.Connection;</span><br><span class="line">import java.util.Properties;</span><br><span class="line">import javax.sql.DataSource;</span><br><span class="line">import com.alibaba.druid.pool.DruidDataSourceFactory;</span><br><span class="line"></span><br><span class="line">public class TestDruid &#123;</span><br><span class="line">	public static void main(String[] args) throws Exception &#123;</span><br><span class="line">		Properties pro = new Properties();		 pro.load(TestDruid.class.getClassLoader().getResourceAsStream(&quot;druid.properties&quot;));</span><br><span class="line">		DataSource ds = DruidDataSourceFactory.createDataSource(pro);</span><br><span class="line">		Connection conn = ds.getConnection();</span><br><span class="line">		System.out.println(conn);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，src下的配置文件为：（<code>druid.properties</code>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">url=jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true</span><br><span class="line">username=root</span><br><span class="line">password=123456</span><br><span class="line">driverClassName=com.mysql.jdbc.Driver</span><br><span class="line"></span><br><span class="line">initialSize=10</span><br><span class="line">maxActive=20</span><br><span class="line">maxWait=1000</span><br><span class="line">filters=wall</span><br></pre></td></tr></table></figure>
+<p>详细参数配置：</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560190-90859eb0-bfdf-4a4e-a29c-fb56a3c69bd0.png" alt=""></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560221-ee22c7ed-d999-4a37-b011-507097c77afc.png" alt=""></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -293,249 +594,6 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\inputminted&#123;python&#125;&#123;codes/main.py&#125;</span><br></pre></td></tr></table></figure>
 <p>可用配色风格参考：<a target="_blank" rel="noopener" href="https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted#Reference_guide">Reference guide</a></p>
 <p>参考：<a target="_blank" rel="noopener" href="https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted">Code Highlighting with minted | Overleaf</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Java%E3%80%91%E4%BC%A0%E7%BB%9FJsp+Servlet%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E5%B0%86%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E4%BF%9D%E5%AD%98%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="winis">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Time to rest">
-      <meta itemprop="description" content="至于俗世流言，诸位请便。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Time to rest">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/07/18/%E3%80%90Java%E3%80%91%E4%BC%A0%E7%BB%9FJsp+Servlet%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E5%B0%86%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E4%BF%9D%E5%AD%98%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-title-link" itemprop="url">【Java】传统Jsp+Servlet上传文件到服务器并将图片地址保存到数据库</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-07-19 02:02:00" itemprop="dateModified" datetime="2026-07-19T02:02:00+08:00">2026-07-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Fixed/" itemprop="url" rel="index"><span itemprop="name">Fixed</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/lhr666666/article/details/104433945">https://blog.csdn.net/lhr666666/article/details/104433945</a></p>
-<h4 id="上传头像">上传头像</h4>
-<p>先写一个上传头像的表单。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;panel panel-default&quot;&gt;</span><br><span class="line">		&lt;div class=&quot;panel-heading&quot;&gt;修改头像&lt;/div&gt;</span><br><span class="line">		&lt;div class=&quot;panel-body&quot;&gt;</span><br><span class="line">			&lt;form action=&quot;upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">			&lt;input type=&quot;hidden&quot; name=&quot;userID&quot; value=&lt;%=user.get(&quot;userID&quot;) %&gt;&gt;</span><br><span class="line">				&lt;input type=&quot;file&quot; name=&quot;testImg&quot; id=&quot;headimg&quot; onchange=&quot;show(this)&quot;&gt;&lt;br&gt;</span><br><span class="line">				&lt;input type=&quot;submit&quot; value=&quot;上传头像&quot;&gt;</span><br><span class="line">			&lt;/form&gt;</span><br><span class="line"></span><br><span class="line">			&lt;div id=&quot;touxiang&quot;&gt;</span><br><span class="line">				&lt;img class=&quot;userinfo-head&quot; src=&quot;&lt;%=user.get(&quot;userHead&quot;) %&gt;&quot; alt=&#x27;头像&#x27; width=&quot;100&quot; height=&quot;100&quot;</span><br><span class="line">					id=&quot;showimg&quot;&gt;</span><br><span class="line">			&lt;/div&gt;</span><br><span class="line">		&lt;/div&gt;</span><br><span class="line">	&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>表单类型enctype=“multipart/form-data”。为了能在选择图片之后就能预览到图片再进行上传，我们添加一段js。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">		function show(f) &#123;</span><br><span class="line">			var reader = new FileReader();//创建文件读取对象</span><br><span class="line">			var files = f.files[0];//获取file组件中的文件</span><br><span class="line">			reader.readAsDataURL(files);//文件读取装换为base64类型</span><br><span class="line">			reader.onloadend = function(e) &#123;</span><br><span class="line">				//加载完毕之后获取结果赋值给img</span><br><span class="line">				document.getElementById(&quot;showimg&quot;).src = this.result;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>添加处理上传文件的servlet：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</span><br><span class="line">		System.out.println(&quot;方法开始执行了&quot;);</span><br><span class="line">		HttpSession session = req.getSession();</span><br><span class="line">		// 验证请求是否满足要求（post 请求 / enctype 是否以multipart打头</span><br><span class="line">		boolean isMultipart = ServletFileUpload.isMultipartContent(req);</span><br><span class="line">		// 如果不满足要求就立即结束对该请求的处理</span><br><span class="line">		if (!isMultipart) &#123;</span><br><span class="line">			return;</span><br><span class="line">		&#125;</span><br><span class="line">		try &#123;</span><br><span class="line">			// FileItem 是表单中的每一个元素的封装</span><br><span class="line">			// 创建一个 FileItem 的工厂类</span><br><span class="line">			FileItemFactory factory = new DiskFileItemFactory();</span><br><span class="line">			// 创建一个文件上传处理器（装饰设计模式）</span><br><span class="line">			ServletFileUpload upload = new ServletFileUpload(factory);</span><br><span class="line">			// 解析请求</span><br><span class="line">			List&lt;FileItem&gt; items = upload.parseRequest(req);</span><br><span class="line">			System.out.println(items);</span><br><span class="line"></span><br><span class="line">			for (FileItem item : items) &#123;</span><br><span class="line">				// 判断文件类型</span><br><span class="line">				if (item.isFormField()) &#123;</span><br><span class="line">					// 文本类型</span><br><span class="line">					String filename = item.getFieldName();</span><br><span class="line">					if (filename.equals(&quot;userID&quot;)) &#123;</span><br><span class="line">						userID = Integer.parseInt(item.getString(&quot;UTF-8&quot;));</span><br><span class="line">						System.out.println(userID);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125; else &#123;</span><br><span class="line">					// 文件类型	</span><br><span class="line">					// 获取文件后缀名</span><br><span class="line">					String imgtype = item.getName().substring(item.getName().lastIndexOf(&quot;.&quot;));</span><br><span class="line">					// 给文件重新命名防止重复</span><br><span class="line">					String imgName = UUID.randomUUID() + imgtype;</span><br><span class="line">					System.out.println();</span><br><span class="line">					// 将上传的文件保存到服务器</span><br><span class="line">					item.write(new File(&quot;E:\\eclipse-workspace1\\HPBUS_front\\WebContent\\image&quot;, imgName));</span><br><span class="line"></span><br><span class="line">					// 头像路径</span><br><span class="line">					userHead = &quot;image/&quot; + imgName;</span><br><span class="line">					System.out.println(&quot;头像访问路径：&quot; + userHead);</span><br><span class="line">					// 将路径保存到数据库</span><br><span class="line">					dao.updateUserHead(userHead, userID);</span><br><span class="line">					System.out.println(&quot;保存成功！&quot;);</span><br><span class="line">					//更新Session中的用户信息</span><br><span class="line">					HashMap&lt;String, String&gt; user = dao.queryByID(userID);</span><br><span class="line">					session.setAttribute(&quot;loginuser&quot;, user);</span><br><span class="line">					req.getRequestDispatcher(&quot;news?op=index&quot;).forward(req, resp);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; catch (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-<p>问题一：因为用户登陆后用户信息就存放Session中，导致之前头像路径修改完保存到数据库了怎么刷新页面头像还是没有更新，所以这里需要重新从数据库读取修改后的用户信息后放入Session中。</p>
-<p>问题二：为什么Session信息更新了刷新页面头像还是没有改变？因为项目是在tomcat上跑的，eclipse的目录内容改变不会自动和tomcat里的实际内容同步，所以每次上传图片后需要刷新文件夹tomcat里的项目内容才会更新。<br>
-解决：Windows-&gt;preferences-&gt;General-&gt;workspace-&gt;Refresh using native hooks or polling √<br>
-Refresh on access √</p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391536003-9c606041-e5d7-4fd7-9fce-f86cd28c5b92.png" alt=""></p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391536215-eaa03ad9-571a-4342-ba63-4ec1bdab50ff.png" alt=""><br>
-选择头像预览后上传，</p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391536695-c4a43e5b-dbb5-4c2f-9480-997e68cb8d43.png" alt=""><br>
-刷新页面，用户头像修改成功√</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="winis">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Time to rest">
-      <meta itemprop="description" content="至于俗世流言，诸位请便。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Time to rest">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/" class="post-title-link" itemprop="url">【Latex】Class 文章模板的修改</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-07-19 02:03:40" itemprop="dateModified" datetime="2026-07-19T02:03:40+08:00">2026-07-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Fixed/" itemprop="url" rel="index"><span itemprop="name">Fixed</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/milkbusy/article/details/81389289?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;utm_relevant_index=1">https://blog.csdn.net/milkbusy/article/details/</a>81389289</p>
-<h4 id="页边距">页边距</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\usepackage&#123;geometry&#125;</span><br><span class="line">\geometry&#123;a4paper,left=1.5cm,right=1.5cm,top=3cm,bottom=2.5cm&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="页眉页脚">页眉页脚</h4>
-<p>值得注意的是，页眉页脚的设置应该自页边距设置之后，否则无法对齐页边距。<br>
-在用 LaTeX 排版文章、书籍时，缺省定义了四种页眉页脚的格式：</p>
-<ul>
-<li>empty 没有页眉和页脚</li>
-<li>plain 没有页眉，页脚中部放置页码。</li>
-<li>headings 没有页脚，页眉包含章节的标题和页码。</li>
-<li>myheadings 没有页脚，页眉页码和使用者所定义的信息。</li>
-</ul>
-<p>article 缺省使用 plain 格式，而 book 则使用headings 格式。 也可用 \pagestyle 命令在你的文档中设定所用的格式，例如在文档中使用 \pagestyle{empty} 则使得此后的页面没有页眉和页脚。 一般情况下，这四种格式基本可满足排版的要求。但在某些情况下，特别是 使用者想定义自己的页眉和页脚格式时，就会遇到很多限制和麻烦。这时，使用 fancyhdr 宏 包可以很容易地达到目的。</p>
-<p>利用 fancyhdr 宏包提供的命令，可以方便的作到：</p>
-<ul>
-<li>自定义页眉和页脚。</li>
-<li>为页眉和页脚加上装饰性的横线。</li>
-<li>页眉和页脚的宽度可以超过正文文本的宽度。</li>
-<li>多行的页眉和页脚。</li>
-<li>奇偶页使用不同格式的页眉和页脚。</li>
-<li>每章的首页使用不同格式的页眉和页脚。</li>
-<li>浮动对象页使用不同格式的页眉和页脚。</li>
-<li>控制页眉和页脚的字体，包括字形，字族，大小写等。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\usepackage&#123;fancyhdr&#125;</span><br><span class="line">\pagestyle&#123;fancy&#125;</span><br><span class="line">\lhead&#123;&#125; </span><br><span class="line">\chead&#123;&#125; </span><br><span class="line">\rhead&#123;\bfseries The performance of new graduates&#125; </span><br><span class="line">\lfoot&#123;From: K. Grant&#125; </span><br><span class="line">\cfoot&#123;To: Dean A. Smith&#125;</span><br><span class="line">\rfoot&#123;\thepage&#125; </span><br><span class="line"></span><br><span class="line">\renewcommand&#123;\headrulewidth&#125;&#123;0.4pt&#125; </span><br><span class="line">\renewcommand&#123;\footrulewidth&#125;&#123;0.4pt&#125;</span><br><span class="line">......</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046204-58f3075f-9cc7-4315-8a9e-acfb492a1f09.gif" alt=""><br>
-上面例子中，\thepage 给出了当前页的页码，而 \bfseries 则使 LaTeX 使用粗体字排版页眉。如果想在文档中改用其它形式，比如在第一页不要页眉和页脚，则可在 \begin{document} 和 \maketitle 后使用命令</p>
-<p>\thispagestyle{empty}</p>
-<p>缺省情况下，\maketitle 命令会自动设置其所在页的格式为 plain 。因此，如果你想在该页使用 fancy 格式的话，应该在 \maketile 后面使用命令 \thispagestyle{fancy}。</p>
-<p>下面是一个双面页版式下的例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;book&#125; </span><br><span class="line">\usepackage&#123;fancyhdr&#125;</span><br><span class="line">\fancyhead&#123;&#125; % clear all fields </span><br><span class="line">\fancyhead[RO,LE]&#123;\bfseries The performance of new graduates&#125; \fancyfoot[LE,RO]&#123;\thepage&#125; </span><br><span class="line">\fancyfoot[LO,CE]&#123;From: K. Grant&#125; </span><br><span class="line">\fancyfoot[CO,RE]&#123;To: Dean A. Smith&#125; </span><br><span class="line">\renewcommand&#123;\headrulewidth&#125;&#123;0.4pt&#125; \renewcommand&#123;\footrulewidth&#125;&#123;0.4pt&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
-<p>结果如图所示：</p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046681-e3403c3b-b8fa-4afd-aa97-0cb85a60d28a.gif" alt=""></p>
-<p>这里方括号中字母代表的意义为：</p>
-<p>E 偶数页<br>
-O 奇数页<br>
-L 页眉或页脚的左边部分<br>
-C 页眉或页脚的中间部分<br>
-R 页眉或页脚的右边部分<br>
-H 页眉<br>
-F 页脚<br>
-例如</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\fancyhf[HL]&#123;Hello world&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="题目居左">题目居左</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;flushleft&#125;</span><br><span class="line">\huge&#123;This is a title&#125;</span><br><span class="line">\end&#123;flushleft&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="作者居左">作者居左</h4>
-<p>如果文章中用到了maketitle，建议直接在*.cls中修改，找到关键词@author</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\mbox&#123;&#125;\hfill\begin&#123;@IEEEauthorhalign&#125;\@author\end&#123;@IEEEauthorhalign&#125;\hfill\mbox&#123;&#125;\par</span><br><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
-<p>以上是居中，如果要居左，使用flushleft，如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\mbox&#123;&#125;\hfill</span><br><span class="line">\begin&#123;flushleft&#125;</span><br><span class="line">\begin&#123;@IEEEauthorhalign&#125;\@author\end&#123;@IEEEauthorhalign&#125;</span><br><span class="line">\end&#123;flushleft&#125;\hfill\mbox&#123;&#125;\par</span><br><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="改变间距">改变间距</h4>
-<p>以上加上flushleft之后，可能间距也会随之改变，那么就继续调整</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br><span class="line">&#123;\vspace&#123;2.5\baselineskip&#125;</span><br><span class="line">&#123;\vspace&#123;-2.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -2095,6 +2153,145 @@ L(\boldsymbol{w})
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/" class="post-title-link" itemprop="url">【Latex】Class 文章模板的修改</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 02:03:40" itemprop="dateModified" datetime="2026-07-19T02:03:40+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Fixed/" itemprop="url" rel="index"><span itemprop="name">Fixed</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/milkbusy/article/details/81389289?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;utm_relevant_index=1">https://blog.csdn.net/milkbusy/article/details/</a>81389289</p>
+<h4 id="页边距">页边距</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\usepackage&#123;geometry&#125;</span><br><span class="line">\geometry&#123;a4paper,left=1.5cm,right=1.5cm,top=3cm,bottom=2.5cm&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="页眉页脚">页眉页脚</h4>
+<p>值得注意的是，页眉页脚的设置应该自页边距设置之后，否则无法对齐页边距。<br>
+在用 LaTeX 排版文章、书籍时，缺省定义了四种页眉页脚的格式：</p>
+<ul>
+<li>empty 没有页眉和页脚</li>
+<li>plain 没有页眉，页脚中部放置页码。</li>
+<li>headings 没有页脚，页眉包含章节的标题和页码。</li>
+<li>myheadings 没有页脚，页眉页码和使用者所定义的信息。</li>
+</ul>
+<p>article 缺省使用 plain 格式，而 book 则使用headings 格式。 也可用 \pagestyle 命令在你的文档中设定所用的格式，例如在文档中使用 \pagestyle{empty} 则使得此后的页面没有页眉和页脚。 一般情况下，这四种格式基本可满足排版的要求。但在某些情况下，特别是 使用者想定义自己的页眉和页脚格式时，就会遇到很多限制和麻烦。这时，使用 fancyhdr 宏 包可以很容易地达到目的。</p>
+<p>利用 fancyhdr 宏包提供的命令，可以方便的作到：</p>
+<ul>
+<li>自定义页眉和页脚。</li>
+<li>为页眉和页脚加上装饰性的横线。</li>
+<li>页眉和页脚的宽度可以超过正文文本的宽度。</li>
+<li>多行的页眉和页脚。</li>
+<li>奇偶页使用不同格式的页眉和页脚。</li>
+<li>每章的首页使用不同格式的页眉和页脚。</li>
+<li>浮动对象页使用不同格式的页眉和页脚。</li>
+<li>控制页眉和页脚的字体，包括字形，字族，大小写等。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\usepackage&#123;fancyhdr&#125;</span><br><span class="line">\pagestyle&#123;fancy&#125;</span><br><span class="line">\lhead&#123;&#125; </span><br><span class="line">\chead&#123;&#125; </span><br><span class="line">\rhead&#123;\bfseries The performance of new graduates&#125; </span><br><span class="line">\lfoot&#123;From: K. Grant&#125; </span><br><span class="line">\cfoot&#123;To: Dean A. Smith&#125;</span><br><span class="line">\rfoot&#123;\thepage&#125; </span><br><span class="line"></span><br><span class="line">\renewcommand&#123;\headrulewidth&#125;&#123;0.4pt&#125; </span><br><span class="line">\renewcommand&#123;\footrulewidth&#125;&#123;0.4pt&#125;</span><br><span class="line">......</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046204-58f3075f-9cc7-4315-8a9e-acfb492a1f09.gif" alt=""><br>
+上面例子中，\thepage 给出了当前页的页码，而 \bfseries 则使 LaTeX 使用粗体字排版页眉。如果想在文档中改用其它形式，比如在第一页不要页眉和页脚，则可在 \begin{document} 和 \maketitle 后使用命令</p>
+<p>\thispagestyle{empty}</p>
+<p>缺省情况下，\maketitle 命令会自动设置其所在页的格式为 plain 。因此，如果你想在该页使用 fancy 格式的话，应该在 \maketile 后面使用命令 \thispagestyle{fancy}。</p>
+<p>下面是一个双面页版式下的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;book&#125; </span><br><span class="line">\usepackage&#123;fancyhdr&#125;</span><br><span class="line">\fancyhead&#123;&#125; % clear all fields </span><br><span class="line">\fancyhead[RO,LE]&#123;\bfseries The performance of new graduates&#125; \fancyfoot[LE,RO]&#123;\thepage&#125; </span><br><span class="line">\fancyfoot[LO,CE]&#123;From: K. Grant&#125; </span><br><span class="line">\fancyfoot[CO,RE]&#123;To: Dean A. Smith&#125; </span><br><span class="line">\renewcommand&#123;\headrulewidth&#125;&#123;0.4pt&#125; \renewcommand&#123;\footrulewidth&#125;&#123;0.4pt&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>结果如图所示：</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046681-e3403c3b-b8fa-4afd-aa97-0cb85a60d28a.gif" alt=""></p>
+<p>这里方括号中字母代表的意义为：</p>
+<p>E 偶数页<br>
+O 奇数页<br>
+L 页眉或页脚的左边部分<br>
+C 页眉或页脚的中间部分<br>
+R 页眉或页脚的右边部分<br>
+H 页眉<br>
+F 页脚<br>
+例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\fancyhf[HL]&#123;Hello world&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="题目居左">题目居左</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;flushleft&#125;</span><br><span class="line">\huge&#123;This is a title&#125;</span><br><span class="line">\end&#123;flushleft&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="作者居左">作者居左</h4>
+<p>如果文章中用到了maketitle，建议直接在*.cls中修改，找到关键词@author</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\mbox&#123;&#125;\hfill\begin&#123;@IEEEauthorhalign&#125;\@author\end&#123;@IEEEauthorhalign&#125;\hfill\mbox&#123;&#125;\par</span><br><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
+<p>以上是居中，如果要居左，使用flushleft，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\mbox&#123;&#125;\hfill</span><br><span class="line">\begin&#123;flushleft&#125;</span><br><span class="line">\begin&#123;@IEEEauthorhalign&#125;\@author\end&#123;@IEEEauthorhalign&#125;</span><br><span class="line">\end&#123;flushleft&#125;\hfill\mbox&#123;&#125;\par</span><br><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="改变间距">改变间距</h4>
+<p>以上加上flushleft之后，可能间距也会随之改变，那么就继续调整</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br><span class="line">&#123;\vspace&#123;2.5\baselineskip&#125;</span><br><span class="line">&#123;\vspace&#123;-2.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Vim%E3%80%91%E7%AE%80%E6%98%8E%E6%94%BB%E7%95%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2462,7 +2659,7 @@ L(\boldsymbol{w})
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Java%E3%80%91JDBC%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E6%96%87%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C-%E5%85%B3%E4%BA%8E%E6%95%A3%E5%88%97%E5%80%BC%E5%92%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -2480,7 +2677,7 @@ L(\boldsymbol{w})
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/07/18/%E3%80%90Java%E3%80%91JDBC%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0/" class="post-title-link" itemprop="url">【Java】JDBC数据库连接池</a>
+          <a href="/2026/07/18/%E6%96%87%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C-%E5%85%B3%E4%BA%8E%E6%95%A3%E5%88%97%E5%80%BC%E5%92%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" class="post-title-link" itemprop="url">文件完整性校验-关于散列值和数字签名</a>
         </h2>
 
         <div class="post-meta-container">
@@ -2498,7 +2695,7 @@ L(\boldsymbol{w})
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-07-19 01:56:16" itemprop="dateModified" datetime="2026-07-19T01:56:16+08:00">2026-07-19</time>
+      <time title="Modified: 2026-07-19 01:55:51" itemprop="dateModified" datetime="2026-07-19T01:55:51+08:00">2026-07-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2520,82 +2717,157 @@ L(\boldsymbol{w})
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43520450/article/details/107231118">https://blog.csdn.net/weixin_43520450/article/details/107231118</a></p>
-<h3 id="一、JDBC数据库连接池的必要性">一、JDBC数据库连接池的必要性</h3>
-<p>1、在使用开发基于数据库的web程序时，传统的模式基本是按以下步骤：</p>
-<p>（1）在主程序（如servlet、beans）中建立数据库连接<br>
-（2）进行sql操作<br>
-（3）断开数据库连接</p>
-<p>2、这种模式开发，存在的问题:</p>
-<p>（1）普通的JDBC数据库连接使用 DriverManager 来获取，每次向数据库建立连接的时候都要将 Connection加载到内存中，再验证用户名和密码(得花费0.05s～1s的时间)。需要数据库连接的时候，就向数据库要求一个，执行完成后再断开连接。这样的方式将<code>会消耗大量的资源和时间</code>。数据库的连接资源并没有得到很好的重复利用。若同时有几百人甚至几千人在线，频繁的进行数据库连接操作将占用很多的系统资源，严重的甚至会造成服务器的崩溃。<br>
-（2）<code>对于每一次数据库连接，使用完后都得断开。</code>否则，如果程序出现异常而未能关闭，将会导致数据库系统中的内存泄漏，最终将导致重启数据库。（回忆：何为Java的内存泄漏？）<br>
-（3）这种开发<code>不能控制被创建的连接对象数</code>，系统资源会被毫无顾及的分配出去，如连接过多，也可能导致内存泄漏，服务器崩溃。</p>
-<h3 id="二、数据库连接池技术">二、数据库连接池技术</h3>
-<p>为解决传统开发中的数据库连接问题，可以采用数据库连接池技术。</p>
-<p>1、数据库连接池的基本思想：<br>
-就是为数据库连接建立一个“缓冲池”。预先在缓冲池中放入一定数量的连接，当需要建立数据库连接时，只需从“缓冲池”中取出一个，使用完毕之后再放回去。</p>
-<p>数据库连接池负责<code>分配</code>、<code>管理</code>和<code>释放</code>数据库连接，它<code>允许应用程序重复使用一个现有的数据库连接，而不是重新建立一个</code>。</p>
-<p>数据库连接池在初始化时将创建一定数量的数据库连接放到连接池中，这些<code>数据库连接的数量是由最小数据库连接数来设定的</code>。无论这些数据库连接是否被使用，连接池都将一直保证至少拥有这么多的连接数量。连接池的<code>最大数据库连接数量限定了这个连接池能占有的最大连接数</code>，当应用程序向连接池请求的连接数超过最大连接数量时，这些请求将被加入到等待队列中。</p>
+          <p>转载自：<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html">https://program-think.blogspot.com/2013/02/file-integrity-check.html</a></p>
+<p>文章目录</p>
+<p><a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-1">★啥是“完整性校验”？</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-2">★散列算法（哈希算法）扫盲</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-3">★关于散列算法的【可靠性】</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-4">◇何为“散列碰撞”？</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-5">★散列值校验的方法——使用网站提供的软件散列值</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-6">★散列值校验的方法——使用客户端工具计算散列值</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-7">★啥是“数字签名”？</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-8">★Windows 平台的“数字签名”</a><br>
+<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-9">★PGP/GPG 的数字签名</a></p>
+<h2 id="★啥是“完整性校验”？">★啥是“完整性校验”？</h2>
+<p>所谓的“完整性校验”，顾名思义，就是检查文件是否完整。那么，什么情况下会导致文件不完整捏？大概有如下几种情况。</p>
+<ol>
+<li>感染病毒<br>
+比方说你的系统中了病毒，病毒感染了某个软件安装包或者某个可执行程序。那么该文件的完整性就被破坏了。</li>
+<li>植入木马/后门<br>
+还有一种文件不完整的情况，是被别有用心的人植入木马或后门。比方说某些国内的软件下载站点，它们提供的 Windows 安装光盘镜像已经被安置了后门。</li>
+<li>传输故障<br>
+这种情况主要发生在网络下载时。因为网络传输是有可能发生误码的（传输错误），另外还有可能下载到快结束的时候断线（没下载全）。这些情况都会导致你下载的文件不完整。<br>
+如今的上网环境相比当年的 Modem 拨号，已经有明显改善。所以这种情况应该不多见了。</li>
+</ol>
+<h2 id="★散列算法（哈希算法）扫盲">★散列算法（哈希算法）扫盲</h2>
+<h3 id="◇什么是“散列算法-哈希算法”？">◇什么是“散列算法/哈希算法”？</h3>
+<p>这里所说的“散列”是一种计算机算法，洋文叫做 Hash，有时候也根据音译称为哈希。<br>
+散列算法可以把【任意尺寸】的数据（原始数据）转变为一个【固定尺寸】的“小”数据（叫“散列值”或“摘要”）。</p>
+<h3 id="◇摘要长度">◇摘要长度</h3>
+<p>对于某个具体的散列算法，得到的散列值长度总是固定的。散列值的长度又称“摘要长度”。以下是常见散列算法的摘要长度。</p>
+<table>
+<thead>
+<tr>
+<th>散列算法</th>
+<th>散列值比特数</th>
+<th>散列值字节数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRC32</td>
+<td>32</td>
+<td>4</td>
+</tr>
+<tr>
+<td>MD5</td>
+<td>128</td>
+<td>16</td>
+</tr>
+<tr>
+<td>SHA1</td>
+<td>160</td>
+<td>20</td>
+</tr>
+<tr>
+<td>SHA256</td>
+<td>256</td>
+<td>32</td>
+</tr>
+<tr>
+<td>SHA512</td>
+<td>512</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
+<h3 id="◇散列算法的特色">◇散列算法的特色</h3>
+<ol>
+<li>不可逆性<br>
+从刚才的描述看，散列似乎有点像压缩。其实捏，散列算法跟压缩算法是完全不同滴。压缩算法是可逆的（可以把压缩后的数据再还原），而【散列算法是不可逆的】。<br>
+还有一些人把散列算法称为“加密算法”，这也是不对的。因为加密算法是可逆的（“加密”的【逆操作】就是“解密”），而散列算法是【不可逆】的。</li>
+<li>确定性<br>
+通过某种散列算法，分别对两个原始数据计算散列值。如果算出来的散列值不同，那么可以 100% 肯定这两段数据是不同的——这就是“确定性”。<br>
+但反过来，如果这两段数据的散列值相同，则只能说，这两段数据【非常可能】相同。所谓的“非常可能”，就是说，还达不到百分百。具体原因，请看下一节“散列函数的可靠性”。</li>
+</ol>
+<h2 id="★关于散列算法的【可靠性】">★关于散列算法的【可靠性】</h2>
+<h2 id="◇何为“散列碰撞”？">◇何为“散列碰撞”？</h2>
+<p>刚才说了，存在非常小的可能性，导致两段不同的原始数据，计算出相同的散列值。这种情况称之为“散列碰撞”或“散列冲突”。</p>
+<h3 id="◇碰撞的类型">◇碰撞的类型</h3>
+<p>散列碰撞的类型，大体上有两种：</p>
+<ol>
+<li>随机碰撞<br>
+随机碰撞就像买彩票中大奖，完全是出于小概率的偶然因素——你碰巧遇见两个不同的数据（文件），具有相同的散列值。理论上讲，任何散列算法都存在随机碰撞的可能性，只是可能性有大有小。</li>
+<li>人为碰撞<br>
+人为碰撞就是说，有人（通常是恶意的攻击者）故意制造散列碰撞，以此来骗过“基于散列值的完整性校验”。</li>
+</ol>
+<h3 id="◇如何避免碰撞">◇如何避免碰撞</h3>
+<ol>
+<li>对于随机碰撞<br>
+要避免随机碰撞，很简单，只需要选择摘要长度足够长的散列算法。拿前面举的3个例子。<br>
+CRC32 的摘要长度是“32bit”，也就说，最多可以表示“2的32次方”这么多种可能性（也就是几十亿，数量级相当于地球总人口）。表面上看貌似很大，其实还不够大。比如当前互联网上的页面总数就已经大大超过“几十亿”。如果对每个页面计算 CRC32 散列，会碰到很多重复（碰撞）。<br>
+而 MD5 的摘要长度是“128bit”，也就是【2的128次方】。这个数字足够大了。通俗地说，从宇宙诞生到宇宙毁灭，你都未必有机会碰见 MD5 的【随机碰撞】。而 SHA1 的摘要长度是“160bit”，那就更不用说了。</li>
+<li>对于人为碰撞<br>
+想避免人为碰撞，要同时兼顾两个因素——散列算法的摘要长度、散列算法的优秀程度。“摘要长度”刚才已经解释了。光说一下“算法的优秀程度”。<br>
+如果某个散列算法有缺陷（不够优秀），那么攻击者就可以比较容易地构造出两个【不同的】原始数据，但却拥有【相同的】散列值。如此一来，就可以骗过基于散列算法的完整性检查。<br>
+典型的例子就是 MD5——该算法在过去10多年里曾经非常流行，但是前几年被发现存在严重缺陷。所以，MD5 虽然“随机碰撞”的概率非常非常低，但“人为碰撞”的概率可【不低】。如果你比较注重安全性，【不要】再使用 MD5 进行完整性校验。<br>
+再补充一下：<br>
+随着硬件计算能力的提升，即便是 SHA1 也开始变得【不】安全了（参见如下博文中的密码学相关章节）。今后 SHA1 会逐步被 SHA256 或 SHA512 替代。<br>
+《<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2019/07/Security-News.html">近期安全动态和点评（2019年2季度）</a>》</li>
+</ol>
+<h2 id="★散列值校验的方法——使用网站提供的软件散列值">★散列值校验的方法——使用网站提供的软件散列值</h2>
+<p>如今，大伙儿的安全意识越来越高了。相应的，很多知名的软件，除了在官网上提供下载，还会相应提供下载软件的散列值。当你下载好某个软件之后，先在自己电脑里计算一下散列值，然后跟官方网站提供的散列值对比一下。如果散列值一样，通常就说明没问题。<br>
+举例：Firefox 浏览器的散列校验<br>
+打开如下链接，就可以看到 Firefox 某个版本的 SHA1 列表（把网址中的 <code>版本号</code> 三个字替换为具体的【三段式】版本号，比如<code>18.0.2</code>）。这个列表很长，包括各种语言，各个平台。为了方便起见，你可以先算好 SHA1 散列值，然后到里面搜索该散列值。<br>
+<a target="_blank" rel="noopener" href="https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%E7%89%88%E6%9C%AC%E5%8F%B7/SHA1SUMS">https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/版本号/SHA1SUMS</a><br>
+某些菜鸟读者可能会问：如何在自己电脑上计算某个软件的散列值？这就需要看下一个章节。</p>
+<h2 id="★散列值校验的方法——使用客户端工具计算散列值">★散列值校验的方法——使用客户端工具计算散列值</h2>
+<p>前面说完了校验的流程，最后再说一下校验的工具。<br>
+考虑到大部分读者是 Windows 用户，俺介绍一下微软官方的 FCIV（洋文全称是“File Checksum Integrity Verifier”）。这是一个小巧、绿色、免费的命令行工具，下载页面在“<a target="_blank" rel="noopener" href="https://support.microsoft.com/kb/841290/">这里</a>”。<br>
+因为是命令行工具，你需要先运行 CMD，出现 Windows 的命令行界面（黑窗口）之后，在其中使用该工具。下面是 FCIV 功能简介。</p>
+<h3 id="◇计算单个文件">◇计算单个文件</h3>
+<p>比如你有一个微软的系统安装光盘镜像，位于 <code>C:\download\Windows.iso</code> 那么，用如下命令可以计算该文件的 SHA1 散列值。<br>
+fciv -sha1 C:\download\Windows.iso</p>
+<h3 id="◇批量计算某个目录">◇批量计算某个目录</h3>
+<p>FCIV 支持批量计算某个目录下的文件散列值。比方说，可以用如下命令可以计算 <code>C:\download</code> 目录下的每一个文件的 SHA1。<br>
+fciv -sha1 C:\download\</p>
+<h3 id="◇批量计算并存储，供前后对比">◇批量计算并存储，供前后对比</h3>
+<p>比如 <code>C:\download</code> 目录下有很多文件。俺想知道过一段时间之后，这些文件是否被改过。那么，可以先用如下命令，把该目录中所有文件的 SHA1 散列都存储到某个 XML 格式的文件中（本例中，俺假设保存的文件是当前目录的 <code>hash.xml</code>，你也可以保存到其它文件名）。<br>
+fciv -sha1 C:\download\ -xml hash.xml<br>
+过了一段时间后，你可以用如下命令，就可以看出哪些文件被修改过。<br>
+fciv -sha1 C:\download\ -xml hash.xml -v</p>
+<h2 id="★啥是“数字签名”？">★啥是“数字签名”？</h2>
+<p>所谓的“数字签名”，通俗来说，就是采用某种技术手段来证明某个信息确实是由某个机构（或某个人）发布的。因为其用途有点类似于传统的手写签字，所以称之为“数字签名”。<br>
+数字签名的技术实现需要依赖于“非对称加密技术”和“数字证书体系”。关于“非对称加密技术”，考虑到篇幅，今天就不展开了；关于“数字证书”，3年前写过一篇扫盲（在“<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2010/02/introduce-digital-certificate-and-ca.html">这里</a>”），有兴趣的同学可以瞧一瞧，这里就不再啰嗦了。</p>
+<h2 id="★Windows-平台的“数字签名”">★Windows 平台的“数字签名”</h2>
+<p>数字签名有很多种，大伙儿比较常见的是 Windows 平台下的数字签名。如今大型 IT 公司（比如“微软、Google、苹果”等）或者是知名开源组织发布的 Windows 软件，安装文件通常都内置数字签名。所以俺着重介绍 Windows 平台的数字签名该如何校验。</p>
+<h3 id="◇利用资源管理器验证单个文件">◇利用资源管理器验证单个文件</h3>
+<p>大概从 Windows 2000开始，Windows 就支持在某个文件尾部附加数字签名，并且 Windows 的资源管理器内置了对数字签名的校验功能。<br>
+下面俺通过几个截图，简单介绍一下：如何在资源管理器中验证数字签名。<br>
+比如，俺手头有一个 Firefox 的安装文件（带有数字签名）。当俺查看该文件的属性，会看到如下的界面。眼神好的同学，会注意到到上面有个“数字签名”的标签页。如果没有出现这个标签页，就说明该文件没有附带数字签名。</p>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391559471-e5526af8-a3cd-465a-bc4d-76140379f302.png" alt=""><br>
-2、数据库连接池的工作原理：</p>
+<p><img src="https://lh4.googleusercontent.com/7yTWIB51d7IDQdJbkci9h7WasV2KtT3wv1GQHp7jpwDgqgoWuCrR0AN-RBKPpPIKhRJ3X-BW3NgpkSNDk_Pktcc2AKEAj37K6Ykddgrklvseb9D8yxRFX0psAtvXlqpK_4ByoSxd" alt=""></p>
+<p>选择该标签页，出现如下界面。<br>
+顺便说一下，某些数字签名中没有包含“邮件地址”，那么这一项会显示“不可用”；同样的，某些数字签名没有包含“时间戳”，也会显示“不可用”。不要紧张，这里显示的“不可用”跟数字签名的有效性没关系。</p>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560155-f3b35d19-1a20-46bf-9a4a-898a2e4dedad.png" alt=""><br>
-3、数据库连接池技术的优点：</p>
-<p>（1）<code>资源重用</code><br>
-由于数据库连接得以重用，避免了频繁创建，释放连接引起的大量性能开销。在减少系统消耗的基础上，另一方面也增加了系统运行环境的平稳性。</p>
-<p>（2）<code>更快的系统反应速度</code><br>
-数据库连接池在初始化过程中，往往已经创建了若干数据库连接置于连接池中备用。此时连接的初始化工作均已完成。对于业务请求处理而言，直接利用现有可用连接，避免了数据库连接初始化和释放过程的时间开销，从而减少了系统的响应时间</p>
-<p>（3）<code>新的资源分配手段</code><br>
-对于多应用共享同一数据库的系统而言，可在应用层通过数据库连接池的配置，实现某一应用最大可用数据库连接数的限制，避免某一应用独占所有的数据库资源</p>
-<p>（4）<code>统一的连接管理，避免数据库连接泄漏</code><br>
-在较为完善的数据库连接池实现中，可根据预先的占用超时设定，强制回收被占用连接，从而避免了常规数据库连接操作中可能出现的资源泄露</p>
-<h3 id="三、多种开源的数据库连接池">三、多种开源的数据库连接池</h3>
-<p>1、JDBC 的数据库连接池使用 javax.sql .DataSource 来表示，DataSource 只是一个接口，该接口通常由服务器(Weblogic, WebSphere, Tomcat)提供实现，也有一些开源组织提供实现：</p>
-<p>（1）DBCP 是Apache提供的数据库连接池。tomcat服务器自带dbcp数据库连接池。速度相对c3p0较快，但因自身存在BUG，Hibernate3已不再提供支持。</p>
-<p>（2）C3P0 是一个开源组织提供的一个数据库连接池，速度相对较慢，稳定性还可以，hibernate官方推荐使用。</p>
-<p>（3）Proxool 是sourceforge下的一个开源项目数据库连接池，有监控连接池状态的功能，稳定性较c3p0差一点.</p>
-<p>（4）BoneCP 是一个开源组织提供的数据库连接池，速度快。</p>
-<p>（5）Druid 是阿里提供的数据库连接池，据说是集DBCP 、C3P0 、Proxool优点于一身的数据库连接池，但是速度不确定是否有BoneCP快。</p>
-<p>2、DataSource 通常被称为数据源，它包含连接池和连接池管理两个部分，习惯上也经常把 DataSource 称为连接池</p>
-<p>3、DataSource用来取代DriverManager来获取Connection，获取速度快，同时可以大幅度提高数据库访问速度。</p>
-<p>特别注意：</p>
-<p>（1）数据源和数据库连接不同，<code>数据源无需创建多个</code>，它是产生数据库连接的工厂，因此整个应用只需要一个数据源即可。<br>
-（2）当数据库访问结束后，程序还是像以前一样关闭数据库连接：conn.close();<br>
-但conn.close()并没有关闭数据库的物理连接，它仅仅把数据库连接释放，归还给了数据库连接池。</p>
-<h4 id="3-1-C3P0数据库连接池">3.1 C3P0数据库连接池</h4>
-<p>（1）获取连接的方式一：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//使用C3P0数据库连接池的方式，获取数据库的连接：不推荐</span><br><span class="line">public static Connection getConnection1() throws Exception&#123;</span><br><span class="line">	ComboPooledDataSource cpds = new ComboPooledDataSource();</span><br><span class="line">	cpds.setDriverClass(&quot;com.mysql.jdbc.Driver&quot;); </span><br><span class="line">	cpds.setJdbcUrl(&quot;jdbc:mysql://localhost:3306/test&quot;);</span><br><span class="line">	cpds.setUser(&quot;root&quot;);</span><br><span class="line">	cpds.setPassword(&quot;abc123&quot;);</span><br><span class="line">		</span><br><span class="line">//	cpds.setMaxPoolSize(100);</span><br><span class="line">	</span><br><span class="line">	Connection conn = cpds.getConnection();</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>（2）获取连接的方式二：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//使用C3P0数据库连接池的配置文件方式，获取数据库的连接：推荐</span><br><span class="line">private static DataSource cpds = new ComboPooledDataSource(&quot;helloc3p0&quot;);</span><br><span class="line">public static Connection getConnection2() throws SQLException&#123;</span><br><span class="line">	Connection conn = cpds.getConnection();</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中，src下的配置文件为：（<code>c3p0-config.xml</code>）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;c3p0-config&gt;</span><br><span class="line">	&lt;named-config name=&quot;helloc3p0&quot;&gt;</span><br><span class="line">		&lt;!-- 获取连接的4个基本信息 --&gt;</span><br><span class="line">		&lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;</span><br><span class="line">		&lt;property name=&quot;password&quot;&gt;abc123&lt;/property&gt;</span><br><span class="line">		&lt;property name=&quot;jdbcUrl&quot;&gt;jdbc:mysql:///test&lt;/property&gt;</span><br><span class="line">		&lt;property name=&quot;driverClass&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;!-- 涉及到数据库连接池的管理的相关属性的设置 --&gt;</span><br><span class="line">		&lt;!-- 若数据库中连接数不足时, 一次向数据库服务器申请多少个连接 --&gt;</span><br><span class="line">		&lt;property name=&quot;acquireIncrement&quot;&gt;5&lt;/property&gt;</span><br><span class="line">		&lt;!-- 初始化数据库连接池时连接的数量 --&gt;</span><br><span class="line">		&lt;property name=&quot;initialPoolSize&quot;&gt;5&lt;/property&gt;</span><br><span class="line">		&lt;!-- 数据库连接池中的最小的数据库连接数 --&gt;</span><br><span class="line">		&lt;property name=&quot;minPoolSize&quot;&gt;5&lt;/property&gt;</span><br><span class="line">		&lt;!-- 数据库连接池中的最大的数据库连接数 --&gt;</span><br><span class="line">		&lt;property name=&quot;maxPoolSize&quot;&gt;10&lt;/property&gt;</span><br><span class="line">		&lt;!-- C3P0 数据库连接池可以维护的 Statement 的个数 --&gt;</span><br><span class="line">		&lt;property name=&quot;maxStatements&quot;&gt;20&lt;/property&gt;</span><br><span class="line">		&lt;!-- 每个连接同时可以使用的 Statement 对象的个数 --&gt;</span><br><span class="line">		&lt;property name=&quot;maxStatementsPerConnection&quot;&gt;5&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">	&lt;/named-config&gt;</span><br><span class="line">&lt;/c3p0-config&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="3-2-DBCP数据库连接池">3.2 DBCP数据库连接池</h4>
-<p>1、DBCP 是 Apache 软件基金组织下的开源连接池实现，该连接池依赖该组织下的另一个开源系统：<code>Common-pool</code>。如需使用该连接池实现，应在系统中增加如下两个 jar 文件：</p>
-<p>Commons-dbcp.jar：连接池的实现<br>
-Commons-pool.jar：连接池实现的依赖库</p>
-<p>2、<code>Tomcat 的连接池正是采用该连接池来实现的</code>。该数据库连接池既可以与应用服务器整合使用，也可由应用程序独立使用。</p>
-<p>3、数据源和数据库连接不同，<code>数据源无需创建多个</code>，它是产生数据库连接的工厂，因此整个应用只需要一个数据源即可。</p>
-<p>4、当数据库访问结束后，程序还是像以前一样关闭数据库连接：conn.close(); 但<code>上面的代码并没有关闭数据库的物理连接，它仅仅把数据库连接释放，归还给了数据库连接池</code>。</p>
-<p>配置属性说明：</p>
+<p><img src="https://lh5.googleusercontent.com/RnomEwHFwXYoQL2Ydk9N5WSlVG70Ie09qf2NvCCLcEKItHd-XDMwuB4_tYUFrabuTJxD5AXImyFX6zN_37KJgconsKwcWjgB1s7yS1QuIexm65HMempZvf5WQIXyYookguyc7Rvr" alt=""></p>
+<p>一般来说，签名列表中，有且仅有一个签名。选中它，点“详细信息”按钮。跳出如下界面：<br>
+通常这个界面会显示一行字：该数字签名正常（图中红圈标出）。如果有这行字，就说明该文件从出厂到你手里，中途没有被篡改过（是原装滴、是纯洁滴）。</p>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560196-df0d5f4c-04e2-4ce6-a406-ad4087b21d2d.png" alt=""><br>
-（1）获取连接方式一：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static Connection getConnection3() throws Exception &#123;</span><br><span class="line">	BasicDataSource source = new BasicDataSource();</span><br><span class="line">		</span><br><span class="line">	source.setDriverClassName(&quot;com.mysql.jdbc.Driver&quot;);</span><br><span class="line">	source.setUrl(&quot;jdbc:mysql:///test&quot;);</span><br><span class="line">	source.setUsername(&quot;root&quot;);</span><br><span class="line">	source.setPassword(&quot;abc123&quot;);</span><br><span class="line">		</span><br><span class="line">	//</span><br><span class="line">	source.setInitialSize(10);</span><br><span class="line">		</span><br><span class="line">	Connection conn = source.getConnection();</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>（2）获取连接方式二：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//使用dbcp数据库连接池的配置文件方式，获取数据库的连接：推荐</span><br><span class="line">private static DataSource source = null;</span><br><span class="line">static&#123;</span><br><span class="line">	try &#123;</span><br><span class="line">		Properties pros = new Properties();</span><br><span class="line">		</span><br><span class="line">		InputStream is = DBCPTest.class.getClassLoader().getResourceAsStream(&quot;dbcp.properties&quot;);</span><br><span class="line">			</span><br><span class="line">		pros.load(is);</span><br><span class="line">		//根据提供的BasicDataSourceFactory创建对应的DataSource对象</span><br><span class="line">		source = BasicDataSourceFactory.createDataSource(pros);</span><br><span class="line">	&#125; catch (Exception e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">&#125;</span><br><span class="line">public static Connection getConnection4() throws Exception &#123;</span><br><span class="line">		</span><br><span class="line">	Connection conn = source.getConnection();</span><br><span class="line">	</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中，src下的配置文件为：（<code>dbcp.properties</code>）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">driverClassName=com.mysql.jdbc.Driver</span><br><span class="line">url=jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true&amp;useServerPrepStmts=false</span><br><span class="line">username=root</span><br><span class="line">password=abc123</span><br><span class="line"></span><br><span class="line">initialSize=10</span><br><span class="line">#...</span><br></pre></td></tr></table></figure>
-<h4 id="3-3-Druid（德鲁伊）数据库连接池">3.3 Druid（德鲁伊）数据库连接池</h4>
-<p>Druid是阿里巴巴开源平台上一个数据库连接池实现，它结合了C3P0、DBCP、Proxool等DB池的优点，同时加入了日志监控，可以很好的监控DB池连接和SQL的执行情况，可以说是针对监控而生的DB连接池，可以说是<code>目前最好的连接池之一</code>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import java.sql.Connection;</span><br><span class="line">import java.util.Properties;</span><br><span class="line">import javax.sql.DataSource;</span><br><span class="line">import com.alibaba.druid.pool.DruidDataSourceFactory;</span><br><span class="line"></span><br><span class="line">public class TestDruid &#123;</span><br><span class="line">	public static void main(String[] args) throws Exception &#123;</span><br><span class="line">		Properties pro = new Properties();		 pro.load(TestDruid.class.getClassLoader().getResourceAsStream(&quot;druid.properties&quot;));</span><br><span class="line">		DataSource ds = DruidDataSourceFactory.createDataSource(pro);</span><br><span class="line">		Connection conn = ds.getConnection();</span><br><span class="line">		System.out.println(conn);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中，src下的配置文件为：（<code>druid.properties</code>）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">url=jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true</span><br><span class="line">username=root</span><br><span class="line">password=123456</span><br><span class="line">driverClassName=com.mysql.jdbc.Driver</span><br><span class="line"></span><br><span class="line">initialSize=10</span><br><span class="line">maxActive=20</span><br><span class="line">maxWait=1000</span><br><span class="line">filters=wall</span><br></pre></td></tr></table></figure>
-<p>详细参数配置：</p>
+<p><img src="https://lh4.googleusercontent.com/wkK-RA1vVQf7t_T2KtsyknIF_3yvjTwWaQwAYoI2A1DUtf8bfcOoGLcusTueaZJ1g4L6kN3Ng-4vMdC2Ra9P_hmyhqEoY_7Fziu8O2Z6TFXBwtaPLkkAzfWrv4snlFgDiIjauTv0" alt=""></p>
+<p>如果该文件被篡改过了（比如，感染了病毒、被注入木马），那么对话框会出现一个警告提示：该数字签名无效（图中红圈标出），界面如下。一旦出现数字签名无效，那这个文件就不要再使用了。</p>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560190-90859eb0-bfdf-4a4e-a29c-fb56a3c69bd0.png" alt=""></p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784391560221-ee22c7ed-d999-4a37-b011-507097c77afc.png" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/CB8Nl5udCNWWFTdgk3ZMkNEhmsZjvs9DngaNt0GEgzfpuPu9tCufvlLPJ13jpEyDSZtlTnPZ1DvmzxirIA4-TWIQUEG-KNOWJ5os6HriDq7kjjng85qBnbdz4VQmgZ4T-jloNFON" alt=""></p>
+<h3 id="◇利用命令行工具批量验证">◇利用命令行工具批量验证</h3>
+<p>用上面的图形化界面进行验证，比较傻瓜化。但有一个缺点——如果你要验证的文件比较多，一个一个去点对话框，手会抽筋滴。所以，俺再介绍一下命令行的工具，适合进行批量验证。<br>
+这个命令行工具就是微软官网提供的【SigCheck】，由大名鼎鼎的 SysInternals 出品（SysInternals 已经被微软收购）。跟前面提到的 FCIV 类似，它也是一个小巧、绿色、免费的命令行工具，下载页面在“<a target="_blank" rel="noopener" href="https://docs.microsoft.com/sysinternals/downloads/sigcheck">这里</a>”。<br>
+使用如下命令，可以批量检查某个目录下（包括多层嵌套子目录）的所有可执行程序，并且把“无签名”或者“签名无效”的文件列出来。<br>
+sigcheck -u -e -s 某个目录的路径名 先提醒一下：<br>
+检查数字签名的有效性本身就比较慢，如果目录下的文件很多，你要有足够的耐心等它运行完毕。稍微补充一下，这个 SigCheck 命令还顺便提供了散列值（命令格式如下），该功能可替代 FCIV 的头两个功能，可惜无法替代 FCIV 的第三个功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sigcheck -h 某个【目录】的路径名</span><br><span class="line">sigcheck -h 某个【文件】的路径名</span><br></pre></td></tr></table></figure>
+<h2 id="★PGP-GPG-的数字签名">★PGP/GPG 的数字签名</h2>
+<p>刚才聊了 Windows 平台滴。但是，切莫以为只有 Windows 平台才提供数字签名——其它的数字签名工具还有好几种。名气比较大的数字签名工具当属 PGP/GPG。这两个缩写就像绕口令，很容易搞混。PGP 是商业软件，而 GPG 是 GnuPG 的缩写，是 GNU 的开源项目。后者是前者的开源替代品，两者的功能基本兼容。<br>
+这俩玩意儿的功能很强悍，校验数字签名对它俩只是小菜一碟。考虑到大伙儿平时较少碰到 GPG 的签名，俺今天就偷懒一下，暂不介绍。以后如果有空，再专门写一篇帖子介绍 PGP/GPG 的各种功能和使用场景。</p>
 
       
     </div>
@@ -3211,241 +3483,6 @@ Commons-pool.jar：连接池实现的依赖库</p>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E6%96%87%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C-%E5%85%B3%E4%BA%8E%E6%95%A3%E5%88%97%E5%80%BC%E5%92%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="winis">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Time to rest">
-      <meta itemprop="description" content="至于俗世流言，诸位请便。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Time to rest">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/07/18/%E6%96%87%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C-%E5%85%B3%E4%BA%8E%E6%95%A3%E5%88%97%E5%80%BC%E5%92%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" class="post-title-link" itemprop="url">文件完整性校验-关于散列值和数字签名</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-07-19 01:55:51" itemprop="dateModified" datetime="2026-07-19T01:55:51+08:00">2026-07-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>转载自：<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html">https://program-think.blogspot.com/2013/02/file-integrity-check.html</a></p>
-<p>文章目录</p>
-<p><a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-1">★啥是“完整性校验”？</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-2">★散列算法（哈希算法）扫盲</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-3">★关于散列算法的【可靠性】</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-4">◇何为“散列碰撞”？</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-5">★散列值校验的方法——使用网站提供的软件散列值</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-6">★散列值校验的方法——使用客户端工具计算散列值</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-7">★啥是“数字签名”？</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-8">★Windows 平台的“数字签名”</a><br>
-<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-9">★PGP/GPG 的数字签名</a></p>
-<h2 id="★啥是“完整性校验”？">★啥是“完整性校验”？</h2>
-<p>所谓的“完整性校验”，顾名思义，就是检查文件是否完整。那么，什么情况下会导致文件不完整捏？大概有如下几种情况。</p>
-<ol>
-<li>感染病毒<br>
-比方说你的系统中了病毒，病毒感染了某个软件安装包或者某个可执行程序。那么该文件的完整性就被破坏了。</li>
-<li>植入木马/后门<br>
-还有一种文件不完整的情况，是被别有用心的人植入木马或后门。比方说某些国内的软件下载站点，它们提供的 Windows 安装光盘镜像已经被安置了后门。</li>
-<li>传输故障<br>
-这种情况主要发生在网络下载时。因为网络传输是有可能发生误码的（传输错误），另外还有可能下载到快结束的时候断线（没下载全）。这些情况都会导致你下载的文件不完整。<br>
-如今的上网环境相比当年的 Modem 拨号，已经有明显改善。所以这种情况应该不多见了。</li>
-</ol>
-<h2 id="★散列算法（哈希算法）扫盲">★散列算法（哈希算法）扫盲</h2>
-<h3 id="◇什么是“散列算法-哈希算法”？">◇什么是“散列算法/哈希算法”？</h3>
-<p>这里所说的“散列”是一种计算机算法，洋文叫做 Hash，有时候也根据音译称为哈希。<br>
-散列算法可以把【任意尺寸】的数据（原始数据）转变为一个【固定尺寸】的“小”数据（叫“散列值”或“摘要”）。</p>
-<h3 id="◇摘要长度">◇摘要长度</h3>
-<p>对于某个具体的散列算法，得到的散列值长度总是固定的。散列值的长度又称“摘要长度”。以下是常见散列算法的摘要长度。</p>
-<table>
-<thead>
-<tr>
-<th>散列算法</th>
-<th>散列值比特数</th>
-<th>散列值字节数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>CRC32</td>
-<td>32</td>
-<td>4</td>
-</tr>
-<tr>
-<td>MD5</td>
-<td>128</td>
-<td>16</td>
-</tr>
-<tr>
-<td>SHA1</td>
-<td>160</td>
-<td>20</td>
-</tr>
-<tr>
-<td>SHA256</td>
-<td>256</td>
-<td>32</td>
-</tr>
-<tr>
-<td>SHA512</td>
-<td>512</td>
-<td>64</td>
-</tr>
-</tbody>
-</table>
-<h3 id="◇散列算法的特色">◇散列算法的特色</h3>
-<ol>
-<li>不可逆性<br>
-从刚才的描述看，散列似乎有点像压缩。其实捏，散列算法跟压缩算法是完全不同滴。压缩算法是可逆的（可以把压缩后的数据再还原），而【散列算法是不可逆的】。<br>
-还有一些人把散列算法称为“加密算法”，这也是不对的。因为加密算法是可逆的（“加密”的【逆操作】就是“解密”），而散列算法是【不可逆】的。</li>
-<li>确定性<br>
-通过某种散列算法，分别对两个原始数据计算散列值。如果算出来的散列值不同，那么可以 100% 肯定这两段数据是不同的——这就是“确定性”。<br>
-但反过来，如果这两段数据的散列值相同，则只能说，这两段数据【非常可能】相同。所谓的“非常可能”，就是说，还达不到百分百。具体原因，请看下一节“散列函数的可靠性”。</li>
-</ol>
-<h2 id="★关于散列算法的【可靠性】">★关于散列算法的【可靠性】</h2>
-<h2 id="◇何为“散列碰撞”？">◇何为“散列碰撞”？</h2>
-<p>刚才说了，存在非常小的可能性，导致两段不同的原始数据，计算出相同的散列值。这种情况称之为“散列碰撞”或“散列冲突”。</p>
-<h3 id="◇碰撞的类型">◇碰撞的类型</h3>
-<p>散列碰撞的类型，大体上有两种：</p>
-<ol>
-<li>随机碰撞<br>
-随机碰撞就像买彩票中大奖，完全是出于小概率的偶然因素——你碰巧遇见两个不同的数据（文件），具有相同的散列值。理论上讲，任何散列算法都存在随机碰撞的可能性，只是可能性有大有小。</li>
-<li>人为碰撞<br>
-人为碰撞就是说，有人（通常是恶意的攻击者）故意制造散列碰撞，以此来骗过“基于散列值的完整性校验”。</li>
-</ol>
-<h3 id="◇如何避免碰撞">◇如何避免碰撞</h3>
-<ol>
-<li>对于随机碰撞<br>
-要避免随机碰撞，很简单，只需要选择摘要长度足够长的散列算法。拿前面举的3个例子。<br>
-CRC32 的摘要长度是“32bit”，也就说，最多可以表示“2的32次方”这么多种可能性（也就是几十亿，数量级相当于地球总人口）。表面上看貌似很大，其实还不够大。比如当前互联网上的页面总数就已经大大超过“几十亿”。如果对每个页面计算 CRC32 散列，会碰到很多重复（碰撞）。<br>
-而 MD5 的摘要长度是“128bit”，也就是【2的128次方】。这个数字足够大了。通俗地说，从宇宙诞生到宇宙毁灭，你都未必有机会碰见 MD5 的【随机碰撞】。而 SHA1 的摘要长度是“160bit”，那就更不用说了。</li>
-<li>对于人为碰撞<br>
-想避免人为碰撞，要同时兼顾两个因素——散列算法的摘要长度、散列算法的优秀程度。“摘要长度”刚才已经解释了。光说一下“算法的优秀程度”。<br>
-如果某个散列算法有缺陷（不够优秀），那么攻击者就可以比较容易地构造出两个【不同的】原始数据，但却拥有【相同的】散列值。如此一来，就可以骗过基于散列算法的完整性检查。<br>
-典型的例子就是 MD5——该算法在过去10多年里曾经非常流行，但是前几年被发现存在严重缺陷。所以，MD5 虽然“随机碰撞”的概率非常非常低，但“人为碰撞”的概率可【不低】。如果你比较注重安全性，【不要】再使用 MD5 进行完整性校验。<br>
-再补充一下：<br>
-随着硬件计算能力的提升，即便是 SHA1 也开始变得【不】安全了（参见如下博文中的密码学相关章节）。今后 SHA1 会逐步被 SHA256 或 SHA512 替代。<br>
-《<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2019/07/Security-News.html">近期安全动态和点评（2019年2季度）</a>》</li>
-</ol>
-<h2 id="★散列值校验的方法——使用网站提供的软件散列值">★散列值校验的方法——使用网站提供的软件散列值</h2>
-<p>如今，大伙儿的安全意识越来越高了。相应的，很多知名的软件，除了在官网上提供下载，还会相应提供下载软件的散列值。当你下载好某个软件之后，先在自己电脑里计算一下散列值，然后跟官方网站提供的散列值对比一下。如果散列值一样，通常就说明没问题。<br>
-举例：Firefox 浏览器的散列校验<br>
-打开如下链接，就可以看到 Firefox 某个版本的 SHA1 列表（把网址中的 <code>版本号</code> 三个字替换为具体的【三段式】版本号，比如<code>18.0.2</code>）。这个列表很长，包括各种语言，各个平台。为了方便起见，你可以先算好 SHA1 散列值，然后到里面搜索该散列值。<br>
-<a target="_blank" rel="noopener" href="https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%E7%89%88%E6%9C%AC%E5%8F%B7/SHA1SUMS">https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/版本号/SHA1SUMS</a><br>
-某些菜鸟读者可能会问：如何在自己电脑上计算某个软件的散列值？这就需要看下一个章节。</p>
-<h2 id="★散列值校验的方法——使用客户端工具计算散列值">★散列值校验的方法——使用客户端工具计算散列值</h2>
-<p>前面说完了校验的流程，最后再说一下校验的工具。<br>
-考虑到大部分读者是 Windows 用户，俺介绍一下微软官方的 FCIV（洋文全称是“File Checksum Integrity Verifier”）。这是一个小巧、绿色、免费的命令行工具，下载页面在“<a target="_blank" rel="noopener" href="https://support.microsoft.com/kb/841290/">这里</a>”。<br>
-因为是命令行工具，你需要先运行 CMD，出现 Windows 的命令行界面（黑窗口）之后，在其中使用该工具。下面是 FCIV 功能简介。</p>
-<h3 id="◇计算单个文件">◇计算单个文件</h3>
-<p>比如你有一个微软的系统安装光盘镜像，位于 <code>C:\download\Windows.iso</code> 那么，用如下命令可以计算该文件的 SHA1 散列值。<br>
-fciv -sha1 C:\download\Windows.iso</p>
-<h3 id="◇批量计算某个目录">◇批量计算某个目录</h3>
-<p>FCIV 支持批量计算某个目录下的文件散列值。比方说，可以用如下命令可以计算 <code>C:\download</code> 目录下的每一个文件的 SHA1。<br>
-fciv -sha1 C:\download\</p>
-<h3 id="◇批量计算并存储，供前后对比">◇批量计算并存储，供前后对比</h3>
-<p>比如 <code>C:\download</code> 目录下有很多文件。俺想知道过一段时间之后，这些文件是否被改过。那么，可以先用如下命令，把该目录中所有文件的 SHA1 散列都存储到某个 XML 格式的文件中（本例中，俺假设保存的文件是当前目录的 <code>hash.xml</code>，你也可以保存到其它文件名）。<br>
-fciv -sha1 C:\download\ -xml hash.xml<br>
-过了一段时间后，你可以用如下命令，就可以看出哪些文件被修改过。<br>
-fciv -sha1 C:\download\ -xml hash.xml -v</p>
-<h2 id="★啥是“数字签名”？">★啥是“数字签名”？</h2>
-<p>所谓的“数字签名”，通俗来说，就是采用某种技术手段来证明某个信息确实是由某个机构（或某个人）发布的。因为其用途有点类似于传统的手写签字，所以称之为“数字签名”。<br>
-数字签名的技术实现需要依赖于“非对称加密技术”和“数字证书体系”。关于“非对称加密技术”，考虑到篇幅，今天就不展开了；关于“数字证书”，3年前写过一篇扫盲（在“<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2010/02/introduce-digital-certificate-and-ca.html">这里</a>”），有兴趣的同学可以瞧一瞧，这里就不再啰嗦了。</p>
-<h2 id="★Windows-平台的“数字签名”">★Windows 平台的“数字签名”</h2>
-<p>数字签名有很多种，大伙儿比较常见的是 Windows 平台下的数字签名。如今大型 IT 公司（比如“微软、Google、苹果”等）或者是知名开源组织发布的 Windows 软件，安装文件通常都内置数字签名。所以俺着重介绍 Windows 平台的数字签名该如何校验。</p>
-<h3 id="◇利用资源管理器验证单个文件">◇利用资源管理器验证单个文件</h3>
-<p>大概从 Windows 2000开始，Windows 就支持在某个文件尾部附加数字签名，并且 Windows 的资源管理器内置了对数字签名的校验功能。<br>
-下面俺通过几个截图，简单介绍一下：如何在资源管理器中验证数字签名。<br>
-比如，俺手头有一个 Firefox 的安装文件（带有数字签名）。当俺查看该文件的属性，会看到如下的界面。眼神好的同学，会注意到到上面有个“数字签名”的标签页。如果没有出现这个标签页，就说明该文件没有附带数字签名。</p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://lh4.googleusercontent.com/7yTWIB51d7IDQdJbkci9h7WasV2KtT3wv1GQHp7jpwDgqgoWuCrR0AN-RBKPpPIKhRJ3X-BW3NgpkSNDk_Pktcc2AKEAj37K6Ykddgrklvseb9D8yxRFX0psAtvXlqpK_4ByoSxd" alt=""></p>
-<p>选择该标签页，出现如下界面。<br>
-顺便说一下，某些数字签名中没有包含“邮件地址”，那么这一项会显示“不可用”；同样的，某些数字签名没有包含“时间戳”，也会显示“不可用”。不要紧张，这里显示的“不可用”跟数字签名的有效性没关系。</p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://lh5.googleusercontent.com/RnomEwHFwXYoQL2Ydk9N5WSlVG70Ie09qf2NvCCLcEKItHd-XDMwuB4_tYUFrabuTJxD5AXImyFX6zN_37KJgconsKwcWjgB1s7yS1QuIexm65HMempZvf5WQIXyYookguyc7Rvr" alt=""></p>
-<p>一般来说，签名列表中，有且仅有一个签名。选中它，点“详细信息”按钮。跳出如下界面：<br>
-通常这个界面会显示一行字：该数字签名正常（图中红圈标出）。如果有这行字，就说明该文件从出厂到你手里，中途没有被篡改过（是原装滴、是纯洁滴）。</p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://lh4.googleusercontent.com/wkK-RA1vVQf7t_T2KtsyknIF_3yvjTwWaQwAYoI2A1DUtf8bfcOoGLcusTueaZJ1g4L6kN3Ng-4vMdC2Ra9P_hmyhqEoY_7Fziu8O2Z6TFXBwtaPLkkAzfWrv4snlFgDiIjauTv0" alt=""></p>
-<p>如果该文件被篡改过了（比如，感染了病毒、被注入木马），那么对话框会出现一个警告提示：该数字签名无效（图中红圈标出），界面如下。一旦出现数字签名无效，那这个文件就不要再使用了。</p>
-<!-- 这是一张图片，ocr 内容为： -->
-<p><img src="https://lh3.googleusercontent.com/CB8Nl5udCNWWFTdgk3ZMkNEhmsZjvs9DngaNt0GEgzfpuPu9tCufvlLPJ13jpEyDSZtlTnPZ1DvmzxirIA4-TWIQUEG-KNOWJ5os6HriDq7kjjng85qBnbdz4VQmgZ4T-jloNFON" alt=""></p>
-<h3 id="◇利用命令行工具批量验证">◇利用命令行工具批量验证</h3>
-<p>用上面的图形化界面进行验证，比较傻瓜化。但有一个缺点——如果你要验证的文件比较多，一个一个去点对话框，手会抽筋滴。所以，俺再介绍一下命令行的工具，适合进行批量验证。<br>
-这个命令行工具就是微软官网提供的【SigCheck】，由大名鼎鼎的 SysInternals 出品（SysInternals 已经被微软收购）。跟前面提到的 FCIV 类似，它也是一个小巧、绿色、免费的命令行工具，下载页面在“<a target="_blank" rel="noopener" href="https://docs.microsoft.com/sysinternals/downloads/sigcheck">这里</a>”。<br>
-使用如下命令，可以批量检查某个目录下（包括多层嵌套子目录）的所有可执行程序，并且把“无签名”或者“签名无效”的文件列出来。<br>
-sigcheck -u -e -s 某个目录的路径名 先提醒一下：<br>
-检查数字签名的有效性本身就比较慢，如果目录下的文件很多，你要有足够的耐心等它运行完毕。稍微补充一下，这个 SigCheck 命令还顺便提供了散列值（命令格式如下），该功能可替代 FCIV 的头两个功能，可惜无法替代 FCIV 的第三个功能。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sigcheck -h 某个【目录】的路径名</span><br><span class="line">sigcheck -h 某个【文件】的路径名</span><br></pre></td></tr></table></figure>
-<h2 id="★PGP-GPG-的数字签名">★PGP/GPG 的数字签名</h2>
-<p>刚才聊了 Windows 平台滴。但是，切莫以为只有 Windows 平台才提供数字签名——其它的数字签名工具还有好几种。名气比较大的数字签名工具当属 PGP/GPG。这两个缩写就像绕口令，很容易搞混。PGP 是商业软件，而 GPG 是 GnuPG 的缩写，是 GNU 的开源项目。后者是前者的开源替代品，两者的功能基本兼容。<br>
-这俩玩意儿的功能很强悍，校验数字签名对它俩只是小菜一碟。考虑到大伙儿平时较少碰到 GPG 的签名，俺今天就偷懒一下，暂不介绍。以后如果有空，再专门写一篇帖子介绍 PGP/GPG 的各种功能和使用场景。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/02/parallel-computing-disease-gene-prediction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3482,7 +3519,7 @@ sigcheck -u -e -s 某个目录的路径名 先提醒一下：<br>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-07-19 02:02:47" itemprop="dateModified" datetime="2026-07-19T02:02:47+08:00">2026-07-19</time>
+      <time title="Modified: 2026-07-19 02:12:41" itemprop="dateModified" datetime="2026-07-19T02:12:41+08:00">2026-07-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -3490,7 +3527,7 @@ sigcheck -u -e -s 某个目录的路径名 先提醒一下：<br>
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Research/" itemprop="url" rel="index"><span itemprop="name">Research</span></a>
+          <a href="/categories/Archive/" itemprop="url" rel="index"><span itemprop="name">Archive</span></a>
         </span>
     </span>
 
