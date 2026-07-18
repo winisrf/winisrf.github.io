@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Channels Channels are used to provide information to the OPC Server about the physical connection to a hardware device (PLCs). For the Modbus&#x2F;TCP server, a channel is comprised of the target device’s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AutoOPC Server Help">
+<meta property="og:url" content="http://example.com/2026/07/18/AutoOPC%20Server%20Help/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="Channels Channels are used to provide information to the OPC Server about the physical connection to a hardware device (PLCs). For the Modbus&#x2F;TCP server, a channel is comprised of the target device’s">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524230979-118548cc-124a-4cd2-a065-7dc0ed247b14.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524238658-d6a80422-2cd4-4aeb-9af7-3d00c18eca37.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524266993-b0772fd5-456b-4703-8639-18beb6e2fb6b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524296561-3ec4aba6-9024-4115-b53a-eea5c9cec61a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524306347-ef80e077-0465-4446-a84b-ddd5e09ad767.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524316455-dca5cd74-04b1-49e2-9cbb-ffb28ae2f71c.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524352257-e8229d98-44f1-47e3-97e3-1bb25628b72a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524360660-2cfff0b5-e474-4642-ac71-435985666ade.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524468429-981cfc95-7954-4b4f-8fad-f8b345cc2826.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524477178-33de8f2c-154e-4b24-8788-12803d95735a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524604483-e700ea2b-fd68-411f-917d-8c4122ae09a7.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524612685-5cdec6f8-cc08-4b33-be68-a341dd38eb69.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524676222-12e1298a-6f9b-4c8e-8626-bb1f84117407.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524779543-a32d5af0-461d-4c6b-af45-1a0a3d26e5b1.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524785412-20acc148-5d89-4163-b9e6-ec87a62b5f32.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524807662-b5612d6e-9789-4cbc-8fe2-4ef88d390363.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524812668-95272b16-2523-427d-84d7-21ba634158de.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524731462-89710e47-6f68-4474-b947-a0d86035e6a8.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524737924-0009fe97-2e0f-4fa3-ae53-7bc7d0257e06.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524895637-2ef582ae-0b36-45f4-829c-a984b5c5cc13.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524953549-b95ec782-f887-4645-ad79-aa28932ac085.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746525002172-760db1d6-ff17-438f-8535-2ced0b2995e2.png">
+<meta property="article:published_time" content="2026-07-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T18:17:47.577Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524230979-118548cc-124a-4cd2-a065-7dc0ed247b14.png">
+
+
+<link rel="canonical" href="http://example.com/2026/07/18/AutoOPC%20Server%20Help/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/18/AutoOPC%20Server%20Help/","path":"2026/07/18/AutoOPC Server Help/","title":"AutoOPC Server Help"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AutoOPC Server Help | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">Channels</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Adding-a-Channel"><span class="nav-number">1.1.</span> <span class="nav-text">Adding a Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Changing-a-Channel"><span class="nav-number">1.2.</span> <span class="nav-text">Changing a Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deleting-a-Channel"><span class="nav-number">1.3.</span> <span class="nav-text">Deleting a Channel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Devices</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Adding-a-Device"><span class="nav-number">2.1.</span> <span class="nav-text">Adding a Device</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Device-Name"><span class="nav-number">2.1.1.</span> <span class="nav-text">Device Name</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Channel"><span class="nav-number">2.1.2.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unit-ID"><span class="nav-number">2.1.3.</span> <span class="nav-text">Unit ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transaction-Timeout"><span class="nav-number">2.1.4.</span> <span class="nav-text">Transaction Timeout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Address-Type"><span class="nav-number">2.1.5.</span> <span class="nav-text">Address Type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Force-Discretes"><span class="nav-number">2.1.6.</span> <span class="nav-text">Force Discretes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Float-Word-Swap"><span class="nav-number">2.1.7.</span> <span class="nav-text">Float Word Swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Long-Word-Swap"><span class="nav-number">2.1.8.</span> <span class="nav-text">Long Word Swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Simulate-I-O"><span class="nav-number">2.1.9.</span> <span class="nav-text">Simulate I&#x2F;O</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Changing-a-Device"><span class="nav-number">2.2.</span> <span class="nav-text">Changing a Device</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Device-Name-2"><span class="nav-number">2.2.1.</span> <span class="nav-text">Device Name</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Channel-2"><span class="nav-number">2.2.2.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unit-ID-2"><span class="nav-number">2.2.3.</span> <span class="nav-text">Unit ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transaction-Timeout-2"><span class="nav-number">2.2.4.</span> <span class="nav-text">Transaction Timeout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Address-Type-2"><span class="nav-number">2.2.5.</span> <span class="nav-text">Address Type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Force-Discretes-2"><span class="nav-number">2.2.6.</span> <span class="nav-text">Force Discretes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Float-Word-Swap-2"><span class="nav-number">2.2.7.</span> <span class="nav-text">Float Word Swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Long-Word-Swap-2"><span class="nav-number">2.2.8.</span> <span class="nav-text">Long Word Swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Simulate-I-O-2"><span class="nav-number">2.2.9.</span> <span class="nav-text">Simulate I&#x2F;O</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deleting-a-Device"><span class="nav-number">2.3.</span> <span class="nav-text">Deleting a Device</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">Tag Groups</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Adding-a-Tag-Group"><span class="nav-number">3.1.</span> <span class="nav-text">Adding a Tag Group</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Changing-a-Tag-Group"><span class="nav-number">3.2.</span> <span class="nav-text">Changing a Tag Group</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deleting-a-Tag-Group"><span class="nav-number">3.3.</span> <span class="nav-text">Deleting a Tag Group</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">Tags</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Adding-a-Tag"><span class="nav-number">4.1.</span> <span class="nav-text">Adding a Tag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Changing-a-Tag"><span class="nav-number">4.2.</span> <span class="nav-text">Changing a Tag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deleting-a-Tag"><span class="nav-number">4.3.</span> <span class="nav-text">Deleting a Tag</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">Run Modes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unattended-Mode"><span class="nav-number">5.1.</span> <span class="nav-text">Unattended Mode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System-Tray-Mode"><span class="nav-number">5.2.</span> <span class="nav-text">System Tray Mode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Standard-Executable-Mode"><span class="nav-number">5.3.</span> <span class="nav-text">Standard Executable Mode</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/AutoOPC%20Server%20Help/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AutoOPC Server Help | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AutoOPC Server Help
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 02:17:47" itemprop="dateModified" datetime="2026-07-19T02:17:47+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>Channels</h1>
+<p>Channels are used to provide information to the OPC Server about the physical connection to a hardware device (PLCs). For the Modbus/TCP server, a channel is comprised of the target device’s IP Address, IP Port, and connection timeout value. A unique channel must be created for each IP Address and IP Port pair.</p>
+<h2 id="Adding-a-Channel">Adding a Channel</h2>
+<p>To add a channel, select the OPC, Channels… menu item or the Channels icon <!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524230979-118548cc-124a-4cd2-a065-7dc0ed247b14.png" alt=""> on the server toolbar. A Channel Configuration dialog will appear:</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524238658-d6a80422-2cd4-4aeb-9af7-3d00c18eca37.png" alt=""></p>
+<p>Select the [Add…] button to add a new channel. The Channel Properties dialog will appear:</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524266993-b0772fd5-456b-4703-8639-18beb6e2fb6b.png" alt=""></p>
+<ol>
+<li>Enter the IP Address of the target device.</li>
+<li>If a non-standard port is used by the target device, enter it in the IP Port field. The default for Modbus/TCP is 502.</li>
+<li>Enter the connection timeout value in milliseconds.</li>
+<li>Click [OK] to create the new channel and close the dialog, or click [Cancel] to close the dialog without creating a new channel.</li>
+</ol>
+<h2 id="Changing-a-Channel">Changing a Channel</h2>
+<p>To edit a channel configuration, select the OPC, Channels… menu item or the Channels icon <!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524296561-3ec4aba6-9024-4115-b53a-eea5c9cec61a.png" alt=""> on the server toolbar. A Channel Configuration dialog will appear:</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524306347-ef80e077-0465-4446-a84b-ddd5e09ad767.png" alt=""></p>
+<p>Select a channel from the Installed Channels list box and click the [Edit…] button. The Channel Properties dialog will appear:</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524316455-dca5cd74-04b1-49e2-9cbb-ffb28ae2f71c.png" alt=""></p>
+<ol>
+<li>Make the appropriate changes.</li>
+<li>Click [OK] to create the new channel and close the dialog, or click [Cancel] to close the dialog without creating a new channel.</li>
+</ol>
+<h2 id="Deleting-a-Channel">Deleting a Channel</h2>
+<p>To delete a channel configuration, select the OPC, Channels… menu item or the Channels icon <!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524352257-e8229d98-44f1-47e3-97e3-1bb25628b72a.png" alt=""> on the server toolbar. A Channel Configuration dialog will appear:</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524360660-2cfff0b5-e474-4642-ac71-435985666ade.png" alt=""></p>
+<p>Select a channel in the list box and click the [Delete] button. The Channel will be removed from the Installed Channels list box.</p>
+<h1>Devices</h1>
+<p>OPC Server Devices are used to refer to hardware devices (PLC or other process hardware) that are connected to the OPC Server. For the Modbus/TCP OPC Server, devices refer to Modicon or other 3rd party Modbus/TCP compatible hardware. A Device contains information such as the PLC’s Node Address, transaction timeout, connection type, etc.</p>
+<h2 id="Adding-a-Device">Adding a Device</h2>
+<p>Follow the steps below to add a hardware <u><font style="color:#008000;">Device</font></u>:</p>
+<ol>
+<li>Click on the Add Device<!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524468429-981cfc95-7954-4b4f-8fad-f8b345cc2826.png" alt="">  toolbar button and the Device Properties dialog will appear:</li>
+</ol>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524477178-33de8f2c-154e-4b24-8788-12803d95735a.png" alt=""></p>
+<ol start="2">
+<li>Enter the following information:</li>
+</ol>
+<h3 id="Device-Name">Device Name</h3>
+<p>Enter a name for the target device (process hardware). Device names must be unique on the server they were created on. Examples: MyDevice, Quantum_1, Packaging_Line</p>
+<h3 id="Channel">Channel</h3>
+<p>Dropdown list containing all the <a target="_blank" rel="noopener" href="https://Channel.htm">channels</a> that are configured on the server. Select the appropriate <a target="_blank" rel="noopener" href="https://Channel.htm">channel</a> for this device.</p>
+<h3 id="Unit-ID">Unit ID</h3>
+<p>Modbus/TCP Unit ID. Default is 0, range is 0…254. The Unit ID is intended for use with bridging devices. Most Modbus/TCP slave hardware will ignore this value, but some hardware requires a valid Unit ID.</p>
+<h3 id="Transaction-Timeout">Transaction Timeout</h3>
+<p>Transaction timeout value for the target device in milliseconds.</p>
+<h3 id="Address-Type">Address Type</h3>
+<p>Select from the following choices:</p>
+<ul>
+<li>Modicon Style PLC Addressing (x, 1xxxx, 3xxxx, 4xxxx)</li>
+<li>Absolute Zero-based Addressing</li>
+<li>Generic One-based Addressing</li>
+</ul>
+<h3 id="Force-Discretes">Force Discretes</h3>
+<p>The Modbus/TCP specification provides two functions for forcing discretes:</p>
+<ul>
+<li>FNC 5 – Force Single Coil</li>
+<li>FNC 15 – Force Multiple Coils</li>
+</ul>
+<p>Hardware support for one or both these functions is manufacturer dependent. Select the radio button that is appropriate to your hardware’s functional support. If your hardware supports both, check either radio button; effect on performance is negligible.</p>
+<h3 id="Float-Word-Swap">Float Word Swap</h3>
+<p>For floating point variables only. The word order in which floating point data is stored and transferred via Modbus/TCP varies across manufacturers. If this box is unchecked, data is handled using non-IEEE word order. If this box is checked, data is handled using IEEE word order.</p>
+<h3 id="Long-Word-Swap">Long Word Swap</h3>
+<p>For long integer variables only. The word order in which long integer data is stored and transferred via Modbus/TCP varies across manufacturers. If this box is unchecked, data is handled using non-IEEE word order. If this box is checked, data is handled using IEEE word order.</p>
+<h3 id="Simulate-I-O">Simulate I/O</h3>
+<p>Simulates activity on the device. Useful during development or when the target device is not present. Uncheck this when the target device is connected and actual data is required.</p>
+<p><strong>NOTE:</strong> When simulate I/O is checked, simulated values are generated for INPUT_REGISTERS and DISCRETE_INPUTS only; OUTPUT_REGISTERS and DISCRETE_OUTPUTS are not effected. Since input registers are read-only, you will not be able to write values to simulated registers.</p>
+<ol>
+<li>Click on the [OK] button to save changes, or click on the [Cancel] button to exit without saving changes.</li>
+</ol>
+<h2 id="Changing-a-Device">Changing a Device</h2>
+<p>Follow the steps below to change a hardware <u><font style="color:#008000;">Device</font></u>:</p>
+<ol>
+<li>Right mouse click on the Device icon<!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524604483-e700ea2b-fd68-411f-917d-8c4122ae09a7.png" alt="">  in the tree view pane, select Properties… from the popup menu, and the Device Properties dialog will appear:</li>
+</ol>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524612685-5cdec6f8-cc08-4b33-be68-a341dd38eb69.png" alt=""></p>
+<ol start="2">
+<li>Make changes.</li>
+</ol>
+<h3 id="Device-Name-2">Device Name</h3>
+<p>Enter a name for the target device (process hardware). Device names must be unique on the server they were created on. Examples: MyDevice, Quantum_1, Packaging_Line</p>
+<h3 id="Channel-2">Channel</h3>
+<p>Dropdown list containing all the <a target="_blank" rel="noopener" href="https://Channel.htm">channels</a> that are configured on the server. Select the appropriate <a target="_blank" rel="noopener" href="https://Channel.htm">channel</a> for this device.</p>
+<h3 id="Unit-ID-2">Unit ID</h3>
+<p>Modbus/TCP defined Unit ID. Default is 0, range is 0…254. The Unit ID is intended for use with bridging devices. Most Modbus/TCP slave hardware will ignore this value, but some hardware requires a valid Unit ID.</p>
+<h3 id="Transaction-Timeout-2">Transaction Timeout</h3>
+<p>Transaction timeout value for the target device in milliseconds.</p>
+<h3 id="Address-Type-2">Address Type</h3>
+<p>Select from the following choices:</p>
+<ul>
+<li>Modicon Style PLC Addressing (x, 1xxxx, 3xxxx, 4xxxx)</li>
+<li>Absolute Zero-based Addressing</li>
+<li>Generic One-based Addressing</li>
+</ul>
+<h3 id="Force-Discretes-2">Force Discretes</h3>
+<p>The Modbus/TCP specification provides two functions for forcing discretes:</p>
+<ul>
+<li>FNC 5 – Force Single Coil</li>
+<li>FNC 15 – Force Multiple Coils</li>
+</ul>
+<p>Hardware support for one or both these functions is manufacturer dependent. Select the radio button that is appropriate to your hardware’s functional support. If your hardware supports both, check either radio button; effect on performance is negligible.</p>
+<h3 id="Float-Word-Swap-2">Float Word Swap</h3>
+<p>For floating point variables only. The word order in which floating point data is stored and transferred via Modbus/TCP varies across manufacturers. If this box is unchecked, data is handled using non-IEEE word order. If this box is checked, data is handled using IEEE word order.</p>
+<h3 id="Long-Word-Swap-2">Long Word Swap</h3>
+<p>For long integer variables only. The word order in which long integer data is stored and transferred via Modbus/TCP varies across manufacturers. If this box is unchecked, data is handled using non-IEEE word order. If this box is checked, data is handled using IEEE word order.</p>
+<h3 id="Simulate-I-O-2">Simulate I/O</h3>
+<p>Simulates activity on the device. Useful during development or when the target device is not present. Uncheck this when the target device is connected and actual data is required.<strong>NOTE:</strong> When simulate I/O is checked, simulated values are generated for INPUT_REGISTERS and DISCRETE_INPUTS only; OUTPUT_REGISTERS and DISCRETE_OUTPUTS are not effected. Since input registers are read-only, you will not be able to write values to simulated registers.</p>
+<ol>
+<li>Click on the [OK] button to save changes, or click on the [Cancel] button to exit without saving changes.</li>
+</ol>
+<p>After making changes, it is not necessary to reboot the server.</p>
+<h2 id="Deleting-a-Device">Deleting a Device</h2>
+<p>Follow the steps below to remove a hardware Device :</p>
+<ol>
+<li>All Tag Groups and Tags that appear below the target device must be removed prior to removing the device.</li>
+<li>Right mouse click on the Device icon  in the tree view pane and select Remove from the popup menu.- or -Click on the target Device in the tree view pane and then click on the Delete<!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524676222-12e1298a-6f9b-4c8e-8626-bb1f84117407.png" alt="">  toolbar button.</li>
+</ol>
+<h1>Tag Groups</h1>
+<p>Tag groups provide a logical way to group tags together. Tag groups allow clients that support tag browsing to view tags hierarchically.</p>
+<p>Tag groups should not be confused with OPC Client Groups. For a description of OPC Groups see the OPC 2.0 DA Custom Specification.</p>
+<h2 id="Adding-a-Tag-Group">Adding a Tag Group</h2>
+<p>Follow the steps below to add a Tag Group :</p>
+<ol>
+<li>Click on the Add Group<!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524779543-a32d5af0-461d-4c6b-af45-1a0a3d26e5b1.png" alt="">  toolbar button and the Group Properties dialog will appear:</li>
+</ol>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524785412-20acc148-5d89-4163-b9e6-ec87a62b5f32.png" alt=""></p>
+<ol start="2">
+<li>Enter the following information:</li>
+</ol>
+<p>·   Name: Enter a name for the Tag Group.</p>
+<ol>
+<li>Click on the [OK] button to add the Tag Group. Click on the [Cancel] Button to exit without adding the Tag Group.</li>
+</ol>
+<h2 id="Changing-a-Tag-Group">Changing a Tag Group</h2>
+<p>Follow the steps below to change a Tag Group :</p>
+<ol>
+<li>Right mouse click on the Tag Group<!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524807662-b5612d6e-9789-4cbc-8fe2-4ef88d390363.png" alt="">  icon in the tree view pane, select Properties… from the popup menu, and the Tag Group’s property dialog will appear:</li>
+</ol>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524812668-95272b16-2523-427d-84d7-21ba634158de.png" alt=""></p>
+<ol start="2">
+<li>Make changes.</li>
+<li>Click on the [OK] button to save changes, or click on the [Cancel] button to exit without saving changes.</li>
+</ol>
+<p>After making changes, it is not necessary to reboot the server.</p>
+<h2 id="Deleting-a-Tag-Group">Deleting a Tag Group</h2>
+<p>Follow the steps below to remove a Tag Group :</p>
+<ol>
+<li>All Tags that appear below the target device must be removed prior to removing the Tag Group.</li>
+<li>Right mouse click on the Tag Group icon  in the tree view pane and select Remove from the popup menu.- or -Click on the target Tag Group in the tree view pane and then click on the Delete  toolbar button .</li>
+</ol>
+<h1>Tags</h1>
+<p>An OPC Tag is an item on the OPC Server that represents a data point in the target device (process hardware).</p>
+<p>Descriptive names can be used instead of PLC style numeric registers. For instance you could create a tag named Pressure which corresponds to register 30001.</p>
+<h2 id="Adding-a-Tag">Adding a Tag</h2>
+<p>Follow the steps below to add a Tag :</p>
+<ol>
+<li>Click on the Add Tag <!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524731462-89710e47-6f68-4474-b947-a0d86035e6a8.png" alt=""> toolbar button and the Tag Properties dialog will appear:</li>
+</ol>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524737924-0009fe97-2e0f-4fa3-ae53-7bc7d0257e06.png" alt=""></p>
+<ol start="2">
+<li>Enter the following information:</li>
+</ol>
+<ul>
+<li>Name: Enter a name for the Tag.</li>
+<li>Description: Optionally enter a description for the Tag.</li>
+<li>Type: Select the Tag’s data type from the pulldown list.</li>
+<li>Location: Enter the hardware register number or general reference file address. For tags that refer to general reference files, use this field to specify the general reference address. Format is <Reference Type>,<File Number>,<Start Address>. Currently, the <Reference Type> field must be set to 6.</li>
+<li>Data Type: This is how the data will be represented in the OPC Server.</li>
+<li>Number of Bytes: For VT_BSTR data type only. Specify the maximum string length here. Largest string allowable is 200 bytes.</li>
+<li>BCD Format: Check this box if data is stored in the process hardware in BCD format. Valid only for VT_I2 and VT_I4 types.</li>
+<li>Scaling and Alarming: Check this box to enable scaling and alarming. For non-discrete types only.</li>
+<li>Simulation Signal: Applies only when the Device is set to Simulate. Specifies how the simulation values are varied.</li>
+</ul>
+<ol>
+<li>Click on the [OK] button to add the Tag Group. Click on the [Cancel] Button to exit without adding the Tag Group.</li>
+</ol>
+<h2 id="Changing-a-Tag">Changing a Tag</h2>
+<p>Follow the steps below to change a Tag :</p>
+<ol>
+<li>Right mouse click on the Tag icon  in the list view pane, select Properties… from the popup menu, and the Tag Property dialog will appear:</li>
+</ol>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524895637-2ef582ae-0b36-45f4-829c-a984b5c5cc13.png" alt=""></p>
+<ol start="2">
+<li>Make changes.</li>
+<li>Click on the [OK] button to save changes, or click on the [Cancel] button to exit without saving changes.</li>
+</ol>
+<p>After making changes, it is not necessary to reboot the server.</p>
+<h2 id="Deleting-a-Tag">Deleting a Tag</h2>
+<p>Follow the steps below to remove a Tag :</p>
+<ol>
+<li>Right mouse click on the Tag icon  in the list view pane and select Remove from the popup menu.- or -Click on the target Tag in the list view pane and then click on the Delete<!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746524953549-b95ec782-f887-4645-ad79-aa28932ac085.png" alt="">  toolbar button.</li>
+</ol>
+<h1>Run Modes</h1>
+<p>The server can be configured to run in the following modes:</p>
+<h2 id="Unattended-Mode">Unattended Mode</h2>
+<p>Unattended mode is set during DCOM Configuration.</p>
+<p>Unattended mode means that in addition to normal server operation where a user is logged onto the OPC Server PC, the server can be launched from a remote OPC Client regardless of whether someone is logged onto the OPC Server PC.</p>
+<p>When set to run in unattended mode and the OPC Server is launched from an OPC Client, the OPC Server’s user interface will not be shown. The server will only show up as a process in the Task Manager. Configuration changes cannot be made while in this mode.</p>
+<p>When set to run in unattended mode and the OPC Server is launched manually, the OPC Server’s user interface will be present and configuration changes can easily be made.</p>
+<p>To run the OPC Server in unattended mode, the OPC Server’s DCOM configuration must be properly set.</p>
+<p>Refer to this document for setting up the server to run in unattended mode:<a target="_blank" rel="noopener" href="http://automatedsolutions.com/technotes/opcserverconnectivity/">DCOM  and Windows Firewall Configuration for Automated Solutions OPC Servers</a></p>
+<h2 id="System-Tray-Mode">System Tray Mode</h2>
+<p>System Tray mode is set via the OPC Server’s View, Run popup menu in the System Tray.</p>
+<p>The System Tray is the area located on the end of the Task Bar and contains icons of background processes. The system tray is shown below:</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/26867783/1746525002172-760db1d6-ff17-438f-8535-2ced0b2995e2.png" alt=""></p>
+<p>To activate the server’s user interface from the system tray, double click on the server icon.</p>
+<p>Note: when the ‘Run in System Tray’ option is selected, you must use File|Exit to shut the server down. Clicking on the close button [X] will minimize the server to the system tray, not close the server.</p>
+<p>Form the system tray you can also right-mouse click on the server icon, the select Exit from the popup menu to shutdown the server.</p>
+<h2 id="Standard-Executable-Mode">Standard Executable Mode</h2>
+<p>Standard Executable mode is set via the OPC Server’s View, Run popup menu in the System Tray.</p>
+<p>When run as a standard executable, the standard OPC Server user interface is shown. When the server is minimized, it will minimize to the Windows Task Bar.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/18/Mitmproxy/" rel="prev" title="Mitmproxy">
+                  <i class="fa fa-angle-left"></i> Mitmproxy
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/19/%E3%80%90LaTex%E3%80%91TeX%20on%20Windows_%20TeX%20Live%20versus%20MiKTeX%20revisited/" rel="next" title="">
+                   <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

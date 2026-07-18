@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、Mitmproxy介绍 Mitmproxy是一组工具，可为HTTP&#x2F;1,HTTP&#x2F;2和WebSockets提供交互式的，具有SSL&#x2F;TLS功能的拦截代理。（除非另有说明，否则“ TLS”的使用在广义上是指SSL（过时和不安全）和TLS（1.0及更高版本））  拦截HTTP和HTTPS请求和响应并即时修改它们; 保存完整的HTTP对话以供以后重播和分析; 重播HTTP对话的客户端; 重播先前记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mitmproxy">
+<meta property="og:url" content="http://example.com/2026/07/18/Mitmproxy/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="一、Mitmproxy介绍 Mitmproxy是一组工具，可为HTTP&#x2F;1,HTTP&#x2F;2和WebSockets提供交互式的，具有SSL&#x2F;TLS功能的拦截代理。（除非另有说明，否则“ TLS”的使用在广义上是指SSL（过时和不安全）和TLS（1.0及更高版本））  拦截HTTP和HTTPS请求和响应并即时修改它们; 保存完整的HTTP对话以供以后重播和分析; 重播HTTP对话的客户端; 重播先前记录">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789085251-ec51811b-d948-43f8-b9c4-fd509995a572.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789085405-2d66785b-32f5-48ff-b432-6f58c5ca7f2c.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789083970-15d07dfb-0a77-4032-999b-f3f32fb9cc21.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789268343-ba99a3d9-ffd2-4ead-b0f4-9069f7be800d.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789269066-4da626b3-89e5-4186-b83b-0c1a9667b16a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789269341-d54aefba-6a60-42cd-8155-c396290e5530.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789267316-697ebe38-5a2c-4644-ac7b-59106d1b770f.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789268954-8ddcc7b6-676d-4426-a71a-83de62fddc70.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789270380-ef9c9fcb-71b1-4a73-9d2f-f318b87ac71b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789274508-a3d3a717-d6f6-4c78-9d8e-397fa985ae07.png">
+<meta property="article:published_time" content="2026-07-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T18:17:34.175Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789085251-ec51811b-d948-43f8-b9c4-fd509995a572.png">
+
+
+<link rel="canonical" href="http://example.com/2026/07/18/Mitmproxy/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/18/Mitmproxy/","path":"2026/07/18/Mitmproxy/","title":"Mitmproxy"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Mitmproxy | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-51-51-51-%E4%B8%80%E3%80%81Mitmproxy%E4%BB%8B%E7%BB%8D-font"><span class="nav-number">1.</span> <span class="nav-text">一、Mitmproxy介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-51-51-51-%E4%BA%8C%E3%80%81%E6%98%BE%E5%BC%8FHTTP-font"><span class="nav-number">2.</span> <span class="nav-text">二、显式HTTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-51-51-51-%E4%B8%89%E3%80%81%E6%98%BE%E5%BC%8FHTTPS-font"><span class="nav-number">3.</span> <span class="nav-text">三、显式HTTPS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#font-style-color-rgb-51-51-51-1%E3%80%81mitmproxy%E4%B8%AD%E7%9A%84MITM-font"><span class="nav-number">3.1.</span> <span class="nav-text">1、mitmproxy中的MITM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#font-style-color-rgb-51-51-51-2%E3%80%81Q1%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E8%BF%9C%E7%A8%8B%E4%B8%BB%E6%9C%BA%E5%90%8D%EF%BC%9F-font"><span class="nav-number">3.2.</span> <span class="nav-text">2、Q1：什么是远程主机名？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#font-style-color-rgb-51-51-51-3%E3%80%81Q2%EF%BC%9A%E4%BD%BF%E7%94%A8%E8%80%85%E6%9B%BF%E4%BB%A3%E5%90%8D%E7%A7%B0-font"><span class="nav-number">3.3.</span> <span class="nav-text">3、Q2：使用者替代名称</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#font-style-color-rgb-51-51-51-4%E3%80%81Q3%EF%BC%9A%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8D%E7%A7%B0%E6%8C%87%E7%A4%BA-font"><span class="nav-number">3.4.</span> <span class="nav-text">4、Q3：服务器名称指示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#font-style-color-rgb-51-51-51-5%E3%80%81%E6%80%BB%E7%BB%93-font"><span class="nav-number">3.5.</span> <span class="nav-text">5、总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-51-51-51-%E5%9B%9B%E3%80%81%E9%80%8F%E6%98%8EHTTP-font"><span class="nav-number">4.</span> <span class="nav-text">四、透明HTTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-51-51-51-%E4%BA%94%E3%80%81%E9%80%8F%E6%98%8E%E7%9A%84HTTPS-font"><span class="nav-number">5.</span> <span class="nav-text">五、透明的HTTPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-51-51-51-%E5%85%AD-font-%E3%80%81%E6%93%8D%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">六、操作方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%B8%B8%E8%A7%84%E4%BB%A3%E7%90%86"><span class="nav-number">6.1.</span> <span class="nav-text">1、常规代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E9%80%8F%E6%98%8E%E4%BB%A3%E7%90%86"><span class="nav-number">6.2.</span> <span class="nav-text">2、透明代理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E5%85%B3"><span class="nav-number">6.2.1.</span> <span class="nav-text">（1）自定义网关</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B7%AF%E7%94%B1"><span class="nav-number">6.2.2.</span> <span class="nav-text">（2）自定义路由</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text">十、反向代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E4%B8%BB%E6%9C%BA%E5%A4%B4"><span class="nav-number">7.1.</span> <span class="nav-text">1、主机头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E4%B8%8A%E6%B8%B8%E4%BB%A3%E7%90%86"><span class="nav-number">7.2.</span> <span class="nav-text">2、上游代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81Socks%E4%BB%A3%E7%90%86"><span class="nav-number">7.3.</span> <span class="nav-text">3、Socks代理</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/Mitmproxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Mitmproxy | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mitmproxy
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 02:17:34" itemprop="dateModified" datetime="2026-07-19T02:17:34+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="font-style-color-rgb-51-51-51-一、Mitmproxy介绍-font"><font style="color:rgb(51, 51, 51);">一、Mitmproxy介绍</font></h3>
+<p><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">是一组工具，可为</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP/1</font><font style="color:rgb(51, 51, 51);">,</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP/2</font><font style="color:rgb(51, 51, 51);">和</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">WebSockets</font><font style="color:rgb(51, 51, 51);">提供交互式的，具有</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">SSL/TLS</font><font style="color:rgb(51, 51, 51);">功能的拦截代理。（除非另有说明，否则“ TLS”的使用在广义上是指SSL（过时和不安全）和TLS（1.0及更高版本））</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">拦截</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">和</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTPS</font><font style="color:rgb(51, 51, 51);">请求和响应并即时修改它们;</font></li>
+<li><font style="color:rgb(51, 51, 51);">保存完整的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">对话以供以后重播和分析;</font></li>
+<li><font style="color:rgb(51, 51, 51);">重播</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">对话的客户端;</font></li>
+<li><font style="color:rgb(51, 51, 51);">重播先前记录的服务器的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">响应;</font></li>
+<li><font style="color:rgb(51, 51, 51);">反向代理模式将流量转发到指定的服务器;</font></li>
+<li><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">macOS</font><font style="color:rgb(51, 51, 51);">和</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Linux</font><font style="color:rgb(51, 51, 51);">上的透明代理模式;</font></li>
+<li><font style="color:rgb(51, 51, 51);">使用</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Python</font><font style="color:rgb(51, 51, 51);">对</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">流量进行脚本化更改;</font></li>
+<li><font style="color:rgb(51, 51, 51);">即时生成用于拦截的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">SSL/TLS</font><font style="color:rgb(51, 51, 51);">证书</font></li>
+</ul>
+<h3 id="font-style-color-rgb-51-51-51-二、显式HTTP-font"><font style="color:rgb(51, 51, 51);">二、显式HTTP</font></h3>
+<p><font style="color:rgb(51, 51, 51);">配置客户端以使用mitmproxy作为显式代理是拦截流量的最简单，最可靠的方法。代理协议已在</font><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7230">HTTP RFC</a><font style="color:rgb(51, 51, 51);">中进行了编码，因此客户端和服务器的行为都得到了很好的定义，并且通常是可靠的。在与mitmproxy进行的最简单的交互中，客户端直接连接到代理，并发出如下所示的请求：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET http://example.com/index.html HTTP/1.1</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(51, 51, 51);">这是一个代理</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">GET</font><font style="color:rgb(51, 51, 51);">请求-原始</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP GET</font><font style="color:rgb(51, 51, 51);">请求的扩展形式，包括模式和主机规范，并且它包含所有需要继续进行的信息</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789085251-ec51811b-d948-43f8-b9c4-fd509995a572.png" alt=""></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">客户端连接到代理并发出请求。</font></li>
+<li><font style="color:rgb(51, 51, 51);">Mitmproxy连接到上游服务器，然后继续转发请求。</font></li>
+</ul>
+<h3 id="font-style-color-rgb-51-51-51-三、显式HTTPS-font"><font style="color:rgb(51, 51, 51);">三、显式HTTPS</font></h3>
+<p><font style="color:rgb(51, 51, 51);">显式代理</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTPS</font><font style="color:rgb(51, 51, 51);">连接的过程是完全不同的。客户端连接到代理并发出如下请求：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CONNECT example.com:443 HTTP/1.1</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(51, 51, 51);">传统的代理既不能查看也不能操纵TLS加密的数据流，因此CONNECT请求只是要求代理打开客户端和服务器之间的管道。这里的代理只是一个促进者-它在两个方向上都盲目转发数据，而对内容一无所知。TLS连接的协商是通过此管道进行的，随后的请求和响应流对于代理是完全不透明的。</font></p>
+<h4 id="font-style-color-rgb-51-51-51-1、mitmproxy中的MITM-font"><font style="color:rgb(51, 51, 51);">1、mitmproxy中的MITM</font></h4>
+<p><font style="color:rgb(51, 51, 51);">这就是</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">的基本技巧发挥作用的地方。</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">MITM</font><font style="color:rgb(51, 51, 51);">的名称代表中间人-对我们用来拦截和干扰这些理论上不透明的数据流的过程的引用。基本思想是假装成为客户端的服务器，并假装成为服务器的客户端，而我们坐在中间，解码双方的流量。棘手的部分是</font><font style="color:rgb(51, 51, 51);"> </font><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Certificate_authority">证书颁发机构</a><font style="color:rgb(51, 51, 51);">该系统旨在通过允许受信任的第三方对服务器的证书进行加密签名以验证它们的合法性，来确切地防止这种攻击。如果此签名不匹配或来自非受信方，则安全客户端将简单地断开连接并拒绝继续。尽管当今存在CA系统的许多缺点，但这对于尝试</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">MITM TLS</font><font style="color:rgb(51, 51, 51);">连接进行分析通常是致命的。我们对这个难题的答案是自己成为一个值得信赖的证书颁发机构。</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">包含一个完整的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">CA</font><font style="color:rgb(51, 51, 51);">实现，该实现可动态生成拦截证书。为了让客户相信这些证书，我们</font><font style="color:rgb(51, 51, 51);"> </font><a target="_blank" rel="noopener" href="https://docs.mitmproxy.org/archive/v5/concepts-certificates/">注册mitmproxy作为与设备手动可信CA</a><font style="color:rgb(51, 51, 51);">。</font></p>
+<h4 id="font-style-color-rgb-51-51-51-2、Q1：什么是远程主机名？-font"><font style="color:rgb(51, 51, 51);">2、Q1：什么是远程主机名？</font></h4>
+<p><font style="color:rgb(51, 51, 51);">要继续执行此计划，我们需要知道要在拦截证书中使用的域名-客户端将验证该证书是否适用于与其连接的域，如果不是，则中止。乍一看，上面的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">CONNECT</font><font style="color:rgb(51, 51, 51);">请求似乎满足了我们的所有需求-在此示例中，这两个值均为</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">example.com</font><font style="color:rgb(51, 51, 51);">。但是，如果客户端按以下方式启动了连接，该怎么办：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CONNECT 10.1.1.1:443 HTTP/1.1</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(51, 51, 51);">使用IP地址是完全合法的，因为它可以为我们提供足够的信息来启动管道，即使它不显示远程主机名也是如此。</font></p>
+<p><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">具有狡猾的机制，可以平滑此上游证书的嗅探。看到</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">CONNECT</font><font style="color:rgb(51, 51, 51);">请求后，我们将暂停对话的客户端部分，并启动与服务器的同时连接。我们完成了与服务器的TLS握手，并检查了它使用的证书。现在，我们在上游证书中使用公用名为客户端生成虚拟证书。瞧，即使没有指定主机名，我们也可以提供给客户端正确的主机名。</font></p>
+<h4 id="font-style-color-rgb-51-51-51-3、Q2：使用者替代名称-font"><font style="color:rgb(51, 51, 51);">3、Q2：使用者替代名称</font></h4>
+<p><font style="color:rgb(51, 51, 51);">输入下一个并发症。有时，证书公用名实际上不是客户端连接到的主机名。这是因为证书中的可选“使用者备用名称”字段允许指定任意数量的备用域。如果期望的域与这些域中的任何一个相匹配，即使该域与证书CN不匹配，客户端也将继续进行。答案很简单：当我们从上游证书中提取CN时，我们还提取了SAN，并将它们添加到生成的虚拟证书中。</font></p>
+<h4 id="font-style-color-rgb-51-51-51-4、Q3：服务器名称指示-font"><font style="color:rgb(51, 51, 51);">4、Q3：服务器名称指示</font></h4>
+<p><font style="color:rgb(51, 51, 51);">原始TLS的最大限制之一是每个证书都需要自己的IP地址。这意味着您无法在具有独立证书的多个域共享同一IP地址的情况下进行虚拟托管。在一个IPv4地址池迅速缩小的世界中，这是一个问题，并且我们 以TLS协议的服务器名称指示扩展的形式提供了一个解决方案。这使客户端可以在TLS握手开始时指定远程服务器名称，然后使服务器选择正确的证书来完成该过程。</font></p>
+<p><font style="color:rgb(51, 51, 51);">SNI中断了上游证书嗅探过程，因为在不使用SNI的情况下进行连接时，将获得默认证书，该默认证书可能与客户端期望的证书无关。该解决方案是客户端连接过程的另一个棘手的复杂问题。客户端连接后，我们允许TLS握手继续直到刚刚之后的SNI值已经传递给我们。现在，我们可以暂停对话，并使用正确的SNI值启动上游连接，然后为我们提供正确的上游证书，从中可以提取预期的CN和SAN。</font></p>
+<h4 id="font-style-color-rgb-51-51-51-5、总结-font"><font style="color:rgb(51, 51, 51);">5、总结</font></h4>
+<p><font style="color:rgb(51, 51, 51);">让我们将所有这些放到完整的显式代理HTTPS流中。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789085405-2d66785b-32f5-48ff-b432-6f58c5ca7f2c.png" alt=""></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">1、客户端建立与mitmproxy的连接，并发出HTTP CONNECT请求。</font></li>
+<li><font style="color:rgb(51, 51, 51);">2、Mitmproxy响应为200 Connection Established，就好像它已经设置了CONNECT管道一样。</font></li>
+<li><font style="color:rgb(51, 51, 51);">3、客户端认为它正在与远程服务器通信，并启动TLS连接。它使用SNI指示要连接的主机名。</font></li>
+<li><font style="color:rgb(51, 51, 51);">4、Mitmproxy连接到服务器，并使用客户端指示的SNI主机名建立TLS连接。</font></li>
+<li><font style="color:rgb(51, 51, 51);">5、服务器以匹配的证书作为响应，该证书包含生成拦截证书所需的CN和SAN值。</font></li>
+<li><font style="color:rgb(51, 51, 51);">6、Mitmproxy生成拦截证书，并继续在步骤3中暂停的客户端TLS握手。</font></li>
+<li><font style="color:rgb(51, 51, 51);">7、客户端通过已建立的TLS连接发送请求。</font></li>
+<li><font style="color:rgb(51, 51, 51);">8、Mitmproxy通过在步骤4中启动的TLS连接将请求传递到服务器。</font></li>
+</ul>
+<h3 id="font-style-color-rgb-51-51-51-四、透明HTTP-font"><font style="color:rgb(51, 51, 51);">四、透明HTTP</font></h3>
+<p><font style="color:rgb(51, 51, 51);">使用透明代理时，连接将重定向到网络层的代理中，而无需任何客户端配置。这使得透明代理非常适合那些您无法更改客户端行为的情况-代理不兼容的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Android</font><font style="color:rgb(51, 51, 51);">应用程序是一个常见示例。</font></p>
+<p><font style="color:rgb(51, 51, 51);">为此，我们需要引入两个额外的组件。第一种是重定向机制，可以透明地将发往</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Internet</font><font style="color:rgb(51, 51, 51);">上服务器的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TCP</font><font style="color:rgb(51, 51, 51);">连接重新路由到侦听代理服务器。这通常采用与代理服务器位于同一主机上的防火墙的形式-</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Linux</font><font style="color:rgb(51, 51, 51);">上的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">iptables</font><font style="color:rgb(51, 51, 51);">或</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">OSX上的 pf</font><font style="color:rgb(51, 51, 51);">。客户端启动连接后，它将发出原始的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">请求，该请求可能类似于以下内容：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /index.html HTTP/1.1</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(51, 51, 51);">此请求与显式代理变体不同，它忽略了方案和主机名。那么，我们如何知道将请求转发到哪个上游主机呢？执行重定向的路由机制为我们跟踪了原始目的地。每种路由机制都有一种公开此数据的不同方法，因此引入了透明代理工作所需的第二个组件：一个主机模块，该主机模块知道如何从路由器检索原始目标地址。在mitmproxy中，这采取一组内置模块的形式，这些 </font><a target="_blank" rel="noopener" href="https://github.com/mitmproxy/mitmproxy/tree/master/mitmproxy/platform">模块</a><font style="color:rgb(51, 51, 51);"> 知道如何与每个平台的重定向机制进行通信。一旦获得了这些信息，这个过程就很简单了。</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">客户端与服务器建立连接。</font></li>
+<li><font style="color:rgb(51, 51, 51);">路由器将连接重定向到</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">，后者通常在同一主机的本地端口上侦听。然后，</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">会咨询路由机制以建立原始目的地。</font></li>
+<li><font style="color:rgb(51, 51, 51);">现在，我们只需阅读客户的请求…</font></li>
+<li><font style="color:rgb(51, 51, 51);">…并将其转发到上游。</font></li>
+</ul>
+<h3 id="font-style-color-rgb-51-51-51-五、透明的HTTPS-font"><font style="color:rgb(51, 51, 51);">五、透明的HTTPS</font></h3>
+<p><font style="color:rgb(51, 51, 51);">第一步是确定我们是否应将传入连接视为</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTPS</font><font style="color:rgb(51, 51, 51);">。这样做的机制很简单-我们使用路由机制找出原始目标端口是什么。所有传入的连接都通过不同的层，这些层可以确定要使用的实际协议。通过在每个连接的开头查找</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">ClientHello</font><font style="color:rgb(51, 51, 51);">消息，自动</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TLS</font><font style="color:rgb(51, 51, 51);">检测可用于</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">SSLv3，TLS 1.0，TLS 1.1</font><font style="color:rgb(51, 51, 51);">和</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TLS 1.2</font><font style="color:rgb(51, 51, 51);">。这独立于所使用的TCP端口起作用。</font></p>
+<p><font style="color:rgb(51, 51, 51);">从这里开始，该过程是我们描述的透明代理</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">和</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">显式代理HTTPS</font><font style="color:rgb(51, 51, 51);">方法的合并。我们使用路由机制来建立上游服务器地址，然后像进行显式</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTPS</font><font style="color:rgb(51, 51, 51);">连接一样建立</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">CN和SAN</font><font style="color:rgb(51, 51, 51);">，并处理</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">SNI</font><font style="color:rgb(51, 51, 51);">。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789083970-15d07dfb-0a77-4032-999b-f3f32fb9cc21.png" alt=""></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">客户端与服务器建立连接。</font></li>
+<li><font style="color:rgb(51, 51, 51);">路由器将连接重定向到</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">，后者通常在同一主机的本地端口上侦听。然后，</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">会咨询路由机制以建立原始目的地。</font></li>
+<li><font style="color:rgb(51, 51, 51);">客户端认为它正在与远程服务器通信，并启动</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TLS</font><font style="color:rgb(51, 51, 51);">连接。它使用</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">SNI</font><font style="color:rgb(51, 51, 51);">指示要连接的主机名。</font></li>
+<li><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">连接到服务器，并使用客户端指示的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">SNI</font><font style="color:rgb(51, 51, 51);">主机名建立</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TLS</font><font style="color:rgb(51, 51, 51);">连接。</font></li>
+<li><font style="color:rgb(51, 51, 51);">服务器以匹配的证书作为响应，该证书包含生成拦截证书所需的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">CN和SAN值</font><font style="color:rgb(51, 51, 51);">。</font></li>
+<li><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">生成拦截证书，并继续在步骤3中暂停的客户端</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TLS</font><font style="color:rgb(51, 51, 51);">握手。</font></li>
+<li><font style="color:rgb(51, 51, 51);">客户端通过已建立的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TLS</font><font style="color:rgb(51, 51, 51);">连接发送请求。</font></li>
+<li><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">通过在步骤4中启动的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">TLS</font><font style="color:rgb(51, 51, 51);">连接将请求传递到服务器。</font></li>
+</ul>
+<h3 id="font-style-color-rgb-51-51-51-六-font-、操作方式"><font style="color:rgb(51, 51, 51);">六</font>、操作方式</h3>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789268343-ba99a3d9-ffd2-4ead-b0f4-9069f7be800d.png" alt=""></p>
+<h4 id="1、常规代理">1、常规代理</h4>
+<p><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Mitmproxy</font><font style="color:rgb(51, 51, 51);">的常规模式是最简单，最容易设置的。</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">启动</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">。</font></li>
+<li><font style="color:rgb(51, 51, 51);">通过显式设置</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">代理，将客户端配置为使用</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">。缺省情况下，</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">侦听端口</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">8080</font><font style="color:rgb(51, 51, 51);">。</font></li>
+<li><font style="color:rgb(51, 51, 51);">快速检查：您应该已经可以通过代理访问未加密的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">站点。</font></li>
+<li><font style="color:rgb(51, 51, 51);">打开</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitm.it</font><font style="color:rgb(51, 51, 51);">并为您的设备安装证书。</font></li>
+</ul>
+<p><font style="color:rgb(51, 51, 51);">不幸的是，某些应用程序绕过了系统</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">代理设置-</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Android</font><font style="color:rgb(51, 51, 51);">应用程序是一个常见的示例。在这些情况下，您需要使用</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">的透明模式。 如果您要代理外部设备，则您的网络可能看起来像这样：</font></p>
+<p><font style="color:rgb(51, 51, 51);">方括号表示源IP地址和目标IP地址。您的客户端显式连接到mitmproxy，而mitmproxy显式连接到目标服务器。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789269066-4da626b3-89e5-4186-b83b-0c1a9667b16a.png" alt=""></p>
+<h4 id="2、透明代理">2、透明代理</h4>
+<p><font style="color:rgb(51, 51, 51);">在透明模式下，无需任何客户端配置即可将流量定向到网络层的代理中。这使得透明代理非常适合您无法更改客户端行为的情况。在下图中，在</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">路由器和Internet之间</font><font style="color:rgb(51, 51, 51);">插入了运行</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">的计算机：</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789269341-d54aefba-6a60-42cd-8155-c396290e5530.png" alt=""></p>
+<p><font style="color:rgb(51, 51, 51);">方括号表示源IP地址和目标IP地址。圆括号标记了以太网/数据链路层上的下一跳。这种区别很重要：当数据包到达mitmproxy机器时，仍必须将其寻址到目标服务器。这意味着在流量到达mitmproxy之前不应该应用网络地址转换，因为这会删除目标信息，从而使mitmproxy无法确定真实的目的地。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789267316-697ebe38-5a2c-4644-ac7b-59106d1b770f.png" alt=""></p>
+<p><font style="color:rgb(51, 51, 51);">有多种方法可以配置网络以实现透明代理。我们将看两种常见的情况：</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">配置客户端以使用自定义网关/路由器/“next hop”</font></li>
+<li><font style="color:rgb(51, 51, 51);">在路由器上实现自定义路由</font></li>
+<li><font style="color:rgb(51, 51, 51);">在大多数情况下，建议使用第一个选项，因为它易于使用。</font></li>
+</ul>
+<h5 id="（1）自定义网关">（1）自定义网关</h5>
+<p><font style="color:rgb(51, 51, 51);">一种简单地将流量发送到具有目标IP的mitmproxy机器的方法是，简单地将mitmproxy框配置为默认网关的客户端。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789268954-8ddcc7b6-676d-4426-a71a-83de62fddc70.png" alt=""></p>
+<p><font style="color:rgb(51, 51, 51);">在这种情况下，我们将：</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">将代理计算机配置为透明模式。您可以在透明部分中找到说明。</font></li>
+<li><font style="color:rgb(51, 51, 51);">配置客户端以使用代理计算机的IP作为默认网关。</font></li>
+<li><font style="color:rgb(51, 51, 51);">快速检查：至此，您应该已经可以通过代理访问未加密的HTTP站点。</font></li>
+<li><font style="color:rgb(51, 51, 51);">打开 <a target="_blank" rel="noopener" href="http://mitm.it">mitm.it</a> 并为您的设备安装证书。</font></li>
+</ul>
+<p><font style="color:rgb(51, 51, 51);">通过在DHCP上将设置提供给客户端，可以自动在客户端上设置自定义网关。这样就</font></p>
+<h5 id="（2）自定义路由">（2）自定义路由</h5>
+<p><font style="color:rgb(51, 51, 51);">在某些情况下，您可能需要更精细地控制哪些流量到达</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">实例，而哪些流量没有。例如，您可以选择仅将流量转移到某些主机到透明代理中。有很多方法可以完成此操作，并且很多方法都取决于您使用的路由器或数据包筛选器。在大多数情况下，配置如下所示：</font></p>
+<h3 id="十、反向代理">十、反向代理</h3>
+<p><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">通常与使用代理访问</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">Internet</font><font style="color:rgb(51, 51, 51);">的客户端一起使用。使用反向代理模式，可以使用</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">mitmproxy</font><font style="color:rgb(51, 51, 51);">充当普通的</font><font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">HTTP</font><font style="color:rgb(51, 51, 51);">服务器：</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789270380-ef9c9fcb-71b1-4a73-9d2f-f318b87ac71b.png" alt=""></p>
+<p><font style="color:rgb(51, 51, 51);">有各种用例：</font></p>
+<ul>
+<li><font style="color:rgb(51, 51, 51);">假设您有一个运行在http：<a target="_blank" rel="noopener" href="//example.local/%E7%9A%84%E5%86%85%E9%83%A8API">//example.local/的内部API</a> 。现在，您可以在http：<a target="_blank" rel="noopener" href="//debug.example.local/%E5%A4%84%E4%BB%A5%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E8%AE%BE%E7%BD%AEmitmproxy%EF%BC%8C%E5%B9%B6%E5%B0%86%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8A%A8%E6%80%81%E6%8C%87%E5%90%91%E8%AF%A5%E6%96%B0%E7%9A%84API%E7%AB%AF%E7%82%B9%EF%BC%8C%E8%AF%A5%E7%AB%AF%E7%82%B9%E5%B0%86%E4%B8%BA%E5%AE%83%E4%BB%AC%E6%8F%90%E4%BE%9B%E7%9B%B8%E5%90%8C%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%8C%E5%B9%B6%E4%B8%BA%E6%82%A8%E6%8F%90%E4%BE%9B%E8%B0%83%E8%AF%95%E4%BF%A1%E6%81%AF%E3%80%82%E5%90%8C%E6%A0%B7%EF%BC%8C%E6%82%A8%E5%8F%AF%E4%BB%A5%E5%B0%86%E7%9C%9F%E5%AE%9E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%85%B6%E4%BB%96IP">//debug.example.local/处以反向代理模式设置mitmproxy，并将客户端动态指向该新的API端点，该端点将为它们提供相同的数据，并为您提供调试信息。同样，您可以将真实服务器移动到其他IP</a> /端口，并在原始位置设置mitmproxy来调试和/或重定向所有会话。</font></li>
+<li><font style="color:rgb(51, 51, 51);">假设您是使用<a href="http://example.com/%E7%9A%84Web%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%EF%BC%88%E5%BC%80%E5%8F%91%E7%89%88%E6%9C%AC%E5%9C%A8http%EF%BC%9A//">http://example.com/的Web开发人员（开发版本在http：//</a> localhost：8000 /上运行）。您可以修改主机文件，以使example.com指向127.0.0.1，然后在反向代理模式下在端口80上运行mitmproxy。您可以在example.com域上测试您的应用，并获取记录在mitmproxy中的所有请求。 假设您有一些玩具项目应该获得SSL支持。只需在端口443上将mitmproxy设置为反向代理，就可以完成（mitmdump -p 443 --mode reverse:</font><a target="_blank" rel="noopener" href="http://localhost/%EF%BC%89%E3%80%82Mitmproxy%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8BTLS%E6%B5%81%E9%87%8F%E5%B9%B6%E5%8A%A8%E6%80%81%E6%8B%A6%E6%88%AA%E3%80%82%E5%AF%B9%E4%BA%8E%E6%AD%A4%E7%89%B9%E5%AE%9A%E4%BB%BB%E5%8A%A1%EF%BC%8C%E6%9C%89%E6%9B%B4%E5%A5%BD%E7%9A%84%E5%B7%A5%E5%85%B7%EF%BC%8C%E4%BD%86%E6%98%AFmitmproxy%E6%98%AF%E8%AE%BE%E7%BD%AESSL%E4%BC%9A%E8%AF%9D%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%9D%9E%E5%B8%B8%E5%BF%AB%E9%80%9F%E5%92%8C%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%B9%E6%B3%95"><font style="color:rgb(51, 51, 51);">http://localhost:80/）。Mitmproxy自动检测TLS流量并动态拦截。对于此特定任务，有更好的工具，但是mitmproxy是设置SSL会话服务器的非常快速和简单的方法</font></a><font style="color:rgb(51, 51, 51);">。</font></li>
+<li><font style="color:rgb(51, 51, 51);">是否想在服务器前添加不支持SSL的压缩代理？您甚至可以生成一个终止SSL（–mode reverse:</font><a href="http://...xn--"><font style="color:rgb(51, 51, 51);">http://…）的mitmproxy实例，将其指向压缩代理，然后让压缩代理指向一个SSL启动的mitmproxy（–mode</font></a>mitmproxy,sslmitmproxy(–mode-1j23cvzbw9mba851ddtuqwkyuica484crdg93ki85r05d1p8hha9209osn3afa5624a8a9379hga2130p/)<font style="color:rgb(51, 51, 51);"> </font><font style="color:rgb(51, 51, 51);">reverse:</font><a href="https://...xn--"><font style="color:rgb(51, 51, 51);">https://…），然后再指向真实服务器。如您所见，这是相当灵活的事情</font></a>,-t24cy4bd2cta803b42m0xqmpjk81a4xp.xn–,-yv6at46ahzfxwbcfx5hhvl65q8shr2rxibe80mb3r/)<font style="color:rgb(51, 51, 51);">。</font></li>
+</ul>
+<h4 id="1、主机头">1、主机头</h4>
+<p><font style="color:rgb(51, 51, 51);">在反向代理模式下，mitmproxy会自动重写Host标头以匹配上游服务器。这使mitmproxy可以轻松连接到开放Web上的现有端点（例如mitmproxy --mode reverse:</font><a href="https://example.com"><font style="color:rgb(51, 51, 51);">https://example.com）。您可以使用该keep_host_header选项禁用此行为</font></a>.xn–keep_host_header-hf0zq1gv0ddw7ag84d4m8bn66bqa839yj31g6juaqq0azh8c/)<font style="color:rgb(51, 51, 51);">。</font></p>
+<p><font style="color:rgb(51, 51, 51);">但是，请记住，mitmproxy不会重写返回的文档或HTTP重定向中的绝对URL。这意味着，如果您在返回的网页中单击“</font><font style="color:rgb(51, 51, 51);"> </font><a href="http://example.com/"><font style="color:rgb(51, 51, 51);">http://example.com</font></a><font style="color:rgb(51, 51, 51);"> </font><font style="color:rgb(51, 51, 51);">”的链接，则将绕过mitmproxy直接进入该URL。</font></p>
+<p><font style="color:rgb(51, 51, 51);">解决此问题的一种可能方法是修改操作系统的主机文件，以便“ <a href="http://example.com">example.com</a>”解析为代理的IP，然后直接转到example.com来访问代理。确保您的代理仍然可以解析原始IP，或在mitmproxy中指定IP。</font></p>
+<p><strong><font style="color:rgb(51, 51, 51);">注意事项：互动使用</font></strong><font style="color:rgb(51, 51, 51);"> </font></p>
+<p><font style="color:rgb(51, 51, 51);">反向代理模式通常不足以在其他URL上创建交互式网站的副本。提供给客户端的HTML保持不变-用户单击非相对URL（或下载非相对图像资源）后，流量不再通过mitmproxy。</font></p>
+<h4 id="2、上游代理">2、上游代理</h4>
+<p><font style="color:rgb(51, 51, 51);">如果要通过在其他代理设备之前添加mitmproxy来链接代理，则可以使用mitmproxy的上游模式。在上游模式下，所有请求都会无条件转移到您选择的上游代理中。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/26867783/1700789274508-a3d3a717-d6f6-4c78-9d8e-397fa985ae07.png" alt=""></p>
+<p><font style="color:rgb(51, 51, 51);">mitmproxy在上游代理模式下支持显式HTTP和显式HTTPS。从理论上讲，您可以连续链接多个mitmproxy实例，但这在实践中没有任何意义（即在我们的测试范围之外）。</font></p>
+<h4 id="3、Socks代理">3、Socks代理</h4>
+<p><font style="color:rgb(51, 51, 51);">在这种模式下，mitmproxy充当SOCKS5代理。</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90Android%E3%80%91Fragment%E5%92%8CActivity%E8%8E%B7%E5%8F%96%E4%B8%8A%E4%B8%8B%E6%96%87Context/" rel="prev" title="【Android】Fragment和Activity获取上下文Context">
+                  <i class="fa fa-angle-left"></i> 【Android】Fragment和Activity获取上下文Context
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/18/AutoOPC%20Server%20Help/" rel="next" title="AutoOPC Server Help">
+                  AutoOPC Server Help <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
