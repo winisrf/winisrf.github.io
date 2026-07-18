@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="转载于：https:&#x2F;&#x2F;blog.csdn.net&#x2F;huweiliyi&#x2F;article&#x2F;details&#x2F;105461725 概述 SQLite 一个非常流行的嵌入式数据库，它支持 SQL 语言，并且只利用很少的内存就有很好的性能。此外它还是开源的，任何人都可以使用它。查看模拟器数据库传送门： Android Studio查看SQLite数据库方法大全 SQLite使用 SQLite数据库创建 An">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Android】SQlite数据库">
+<meta property="og:url" content="http://example.com/2026/07/18/%E3%80%90Android%E3%80%91SQlite%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="转载于：https:&#x2F;&#x2F;blog.csdn.net&#x2F;huweiliyi&#x2F;article&#x2F;details&#x2F;105461725 概述 SQLite 一个非常流行的嵌入式数据库，它支持 SQL 语言，并且只利用很少的内存就有很好的性能。此外它还是开源的，任何人都可以使用它。查看模拟器数据库传送门： Android Studio查看SQLite数据库方法大全 SQLite使用 SQLite数据库创建 An">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461077-77839fd8-a640-4587-b694-c8d0ccc40ba9.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461040-c2568976-2640-4285-9a94-239048d8e159.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461323-86f2a843-76ca-44f5-b973-c7801c337c95.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461489-2e652471-fce4-402f-8658-69edb4f1ca53.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461688-72991adc-3284-470c-9b42-6270565971aa.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462147-dfb5fdb3-d680-4a9a-a25e-111df8e80e33.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462110-b8c9a5ad-f7d6-4ce4-87f0-80aec721411a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462269-d75239d3-a542-48e6-8003-46a1a2eeba93.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462612-d30c4072-6c76-4ae5-87bd-ea9a939dea1a.png">
+<meta property="article:published_time" content="2026-07-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T17:57:27.736Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461077-77839fd8-a640-4587-b694-c8d0ccc40ba9.png">
+
+
+<link rel="canonical" href="http://example.com/2026/07/18/%E3%80%90Android%E3%80%91SQlite%E6%95%B0%E6%8D%AE%E5%BA%93/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/18/%E3%80%90Android%E3%80%91SQlite%E6%95%B0%E6%8D%AE%E5%BA%93/","path":"2026/07/18/【Android】SQlite数据库/","title":"【Android】SQlite数据库"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【Android】SQlite数据库 | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLite%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">SQLite使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQLite%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9B%E5%BB%BA"><span class="nav-number">2.1.</span> <span class="nav-text">SQLite数据库创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="nav-number">2.2.</span> <span class="nav-text">增加数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="nav-number">2.3.</span> <span class="nav-text">删除数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="nav-number">2.4.</span> <span class="nav-text">更新数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="nav-number">2.5.</span> <span class="nav-text">查询数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">完整代码</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Android%E3%80%91SQlite%E6%95%B0%E6%8D%AE%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【Android】SQlite数据库 | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Android】SQlite数据库
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 01:57:27" itemprop="dateModified" datetime="2026-07-19T01:57:27+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>转载于：<a target="_blank" rel="noopener" href="https://blog.csdn.net/huweiliyi/article/details/105461725">https://blog.csdn.net/huweiliyi/article/details/105461725</a></p>
+<h2 id="概述">概述</h2>
+<p>SQLite 一个非常流行的嵌入式数据库，它支持 SQL 语言，并且只利用很少的内存就有很好的性能。此外它还是开源的，任何人都可以使用它。查看模拟器数据库传送门： <a target="_blank" rel="noopener" href="https://blog.csdn.net/huweiliyi/article/details/105459022">Android Studio查看SQLite数据库方法大全</a></p>
+<h2 id="SQLite使用">SQLite使用</h2>
+<h3 id="SQLite数据库创建">SQLite数据库创建</h3>
+<p>Android提供了一个<code>SQLiteOpenHelper</code>帮助类 ，用于对数据库进行创建和升级：<br>
+<code>SQLiteOpenHelper</code>是一个抽象类，使用时需要创建自己的类去继承它。<br>
+<code>SQLiteOpenHelper</code>有两个抽象方法<code>onCreate()</code>和<code>onUpgrade()</code>，必须在自己的类中重写这两个方法，然后分别在这两个方法中实现<code>创建</code>和<code>升级</code>数据库的逻辑。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class DBOpenHelper extends SQLiteOpenHelper &#123;</span><br><span class="line">    public DBOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) &#123;</span><br><span class="line">        super(context, name, factory, version);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate(SQLiteDatabase db) &#123;</span><br><span class="line">        //创建数据库sql语句并执行</span><br><span class="line">        String sql=&quot;create table user(id integer primary key autoincrement,username varchar(20),password varchar(20),age integer)&quot;;</span><br><span class="line">        db.execSQL(sql);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="增加数据">增加数据</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public long insert(String table, String nullColumnHack, ContentValues values) ;</span><br></pre></td></tr></table></figure>
+<p>方法参数:</p>
+<table>
+<thead>
+<tr>
+<th>table</th>
+<th>表名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nullColumnHack</td>
+<td>可选参数，当values参数为空时，指定哪个字段设置为null,如果values不为空，则该参数值可以为空</td>
+</tr>
+<tr>
+<td>values</td>
+<td>指定具体的字段，相当于map集合，键值对的形式存储</td>
+</tr>
+<tr>
+<td>返回值</td>
+<td>返回插入成功的行数，如果为-1表示失败</td>
+</tr>
+</tbody>
+</table>
+<p>实例：<br>
+<code>SQLiteOpenHelper</code>中还有两个非常重要的实例方法: <code>getReadableDatabase()</code>和 <code>getWritableDatabase()</code>。<br>
+这两个方法都可以创建或打开一个现有的数据库(如果数据库已存在则直接打开，否则创建一个新的数据库)，并返回一个可对数据库进行读写操作的对象。<br>
+不同的是，当数据库不可写入的时候(如磁盘空间已满)，<br>
+<code>getReadableDatabase()</code>方法返回的对象将以只读的方式去打开数据库<br>
+<code>getWritableDatabase()</code>方法则将出现异常</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DBOpenHelper dbsqLiteOpenHelper = new DBOpenHelper(MainActivity.this,&quot;users.db&quot;,null,1);</span><br><span class="line"> SQLiteDatabase db = dbsqLiteOpenHelper.getWritableDatabase();</span><br><span class="line">//创建存放数据的ContentValues对象</span><br><span class="line">ContentValues values = new ContentValues();</span><br><span class="line">values.put(&quot;username&quot;,&quot;test&quot;);</span><br><span class="line">values.put(&quot;password&quot;,&quot;123456&quot;);</span><br><span class="line">values.put(&quot;age&quot;,20);</span><br><span class="line">//数据库执行插入命令</span><br><span class="line">db.insert(&quot;user&quot;, null, values);</span><br></pre></td></tr></table></figure>
+<p>添加之前一共7条数据</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461077-77839fd8-a640-4587-b694-c8d0ccc40ba9.png" alt=""></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461040-c2568976-2640-4285-9a94-239048d8e159.png" alt=""><br>
+点击添加按钮刷新后多了一条数据</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461323-86f2a843-76ca-44f5-b973-c7801c337c95.png" alt=""></p>
+<h3 id="删除数据">删除数据</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public int delete(String table, String whereClause, String[] whereArgs) </span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>table</th>
+<th>表名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>whereClause</td>
+<td>查询条件</td>
+</tr>
+<tr>
+<td>whereArgs</td>
+<td>指定条件语句，可以使用占位符？</td>
+</tr>
+<tr>
+<td>whereArgs</td>
+<td>当表达式中含有占位符，改参数用户指定各占位符参数的值</td>
+</tr>
+<tr>
+<td>返回值</td>
+<td>删除成功的行数</td>
+</tr>
+</tbody>
+</table>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DBOpenHelper dbsqLiteOpenHelper = new DBOpenHelper(MainActivity.this,&quot;users.db&quot;,null,1);</span><br><span class="line"> SQLiteDatabase db = dbsqLiteOpenHelper.getWritableDatabase();</span><br><span class="line">db.delete(&quot;user&quot;, &quot;username=?&quot;, new String[]&#123;&quot;test&quot;&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们可以看到删除数据之前表里一共有9条数据</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461489-2e652471-fce4-402f-8658-69edb4f1ca53.png" alt=""><br>
+点击删除刷新后一共只剩6条数据了，成功删除3条数据</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390461688-72991adc-3284-470c-9b42-6270565971aa.png" alt=""></p>
+<h3 id="更新数据">更新数据</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public int update(String table, ContentValues values, String whereClause, String[] whereArgs) </span><br></pre></td></tr></table></figure>
+<p>方法参数：</p>
+<table>
+<thead>
+<tr>
+<th>table</th>
+<th>表名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>values</td>
+<td>指定要更新的字段及对应的字段值</td>
+</tr>
+<tr>
+<td>whereClause</td>
+<td>指定条件语句，可以使用占位符？</td>
+</tr>
+<tr>
+<td>whereArgs</td>
+<td>当表达式中含有占位符，改参数用户指定各占位符参数的值</td>
+</tr>
+<tr>
+<td>返回值</td>
+<td>返回影响的数据条数</td>
+</tr>
+</tbody>
+</table>
+<p>使用示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DBOpenHelper dbsqLiteOpenHelper = new DBOpenHelper(MainActivity.this,&quot;users.db&quot;,null,1);</span><br><span class="line"> SQLiteDatabase db = dbsqLiteOpenHelper.getWritableDatabase();</span><br><span class="line">ContentValues values2 = new ContentValues();</span><br><span class="line">values2.put(&quot;username&quot;, &quot;admin123&quot;);</span><br><span class="line">db.update(&quot;user&quot;, values2, &quot;username=?&quot;, new String[]&#123;&quot;admin&quot;&#125;);</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462147-dfb5fdb3-d680-4a9a-a25e-111df8e80e33.png" alt=""><br>
+点击修改按钮后再刷新数据</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462110-b8c9a5ad-f7d6-4ce4-87f0-80aec721411a.png" alt=""></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462269-d75239d3-a542-48e6-8003-46a1a2eeba93.png" alt=""></p>
+<h3 id="查询数据">查询数据</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public Cursor query(String table, String[] columns, String selection,String[] </span><br><span class="line"> selectionArgs, String groupBy, String having, String orderBy) </span><br></pre></td></tr></table></figure>
+<p>参数详解：</p>
+<table>
+<thead>
+<tr>
+<th>table</th>
+<th>表名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>columns</td>
+<td>指定要查询的列，如果为空，返回所有</td>
+</tr>
+<tr>
+<td>selection</td>
+<td>查询条件 ，可以用占位符？</td>
+</tr>
+<tr>
+<td>selectionArgs</td>
+<td>where对应的条件值</td>
+</tr>
+<tr>
+<td>groupBy</td>
+<td>指定分组方式</td>
+</tr>
+<tr>
+<td>having</td>
+<td>指定having条件</td>
+</tr>
+<tr>
+<td>orderBy</td>
+<td>排序方式</td>
+</tr>
+</tbody>
+</table>
+<p>使用示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DBOpenHelper dbsqLiteOpenHelper = new DBOpenHelper(MainActivity.this,&quot;users.db&quot;,null,1);</span><br><span class="line"> SQLiteDatabase db = dbsqLiteOpenHelper.getWritableDatabase();</span><br><span class="line">  //创建游标对象</span><br><span class="line">Cursor cursor = db.query(&quot;user&quot;, new String[]&#123;&quot;id&quot;,&quot;username&quot;,&quot;age&quot;&#125;, &quot;username=?&quot;,</span><br><span class="line"> new String[]&#123;&quot;admin123&quot;&#125;, null, null, null);</span><br><span class="line">//利用游标遍历所有数据对象</span><br><span class="line">while(cursor.moveToNext())&#123;</span><br><span class="line">    String id = cursor.getString(cursor.getColumnIndex(&quot;id&quot;));</span><br><span class="line">    String username = cursor.getString(cursor.getColumnIndex(&quot;username&quot;));</span><br><span class="line">    int age = cursor.getInt(cursor.getColumnIndex(&quot;age&quot;));</span><br><span class="line">    Log.i(&quot;Mainactivity&quot;,&quot;result: id=&quot;  + id +&quot; username: &quot; + username +&quot;  age:&quot; + age);</span><br><span class="line">&#125;</span><br><span class="line">// 关闭游标，释放资源</span><br><span class="line">cursor.close();</span><br></pre></td></tr></table></figure>
+<p>我们可以看到数据库表中的数据都被打印出来了<!-- 这是一张图片，ocr 内容为： --><br>
+<img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784390462612-d30c4072-6c76-4ae5-87bd-ea9a939dea1a.png" alt=""></p>
+<h2 id="完整代码">完整代码</h2>
+<p><code>MainActivity.java</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">package com.hnu.sqlite;</span><br><span class="line"></span><br><span class="line">import androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line">import android.content.ContentValues;</span><br><span class="line">import android.database.Cursor;</span><br><span class="line">import android.database.sqlite.SQLiteDatabase;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import android.view.View;</span><br><span class="line">import android.widget.Button;</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">import java.io.File;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class MainActivity extends AppCompatActivity &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        DBOpenHelper dbsqLiteOpenHelper = new DBOpenHelper(MainActivity.this,&quot;users.db&quot;,null,1);</span><br><span class="line">        final SQLiteDatabase db = dbsqLiteOpenHelper.getWritableDatabase();</span><br><span class="line"></span><br><span class="line">        Button button1 = findViewById(R.id.button2); //add</span><br><span class="line">        button1.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                //创建存放数据的ContentValues对象</span><br><span class="line">                ContentValues values = new ContentValues();</span><br><span class="line">                values.put(&quot;username&quot;,&quot;test&quot;);</span><br><span class="line">                values.put(&quot;password&quot;,&quot;123456&quot;);</span><br><span class="line">                values.put(&quot;age&quot;,21);</span><br><span class="line">                //数据库执行插入命令</span><br><span class="line">                db.insert(&quot;user&quot;, null, values);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Button button2 = findViewById(R.id.button3); //删</span><br><span class="line">        button2.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                db.delete(&quot;user&quot;, &quot;username=?&quot;, new String[]&#123;&quot;test&quot;&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Button button3= findViewById(R.id.button4); //改</span><br><span class="line">        button3.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                ContentValues values2 = new ContentValues();</span><br><span class="line">                values2.put(&quot;username&quot;, &quot;admin123&quot;);</span><br><span class="line">                db.update(&quot;user&quot;, values2, &quot;username=?&quot;, new String[]&#123;&quot;admin&quot;&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Button button4 = findViewById(R.id.button5); //查</span><br><span class="line">        button4.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                //创建游标对象</span><br><span class="line">                Cursor cursor = db.query(&quot;user&quot;, new String[]&#123;&quot;id&quot;,&quot;username&quot;,&quot;age&quot;&#125;, &quot;username=?or age =?&quot;, new String[]&#123;&quot;test&quot;,&quot;20&quot;&#125;, null, null, null);</span><br><span class="line">                //利用游标遍历所有数据对象</span><br><span class="line">                while(cursor.moveToNext())&#123;</span><br><span class="line">                    String id = cursor.getString(cursor.getColumnIndex(&quot;id&quot;));</span><br><span class="line">                    String username = cursor.getString(cursor.getColumnIndex(&quot;username&quot;));</span><br><span class="line">                    int age = cursor.getInt(cursor.getColumnIndex(&quot;age&quot;));</span><br><span class="line">                    Log.i(&quot;Mainactivity&quot;,&quot;result: id=&quot;  + id +&quot; username: &quot; + username +&quot;  age:&quot; + age);</span><br><span class="line">                &#125;</span><br><span class="line">                // 关闭游标，释放资源</span><br><span class="line">                cursor.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>DBOpenHelper .java</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">package com.hnu.sqlite;</span><br><span class="line"></span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.database.sqlite.SQLiteDatabase;</span><br><span class="line">import android.database.sqlite.SQLiteOpenHelper;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line"></span><br><span class="line">public class DBOpenHelper extends SQLiteOpenHelper &#123;</span><br><span class="line">    public DBOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) &#123;</span><br><span class="line">        super(context, name, factory, version);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate(SQLiteDatabase db) &#123;</span><br><span class="line">        //创建数据库sql语句并执行</span><br><span class="line">        String sql=&quot;create table user(id integer primary key autoincrement,username varchar(20),password varchar(20),age integer)&quot;;</span><br><span class="line">        db.execSQL(sql);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>布局文件activity_main.xml</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span><br><span class="line">&lt;androidx.constraintlayout.widget.ConstraintLayout xmlns:android=<span class="string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span><br><span class="line">    xmlns:app=<span class="string">&quot;http://schemas.android.com/apk/res-auto&quot;</span></span><br><span class="line">    xmlns:tools=<span class="string">&quot;http://schemas.android.com/tools&quot;</span></span><br><span class="line">    android:layout_width=<span class="string">&quot;match_parent&quot;</span></span><br><span class="line">    android:layout_height=<span class="string">&quot;match_parent&quot;</span></span><br><span class="line">    tools:context=<span class="string">&quot;.MainActivity&quot;</span>&gt;</span><br><span class="line">    &lt;Button</span><br><span class="line">        android:id=<span class="string">&quot;@+id/button2&quot;</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90Android%E3%80%91%E6%B7%B7%E6%B7%86%E9%85%8D%E7%BD%AE/" rel="prev" title="【Android】混淆配置">
+                  <i class="fa fa-angle-left"></i> 【Android】混淆配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90Android%E3%80%91%E6%9B%B4%E6%8D%A2%E9%BB%98%E8%AE%A4%E4%B8%BB%E9%A2%98/" rel="next" title="【Android】更换默认主题">
+                  【Android】更换默认主题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="转载自原帖：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;341177816 科普：  GCC：GNU Compiler Collection(GUN 编译器集合)，它可以编译C、C++、JAV、Fortran、Pascal、Object-C、Ada等语言 gcc是GCC中的GUN C Compiler（C 编译器） g++是GCC中的GUN C++ Compiler（C++编译器）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【C&#x2F;C++】GCC&#x2F;G++ 编译C&#x2F;C++的区别">
+<meta property="og:url" content="http://example.com/2026/07/18/%E3%80%90C_C++%E3%80%91GCC_G++%20%E7%BC%96%E8%AF%91C_C++%E7%9A%84%E5%8C%BA%E5%88%AB/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="转载自原帖：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;341177816 科普：  GCC：GNU Compiler Collection(GUN 编译器集合)，它可以编译C、C++、JAV、Fortran、Pascal、Object-C、Ada等语言 gcc是GCC中的GUN C Compiler（C 编译器） g++是GCC中的GUN C++ Compiler（C++编译器）">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T17:50:36.899Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/07/18/%E3%80%90C_C++%E3%80%91GCC_G++%20%E7%BC%96%E8%AF%91C_C++%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/18/%E3%80%90C_C++%E3%80%91GCC_G++%20%E7%BC%96%E8%AF%91C_C++%E7%9A%84%E5%8C%BA%E5%88%AB/","path":"2026/07/18/【C_C++】GCC_G++ 编译C_C++的区别/","title":"【C/C++】GCC/G++ 编译C/C++的区别"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【C/C++】GCC/G++ 编译C/C++的区别 | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-gcc-g-%E7%BC%96%E8%AF%91c%E6%96%87%E4%BB%B6-font"><span class="nav-number">1.</span> <span class="nav-text">gcc&#x2F;g++编译c文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-gcc-g-%E7%BC%96%E8%AF%91cpp%E6%96%87%E4%BB%B6-font"><span class="nav-number">2.</span> <span class="nav-text">gcc&#x2F;g++编译cpp文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%80%BB%E7%BB%93-font"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90C_C++%E3%80%91GCC_G++%20%E7%BC%96%E8%AF%91C_C++%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【C&#x2F;C++】GCC&#x2F;G++ 编译C&#x2F;C++的区别 | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【C/C++】GCC/G++ 编译C/C++的区别
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 01:50:36" itemprop="dateModified" datetime="2026-07-19T01:50:36+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><font style="color:rgb(25, 27, 31);">转载自原帖：</font><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/341177816">https://zhuanlan.zhihu.com/p/341177816</a></p>
+<p><font style="color:rgb(25, 27, 31);">科普：</font></p>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">GCC：</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=GNU+Compiler+Collection&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiJHTlUgQ29tcGlsZXIgQ29sbGVjdGlvbiIsInpoaWRhX3NvdXJjZSI6ImVudGl0eSIsImNvbnRlbnRfaWQiOjE2Mzk0NzA3MiwiY29udGVudF90eXBlIjoiQXJ0aWNsZSIsIm1hdGNoX29yZGVyIjoxLCJ6ZF90b2tlbiI6bnVsbH0.OFJLpSLKfvSMveFIsla0uhw3TFMjit5Ax0P04Hg9p1o&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">GNU Compiler Collection</font></a><font style="color:rgb(25, 27, 31);">(GUN </font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=%E7%BC%96%E8%AF%91%E5%99%A8%E9%9B%86%E5%90%88&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiLnvJbor5Hlmajpm4blkIgiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.7ZpwXwxYMr9XaLGH8KFJwvMWwUGyq7ERlKs8Ryo5bTw&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">编译器集合</font></a><font style="color:rgb(25, 27, 31);">)，它可以编译C、</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=C%2B%2B&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiJDKysiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.f_KQSfpYZUK_VEL05ppPdvV4-iSqHbQgNqwwlwM39o4&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">C++</font></a><font style="color:rgb(25, 27, 31);">、JAV、Fortran、Pascal、Object-C、Ada等语言</font></li>
+<li><font style="color:rgb(25, 27, 31);">gcc是GCC中的GUN C Compiler（C 编译器）</font></li>
+<li><font style="color:rgb(25, 27, 31);">g++是GCC中的GUN C++ Compiler（</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=C%2B%2B%E7%BC%96%E8%AF%91%E5%99%A8&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiJDKyvnvJbor5HlmagiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.e8VEFc9JpENWWqg0YxA9Zj6RAB7pJnc3IqQqHIKSeE4&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">C++编译器</font></a><font style="color:rgb(25, 27, 31);">）</font></li>
+</ul>
+<p><font style="color:rgb(25, 27, 31);">另外注意两点：</font></p>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">实际上 g++ == gcc -xc++ -lstdc++ -shared-libgcc，第一项是编译选项，表示按照c++编译，后面两项是</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=%E9%93%BE%E6%8E%A5&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiLpk77mjqUiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.Vclqj9OGVMLJTa-LJ-5Yl0xqL6X0sypVHSdlGX57vdM&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">链接</font></a><font style="color:rgb(25, 27, 31);">选项，表示g++要相比gcc多链接其他</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=%E5%BA%93%E5%87%BD%E6%95%B0&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiLlupPlh73mlbAiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.ic80gkQBpZNGyZKZbkYL2kkx8H2ZtrAIrYUmj9W8rv4&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">库函数</font></a></li>
+<li><font style="color:rgb(25, 27, 31);">大多数系统，GCC 安装时会安装一名为 c++ 的程序。如果有安装，它和 g++ 等同</font></li>
+</ul>
+<p><font style="color:rgb(25, 27, 31);">gcc编译的四个阶段：预处理、编译、</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=%E6%B1%87%E7%BC%96&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiLmsYfnvJYiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.vSRRbgriudFWZdW6SQhSIVmFovUc6Fd3vuzNMPjGYNc&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">汇编</font></a><font style="color:rgb(25, 27, 31);">、链接。前三个阶段对gcc和g++</font><strong><font style="color:rgb(25, 27, 31);">几乎</font></strong><font style="color:rgb(25, 27, 31);">都是一样的，最后的链接差异比较大。下面逐一进行解释。</font></p>
+<h2 id="font-style-color-rgb-25-27-31-gcc-g-编译c文件-font"><strong><font style="color:rgb(25, 27, 31);">gcc/g++编译c文件</font></strong></h2>
+<p><font style="color:rgb(25, 27, 31);">首先说预处理和汇编，从g++ == gcc -xc++ -lstdc++ -shared-</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=2&amp;q=libgcc&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiJsaWJnY2MiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MiwiemRfdG9rZW4iOm51bGx9.Ay1_JLQh7-A_FuG-wX7lqDw8vEOi1trmYtjfUK0l3mU&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">libgcc</font></a><font style="color:rgb(25, 27, 31);">，能看出来，g++只针对编译和链接做了调整，但对预处理和汇编而言，g++与gcc是</font><strong><font style="color:rgb(25, 27, 31);">完全等价</font></strong><font style="color:rgb(25, 27, 31);">的。其次，如果编译的是.cpp文件，gcc会自动按照.cpp的标准也就是c++的标准进行编译；如果编译的是.c文件，在没有涉及一些不规范语法的情况下，两者也是完全等价的，前面的-xc++可能因为使用c++的编译标准而不支持c语言一些语法，要求更严一些，但后面链接的其他库对没有使用c++库的代码是没有意义的。我们写一个demo1.c来作示范。</font></p>
+<p><font style="color:rgb(25, 27, 31);">示例如下：</font></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line"> &#123;</span><br><span class="line">     printNum();</span><br><span class="line">     getchar();</span><br><span class="line">     <span class="keyword">return</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> <span class="type">int</span> <span class="title function_">printNum</span><span class="params">()</span></span><br><span class="line"> &#123;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, <span class="number">2</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">这是一段不规范的c代码，return的返回值类型与函数的返回值类型不一致，函数未声明就被调用，被调用的函数也没有返回值。</font></p>
+<p><font style="color:rgb(25, 27, 31);">下面我们先用gcc来编译：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -xc demo1.c // 指定语言类型为c语言 （此处我忘记指定输出文件名了，Windows下默认为a.exe, Linux下默认为a.out)</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">输出了一堆警告（其中</font><em><font style="color:rgb(25, 27, 31);">note是</font></em><font style="color:rgb(25, 27, 31);">类型不统一）：</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -xc demo<span class="number">1.</span>c   </span><br><span class="line"> demo<span class="number">1.</span>c: In function <span class="string">&#x27;main&#x27;</span>:</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">13</span>:<span class="number">5</span>: warning: implicit declaration of function <span class="string">&#x27;printNum&#x27;</span>; did you mean <span class="string">&#x27;printf_s&#x27;</span>? [-Wimplicit-function-declaration] </span><br><span class="line">      <span class="built_in">printNum</span>();</span><br><span class="line">      ^~~~~~~~</span><br><span class="line">      printf_s</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">15</span>:<span class="number">5</span>: warning: <span class="string">&#x27;return&#x27;</span> with no value, in function returning non-<span class="type">void</span></span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">      ^~~~~~</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">11</span>:<span class="number">5</span>: note: <span class="function">declared here</span></span><br><span class="line"><span class="function">  <span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function">      ^~~~</span></span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">然后我们允许生成的a.exe可执行文件，刚刚忘记 -o 指定文件名了：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;a.exe</span><br><span class="line"> 2</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">我们可以看到，正常输出了，当然代码是不规范的，不推荐大家这么写代码。然后使用指定为c++进行编译：</font></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -xc++ demo1.c   （此处我又忘记指定输出文件名了......）</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">然后就报错了，可见c++对语法要求更为严格。</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">demo<span class="number">1.</span>c: In function <span class="string">&#x27;int main()&#x27;</span>:</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">13</span>:<span class="number">5</span>: error: <span class="string">&#x27;printNum&#x27;</span> <span class="function">was <span class="keyword">not</span> declared in <span class="keyword">this</span> scope</span></span><br><span class="line"><span class="function">      <span class="title">printNum</span><span class="params">()</span></span>;</span><br><span class="line">      ^~~~~~~~</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">13</span>:<span class="number">5</span>: note: suggested alternative: <span class="string">&#x27;printf_s&#x27;</span></span><br><span class="line">      <span class="built_in">printNum</span>();</span><br><span class="line">      ^~~~~~~~</span><br><span class="line">      printf_s</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">15</span>:<span class="number">5</span>: error: <span class="keyword">return</span>-statement with no value, in function returning <span class="string">&#x27;int&#x27;</span> [-fpermissive]</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">      ^~~~~~</span><br><span class="line"> demo<span class="number">1.</span>c: In function <span class="string">&#x27;int printNum()&#x27;</span>:</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">21</span>:<span class="number">1</span>: warning: no <span class="keyword">return</span> statement in function returning non-<span class="type">void</span> [-Wreturn-type]</span><br><span class="line">  &#125;</span><br><span class="line">  ^</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">为了保险起见，我们根据gcc</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiLnvJbor5Hpk77mjqUiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.mHOJIcF3mFxNXn__rwoKxswXgSu8ukDUqlESr3BcL4w&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">编译链接</font></a><font style="color:rgb(25, 27, 31);">的四个过程，逐步进行：</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo<span class="number">1.</span>i -xc++ -E demo<span class="number">1.</span>c  <span class="comment">// 此处是对源代码进行预处理，生成纯c代码，文件名指定为demo1.i，无差错</span></span><br><span class="line">     </span><br><span class="line"> D:\study\master\code\cpp\demo&gt;gcc -o demo<span class="number">1.</span>s -xc++ -S demo<span class="number">1.</span>i  <span class="comment">// 此处是对预处理过后的纯c代码进行编译，并加入xc++选项，即按照c++的标准进行编译（只编译，并不进行汇编和链接，即只生成汇编代码 ，文件名指定为demo1.s，不产生二进制目标代码及可执行文件）</span></span><br><span class="line">     </span><br><span class="line"> <span class="comment">// 报错    </span></span><br><span class="line"> demo<span class="number">1.</span>c: In function <span class="string">&#x27;int main()&#x27;</span>:</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">13</span>:<span class="number">5</span>: error: <span class="string">&#x27;printNum&#x27;</span> <span class="function">was <span class="keyword">not</span> declared in <span class="keyword">this</span> scope</span></span><br><span class="line"><span class="function">      <span class="title">printNum</span><span class="params">()</span></span>;</span><br><span class="line">      ^~~~~~~~</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">13</span>:<span class="number">5</span>: note: suggested alternative: <span class="string">&#x27;printf_s&#x27;</span></span><br><span class="line">      <span class="built_in">printNum</span>();</span><br><span class="line">      ^~~~~~~~</span><br><span class="line">      printf_s</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">15</span>:<span class="number">5</span>: error: <span class="keyword">return</span>-statement with no value, in function returning <span class="string">&#x27;int&#x27;</span> [-fpermissive]</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">      ^~~~~~</span><br><span class="line"> demo<span class="number">1.</span>c: In function <span class="string">&#x27;int printNum()&#x27;</span>:</span><br><span class="line"> demo<span class="number">1.</span>c:<span class="number">21</span>:<span class="number">1</span>: warning: no <span class="keyword">return</span> statement in function returning non-<span class="type">void</span> [-Wreturn-type]</span><br><span class="line">  &#125;</span><br><span class="line">  ^</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">然后，我们将代码修改为规范的c语言代码：</font></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">printNum</span><span class="params">()</span></span><br><span class="line"> &#123;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, <span class="number">2314</span>);</span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> <span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line"> &#123;</span><br><span class="line">     printNum();</span><br><span class="line">     <span class="comment">// getchar();</span></span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">然后编译运行：</font></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -xc++ demo1.c  <span class="comment">// 因为不涉及c++的库，因此gcc -xc++ 在此等价于g++</span></span><br><span class="line"></span><br><span class="line">D:\study\master\code\cpp\demo&gt;a.exe  <span class="comment">// 不带后缀.exe，直接调用a也可</span></span><br><span class="line"><span class="number">2314</span>   <span class="comment">// 正确输出</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// 不放心的话，我们再用g++试一次</span></span><br><span class="line">D:\study\master\code\cpp\demo&gt;g++ -o cpp1 demo1.c </span><br><span class="line"></span><br><span class="line">D:\study\master\code\cpp\demo&gt;cpp1</span><br><span class="line"><span class="number">2314</span></span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">由上述两个例子可以看出，对于c文件来说，gcc和g++的区别不大（前提是你要将代码写规范）。</font></p>
+<h2 id="font-style-color-rgb-25-27-31-gcc-g-编译cpp文件-font"><strong><font style="color:rgb(25, 27, 31);">gcc/g++编译cpp文件</font></strong></h2>
+<p><font style="color:rgb(25, 27, 31);">从文章的第一部分，我们已经知道，gcc编译链接的四个阶段对于c文件几乎没有区别。那么对于cpp文件来说，前三个阶段就是</font><strong><font style="color:rgb(25, 27, 31);">完全没有区别</font></strong><font style="color:rgb(25, 27, 31);">，因为cpp文件本身就要按照c++的标准编译。那么问题就来了，第四个阶段链接的区别究竟在哪呢？</font></p>
+<p><font style="color:rgb(25, 27, 31);">这次我们重新写一个demo2.cpp：</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="number">1234</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">这里使用了c++的标准库<iostream>，我们尝试用gcc进行编译：</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo2    demo2.cpp            </span><br><span class="line">C:\Users\L\AppData\Local\Temp\ccBaPqOg.o:demo2.cpp:(.text+0x1e): undefined reference to `std::cout&#x27;</span><br><span class="line">C:\Users\L\AppData\Local\Temp\ccBaPqOg.o:demo2.cpp:(.text+0x23): undefined reference to `std::ostream::operator&lt;&lt;(int)&#x27;</span><br><span class="line">C:\Users\L\AppData\Local\Temp\ccBaPqOg.o:demo2.cpp:(.text+0x43): undefined reference to `std::ios_base::Init::~Init()&#x27;</span><br><span class="line">C:\Users\L\AppData\Local\Temp\ccBaPqOg.o:demo2.cpp:(.text+0x64): undefined reference to `std::ios_base::Init::Init()&#x27;</span><br><span class="line">collect2.exe: error: ld returned 1 exit status</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">报错了，找不到对应的函数，这也就是网上都说的无法连接到c++对应的库。那我们将c++的标准库链接进来试试看：</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo2    demo<span class="number">2.</span>cpp  -lstdc++</span><br><span class="line"></span><br><span class="line">D:\study\master\code\cpp\demo&gt;demo2 </span><br><span class="line"><span class="number">1234</span></span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">这时候可以了，但是还无法说明究竟是哪一步出了问题，我们再试试看：</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo<span class="number">2.</span>o -c  demo<span class="number">2.</span>cpp       </span><br><span class="line"></span><br><span class="line">D:\study\master\code\cpp\demo&gt;ls            </span><br><span class="line">demo<span class="number">1.</span>c  demo<span class="number">1.</span>h  demo<span class="number">2.</span>cpp  demo<span class="number">2.</span>exe  demo<span class="number">2.</span>o  stringAllCombination.cpp</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">看来链接之前都是可以的，但是果真是这样的吗？如果我们一步一步进行呢，从</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=6&amp;q=%E9%A2%84%E5%A4%84%E7%90%86&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiLpooTlpITnkIYiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6NiwiemRfdG9rZW4iOm51bGx9.hqwp3PQ2erOmzXgHSkhLevEXLNgb-s_PgyPeNQkyPWk&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">预处理</font></a><font style="color:rgb(25, 27, 31);">开始呢？</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo<span class="number">2.</span>i -E  demo<span class="number">2.</span>cpp  <span class="comment">// 预处理可以</span></span><br><span class="line"></span><br><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo<span class="number">2.</span>s -S  demo<span class="number">2.</span>i    <span class="comment">// 编译这一步就不行了</span></span><br><span class="line">In file included from C:/<span class="function">Program <span class="title">Files</span> <span class="params">(x86)</span>/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/iostream:<span class="number">38</span>,</span></span><br><span class="line"><span class="function">                 from demo<span class="number">2.</span>cpp:<span class="number">112</span>:</span></span><br><span class="line"><span class="function">C:/Program Files (x86)/mingw-w64/i686<span class="number">-8.1</span><span class="number">.0</span>-posix-dwarf-rt_v6-rev0/mingw32/lib/gcc/i686-w64-mingw32/<span class="number">8.1</span><span class="number">.0</span>/include/c++/i686-w64-mingw32/bits/c++config.h:<span class="number">236</span>:<span class="number">1</span>: error: unknown type name <span class="string">&#x27;namespace&#x27;</span></span></span><br><span class="line"><span class="function"> namespace std</span></span><br><span class="line"><span class="function"> ^~~~~~~~~</span></span><br><span class="line"><span class="function">C:/Program Files (x86)/mingw-w64/i686<span class="number">-8.1</span><span class="number">.0</span>-posix-dwarf-rt_v6-rev0/mingw32/lib/gcc/i686-w64-mingw32/<span class="number">8.1</span><span class="number">.0</span>/include/c++/i686-w64-mingw32/bits/c++config.h:<span class="number">237</span>:<span class="number">1</span>: error: expected <span class="string">&#x27;=&#x27;</span>, <span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27;;&#x27;</span>, <span class="string">&#x27;asm&#x27;</span> or <span class="string">&#x27;__attribute__&#x27;</span> before <span class="string">&#x27;&#123;&#x27;</span> token</span></span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">我们想一想这是为什么？之所以直接进行到编译这一步可以，是因为gcc可以根据后缀名判断按照c还是cpp的标准进行编译，当我们完成了预处理之后，将纯cpp代码的后缀名改为了.i（其实就是.c），于是按照c文件进行处理，结果报错。因此，说明gcc确实可以根据文件后缀判断如何进行编译。</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo2i.cpp -E  demo<span class="number">2.</span>cpp   <span class="comment">// 我们将预处理的文件后缀改为.cpp</span></span><br><span class="line"></span><br><span class="line">D:\study\master\code\cpp\demo&gt;gcc -o demo2i.s -S  demo2i.cpp    <span class="comment">// 没有报错</span></span><br><span class="line"></span><br><span class="line">D:\study\master\code\cpp\demo&gt;ls</span><br><span class="line">demo<span class="number">1.</span>c  demo<span class="number">1.</span>h  demo<span class="number">2.</span>cpp  demo<span class="number">2.</span>exe  demo<span class="number">2.</span>i  demo<span class="number">2.</span>o  demo<span class="number">2.</span>s  demo2i.cpp  demo2i.s  stringAllCombination.cpp</span><br></pre></td></tr></table></figure>
+<p><font style="color:rgb(25, 27, 31);">但是，到了链接的时候，gcc也没有办法，因为它确实无法链接到C＋＋程序使用的库，如果非要用gcc的话，需要在后面加上一个 -lstdc++，将c++的标准库链接进来。</font></p>
+<h2 id="font-style-color-rgb-25-27-31-总结-font"><strong><font style="color:rgb(25, 27, 31);">总结</font></strong></h2>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">对于c文件，gcc与g++在</font><strong><font style="color:rgb(25, 27, 31);">代码规范</font></strong><font style="color:rgb(25, 27, 31);">的情况下，是</font><strong><font style="color:rgb(25, 27, 31);">完全等价</font></strong><font style="color:rgb(25, 27, 31);">的。</font></li>
+<li><font style="color:rgb(25, 27, 31);">对于</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=5&amp;q=cpp%E6%96%87%E4%BB%B6&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiJjcHDmlofku7YiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6NSwiemRfdG9rZW4iOm51bGx9.3_vc3Msk_rEiS98GL9opB6au0c810G0t2fGf8_QBW0s&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">cpp文件</font></a><font style="color:rgb(25, 27, 31);">，在预处理、编译、汇编这三部分，gcc和</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=16&amp;q=g%2B%2B&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiJnKysiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MTYsInpkX3Rva2VuIjpudWxsfQ.aGFLqz1usafj9Qub0_hWYJBvhzVOs_cMDReacqfoas8&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">g++</font></a><font style="color:rgb(25, 27, 31);">也是等价的，前提是这三个步骤一起做，或者你在中间继续能够体现cpp的文件名。</font></li>
+<li><font style="color:rgb(25, 27, 31);">在涉及c++的标准库时，gcc无法链接到这些库，必须加上-lstdc++ 选项，相比之下，不如直接使用g++来得方便快捷。</font></li>
+<li><font style="color:rgb(25, 27, 31);">g++就是gcc以默认c++的方式进行编译，然后链接的时候加上了一些c++的库。</font></li>
+</ul>
+<p><font style="color:rgb(25, 27, 31);">对于一些细节：</font></p>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">-lstdc++ 要放在后面，因为编译器是从右向左调用和处理变量的（根据编译器版本的不同，有些版本可能支持放在前面）</font></li>
+<li><font style="color:rgb(25, 27, 31);">-l 后面加的是</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=163947072&amp;content_type=Article&amp;match_order=1&amp;q=%E5%8A%A8%E6%80%81%E5%BA%93&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ3NDMsInEiOiLliqjmgIHlupMiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxNjM5NDcwNzIsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.BotLYnDl4LJW6pzh4dVT5GcdgaTsMH6M-JqawrIdKZo&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">动态库</font></a><font style="color:rgb(25, 27, 31);">libstdc++.-l加的时候，把&quot;lib&quot;三个字符省略，例如链接libtest.so你就需要加 -ltest ,一般这个库在usr/lib下可以找到</font></li>
+<li><font style="color:rgb(25, 27, 31);">gcc可以编译c++文件，也可以编译c文件，但默认是编译c文件的，加-lstdc++表示编译c++文件，即链接c++库，加-lc表示链接c库，默认情况下就是链接c库，所以如果编译c文件可以不加-lc。</font></li>
+<li><font style="color:rgb(25, 27, 31);">–shared-libgcc 链接动态libgcc库</font></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90C++%E3%80%91%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81/" rel="prev" title="【C++】输入输出流">
+                  <i class="fa fa-angle-left"></i> 【C++】输入输出流
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90LINUX%E3%80%91%E6%9D%83%E9%99%90/" rel="next" title="【Linux】权限">
+                  【Linux】权限 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

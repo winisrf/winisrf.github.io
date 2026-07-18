@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="转载自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;571898623 本文讨论了标准输入输出流、文件输入输出流、streambuffer流和字符串输入输出流，以及对应的迭代器使用。 问题带入： 解决标准输入给不同类型变量赋值的不足： 1234567891011121314151617181920#include &lt;iostream&gt;#include &lt;string">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【C++】输入输出流">
+<meta property="og:url" content="http://example.com/2026/07/18/%E3%80%90C++%E3%80%91%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;571898623 本文讨论了标准输入输出流、文件输入输出流、streambuffer流和字符串输入输出流，以及对应的迭代器使用。 问题带入： 解决标准输入给不同类型变量赋值的不足： 1234567891011121314151617181920#include &lt;iostream&gt;#include &lt;string">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382229920-87c38ae0-f6a6-4a8b-918a-41c8d9509fd2.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382229484-1298cc19-71ff-4285-a61a-98a7b641aac6.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382229813-85fa6212-c055-47b1-8024-7fb7f55065a8.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230216-52d917f6-be06-4a3d-b38e-07b93656cfde.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230513-04546998-7a73-4e04-b26d-b7cf1cca03cb.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230377-20b47347-869b-4267-9e7d-39373eed2547.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230912-d6dd242d-547f-466d-9572-71859e98db3d.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231521-77d32028-55be-44a1-b96a-8486d4274eae.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232136-c558f67d-e8cf-45fd-b9ee-7f1ec691739d.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231720-fc33ef15-3cfb-407a-b752-612dde3d6617.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232339-dd3c77be-774d-443e-9f8d-84dc8b32b0a8.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231398-0e1d872e-2af3-4bf5-8653-54bef4b3e527.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231721-3fca9d46-5d17-42dd-b1aa-bcd6dce6a12a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231968-32ce38ad-3b2f-4772-acdd-d29f74cb051f.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232217-0aa563c3-01e5-4cc4-aa4a-17532287bd7b.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232220-b1bbcc4d-4fd2-4634-8dc7-8296f1d39379.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232665-20831801-c5b6-422b-afd8-77bc6db16cdf.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232544-b35d5982-7262-4b77-9b54-38b440f0c3e5.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232586-afe567aa-bd0e-49d8-9669-9f0425a68a03.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232613-69d2ef7f-eb75-4f0a-8fed-7353788922d8.png">
+<meta property="article:published_time" content="2026-07-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T17:51:04.705Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382229920-87c38ae0-f6a6-4a8b-918a-41c8d9509fd2.png">
+
+
+<link rel="canonical" href="http://example.com/2026/07/18/%E3%80%90C++%E3%80%91%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/18/%E3%80%90C++%E3%80%91%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81/","path":"2026/07/18/【C++】输入输出流/","title":"【C++】输入输出流"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【C++】输入输出流 | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E9%97%AE%E9%A2%98%E5%B8%A6%E5%85%A5%EF%BC%9A-font"><span class="nav-number">1.</span> <span class="nav-text">问题带入：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E8%A7%A3%E5%86%B3%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E7%BB%99%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC%E7%9A%84%E4%B8%8D%E8%B6%B3%EF%BC%9A-font"><span class="nav-number">1.1.</span> <span class="nav-text">解决标准输入给不同类型变量赋值的不足：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E4%BD%BF%E7%94%A8-font-font-style-color-rgb-9-64-142-get%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0-font-font-style-color-rgb-25-27-31-%E8%A7%A3%E5%86%B3%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E7%BB%99%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC%E7%9A%84%E4%B8%8D%E8%B6%B3%E9%97%AE%E9%A2%98%EF%BC%9A-font"><span class="nav-number">2.</span> <span class="nav-text">使用get系列函数解决标准输入给不同类型变量赋值的不足问题：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-get-%E5%92%8C-getline-%E5%8C%BA%E5%88%AB%EF%BC%9A-font"><span class="nav-number">2.1.</span> <span class="nav-text">get 和 getline 区别：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-get%E5%87%BD%E6%95%B0%E7%BB%93%E6%9E%9C%EF%BC%9A-font"><span class="nav-number">2.2.</span> <span class="nav-text">get函数结果：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-getline%E5%87%BD%E6%95%B0%E7%BB%93%E6%9E%9C%EF%BC%9A-font"><span class="nav-number">2.3.</span> <span class="nav-text">getline函数结果：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-cout%E3%80%81cerr-%E5%92%8C-clog-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E5%A6%82%E4%B8%8B%EF%BC%9A-font"><span class="nav-number">3.</span> <span class="nav-text">cout、cerr 和 clog 之间的区别如下：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E5%A4%84%E7%90%86%E6%B5%81%E9%94%99%E8%AF%AF%EF%BC%9A-font"><span class="nav-number">4.</span> <span class="nav-text">处理流错误：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-C-%E4%B8%AD%E6%B5%81%E7%8A%B6%E6%80%81%EF%BC%9A-font"><span class="nav-number">5.</span> <span class="nav-text">C++中流状态：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E5%AF%B9%E5%BA%94%E5%87%BD%E6%95%B0%EF%BC%9A-font"><span class="nav-number">5.1.</span> <span class="nav-text">对应函数：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-c-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E7%B1%BB%E5%9B%BE-font"><span class="nav-number">6.</span> <span class="nav-text">c++输入输出流类图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E5%9C%A8%E7%B1%BB%E5%9B%BE%E4%B8%AD%E6%9C%89-font"><span class="nav-number">6.1.</span> <span class="nav-text">在类图中有</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%96%87%E4%BB%B6%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81-font"><span class="nav-number">7.</span> <span class="nav-text">文件的输入输出流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E7%89%B9%E7%82%B9%EF%BC%9A-font"><span class="nav-number">7.1.</span> <span class="nav-text">文件输入输出流特点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%96%87%E4%BB%B6%E6%B5%81%E6%93%8D%E4%BD%9C3%E6%AD%A5-font"><span class="nav-number">8.</span> <span class="nav-text">文件流操作3步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%89%93%E5%BC%80%E6%A8%A1%E5%BC%8Fmode-font"><span class="nav-number">8.1.</span> <span class="nav-text">打开模式mode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E8%AF%BB%E5%86%99%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6-font"><span class="nav-number">9.</span> <span class="nav-text">读写二进制文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E9%80%9A%E8%BF%87read-write%E5%AE%8C%E6%88%902%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%8A%9F%E8%83%BD-font"><span class="nav-number">9.1.</span> <span class="nav-text">通过read&#x2F;write完成2进制文件读写功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%9B%B4%E7%9B%B4%E6%8E%A5%E9%9D%A2%E5%AF%B9%E9%97%AE%E9%A2%98%EF%BC%8C%E6%95%88%E7%8E%87%E9%AB%98-font"><span class="nav-number">9.2.</span> <span class="nav-text">二进制更直接面对问题，效率高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E7%BB%BC%E5%90%88%E5%AE%9E%E4%BE%8B%EF%BC%88%E8%AF%BB%E5%8F%96a%E6%96%87%E4%BB%B6%E7%9A%84%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE%EF%BC%8C%E5%86%99%E5%85%A5b%E6%96%87%E4%BB%B6%E4%B8%AD%EF%BC%89-font"><span class="nav-number">9.3.</span> <span class="nav-text">综合实例（读取a文件的二进制数据，写入b文件中）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E4%B8%AD%E7%9A%84%E7%BC%93%E5%86%B2streambuf-font"><span class="nav-number">10.</span> <span class="nav-text">输入输出流中的缓冲streambuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E5%AE%9A%E4%BD%8D%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81-font"><span class="nav-number">11.</span> <span class="nav-text">定位输入输出流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-istream-seekg-long-relativepos-ios-seek-dir-dir-font"><span class="nav-number">11.1.</span> <span class="nav-text">istream&amp; seekg(long relativepos, ios::seek_dir dir)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-ostream-seekp-long-relativepos-ios-seek-dir-dir-font"><span class="nav-number">11.2.</span> <span class="nav-text">ostream&amp; seekp(long relativepos, ios::seek_dir dir)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-tellg-font"><span class="nav-number">11.3.</span> <span class="nav-text">tellg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-tellp-font"><span class="nav-number">11.4.</span> <span class="nav-text">tellp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E7%BB%BC%E5%90%88%E5%AE%9E%E4%BE%8B-font"><span class="nav-number">11.5.</span> <span class="nav-text">综合实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81-font"><span class="nav-number">12.</span> <span class="nav-text">字符串输入输出流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%A0%87%E5%87%86%E5%BA%93%E5%AE%9A%E4%B9%89%E7%9A%84%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B5%81-font"><span class="nav-number">12.1.</span> <span class="nav-text">标准库定义的三种类型的字符串流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%B5%81%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%8C%96-font"><span class="nav-number">12.2.</span> <span class="nav-text">流的模板化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#font-style-color-rgb-25-27-31-%E6%80%BB%E7%BB%93%EF%BC%9A-font"><span class="nav-number">13.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90C++%E3%80%91%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【C++】输入输出流 | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【C++】输入输出流
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 01:51:04" itemprop="dateModified" datetime="2026-07-19T01:51:04+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><font style="color:rgb(25, 27, 31);">转载自：</font><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/571898623">https://zhuanlan.zhihu.com/p/571898623</a></p>
+<p>本文讨论了标准输入输出流、文件输入输出流、<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=215221711&amp;content_type=Article&amp;match_order=1&amp;q=streambuffer%E6%B5%81&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ5OTQsInEiOiJzdHJlYW1idWZmZXLmtYEiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoyMTUyMjE3MTEsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9._hX4LYnl8Ip1H-PpfHnfgF5h-k1kGpMnbthIxnG3URY&amp;zhida_source=entity">streambuffer流</a>和字符串输入输出流，以及对应的迭代器使用。</p>
+<h2 id="font-style-color-rgb-25-27-31-问题带入：-font"><font style="color:rgb(25, 27, 31);">问题带入：</font></h2>
+<h3 id="font-style-color-rgb-25-27-31-解决标准输入给不同类型变量赋值的不足：-font"><font style="color:rgb(25, 27, 31);">解决标准输入给不同类型变量赋值的不足：</font></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">        int i;</span><br><span class="line">        char str[20];</span><br><span class="line">        string s1;</span><br><span class="line">        cout &lt;&lt; &quot;请输入一个字符串：&quot;;</span><br><span class="line">        cin &gt;&gt; s1;</span><br><span class="line">        cout &lt;&lt; &quot;s1 = &quot; &lt;&lt; s1;</span><br><span class="line">        cout &lt;&lt; &quot;请输入一个整型及一个字符串：&quot;;</span><br><span class="line">        cin &gt;&gt; i &gt;&gt; str;</span><br><span class="line">        cout &lt;&lt; &quot;i = &quot; &lt;&lt; i &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;str = &quot; &lt;&lt; str &lt;&lt; endl;</span><br><span class="line">        char str1[20];</span><br><span class="line">        cout &lt;&lt; &quot;请输入一个字符串：&quot;;</span><br><span class="line">        cin &gt;&gt; str1;</span><br><span class="line">        cout &lt;&lt; &quot;str1 = &quot; &lt;&lt; str1 &lt;&lt; endl;</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382229920-87c38ae0-f6a6-4a8b-918a-41c8d9509fd2.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">由于命令行各参数默认是以空格为界定符的，how后是空格，因此解析串到此位置就停止了</font></p>
+<h2 id="font-style-color-rgb-25-27-31-使用-font-font-style-color-rgb-9-64-142-get系列函数-font-font-style-color-rgb-25-27-31-解决标准输入给不同类型变量赋值的不足问题：-font"><font style="color:rgb(25, 27, 31);">使用</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=215221711&amp;content_type=Article&amp;match_order=1&amp;q=get%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ5OTQsInEiOiJnZXTns7vliJflh73mlbAiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoyMTUyMjE3MTEsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.CHuQhWvR4ql62lLxBBQJXOfjZZvafyM67zF8nOkNon8&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">get系列函数</font></a><font style="color:rgb(25, 27, 31);">解决标准输入给不同类型变量赋值的不足问题：</font></h2>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">int get(); 返回输入流一个字符</font></li>
+<li><font style="color:rgb(25, 27, 31);">istream&amp; get(unsigned char * pszBuf, int nBufLen, char delime = ‘\n’)</font>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">pszBuf:指向字符缓冲区的指针，用于保存结果</font></li>
+<li><font style="color:rgb(25, 27, 31);">nBufLen:缓冲区长度</font></li>
+<li><font style="color:rgb(25, 27, 31);">delim: 结束字符，根据结束字符判断何时停止读入操作</font></li>
+</ul>
+</li>
+<li><font style="color:rgb(25, 27, 31);">istream&amp; getline(unsigned char * pszBuf, int nBufLen, char delim = ‘\n’)</font></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">        char szBuf[60];</span><br><span class="line">        char szBuf1[60];</span><br><span class="line">        cout &lt;&lt; &quot;请输入一个字符串：&quot;;</span><br><span class="line">        int n = cin.get();        //特殊情况可使用get提取&#x27;\n&#x27;</span><br><span class="line">        //cin.get(szBuf1, 60);</span><br><span class="line">        cin.getline(szBuf, 60);</span><br><span class="line">        cout &lt;&lt; n &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;The received string is:&quot; &lt;&lt; szBuf &lt;&lt; endl;</span><br><span class="line">        //cout &lt;&lt; &quot;The received string is:&quot; &lt;&lt; szBuf1 &lt;&lt; endl;</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="font-style-color-rgb-25-27-31-get-和-getline-区别：-font"><font style="color:rgb(25, 27, 31);">get 和 getline 区别：</font></h3>
+<p><font style="color:rgb(25, 27, 31);">当遇到输入流中的界定符（delim）时，get（）停止执行，但是并不从输入流中提取界定符，直接在字符串缓冲区尾部加结束标志’\0’;</font></p>
+<p><font style="color:rgb(25, 27, 31);">函数getline()相反，它将从输入流中提取界定符，但不会把它存储到结果缓冲区中。</font></p>
+<p><font style="color:rgb(25, 27, 31);">文件&quot;a.txt&quot;中有：</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382229484-1298cc19-71ff-4285-a61a-98a7b641aac6.png" alt=""></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;fstream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">        char buf[80];</span><br><span class="line">        ifstream in&#123; &quot;d:\\a.txt&quot; &#125;;</span><br><span class="line">        if (!in) &#123;</span><br><span class="line">               cout &lt;&lt; &quot;fail to open a.txt&quot; &lt;&lt; endl;</span><br><span class="line">               return EXIT_FAILURE;</span><br><span class="line">        &#125;</span><br><span class="line">        //while(in.getline(buf, sizeof(buf)))</span><br><span class="line">        while (in.get(buf, sizeof(buf)))</span><br><span class="line">        &#123;</span><br><span class="line">               cout &lt;&lt; buf &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        in.close();</span><br><span class="line">        return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="font-style-color-rgb-25-27-31-get函数结果：-font"><font style="color:rgb(25, 27, 31);">get函数结果：</font></h3>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382229813-85fa6212-c055-47b1-8024-7fb7f55065a8.png" alt=""></p>
+<h3 id="font-style-color-rgb-25-27-31-getline函数结果：-font"><font style="color:rgb(25, 27, 31);">getline函数结果：</font></h3>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230216-52d917f6-be06-4a3d-b38e-07b93656cfde.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">除了cin和cout之外，<iostream> 头文件中还声明有 2 个 ostream 类对象，分别为</font><font style="color:rgb(25, 27, 31);"> </font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=215221711&amp;content_type=Article&amp;match_order=1&amp;q=cerr&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ5OTQsInEiOiJjZXJyIiwiemhpZGFfc291cmNlIjoiZW50aXR5IiwiY29udGVudF9pZCI6MjE1MjIxNzExLCJjb250ZW50X3R5cGUiOiJBcnRpY2xlIiwibWF0Y2hfb3JkZXIiOjEsInpkX3Rva2VuIjpudWxsfQ.eQgAl7W2vY9C5FTDZbY3L-QTYRHyQH4EEffAQLcDGNY&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">cerr</font></a><font style="color:rgb(25, 27, 31);"> </font><font style="color:rgb(25, 27, 31);">和</font><font style="color:rgb(25, 27, 31);"> </font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=215221711&amp;content_type=Article&amp;match_order=1&amp;q=clog&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ5OTQsInEiOiJjbG9nIiwiemhpZGFfc291cmNlIjoiZW50aXR5IiwiY29udGVudF9pZCI6MjE1MjIxNzExLCJjb250ZW50X3R5cGUiOiJBcnRpY2xlIiwibWF0Y2hfb3JkZXIiOjEsInpkX3Rva2VuIjpudWxsfQ.XplySTq18qIAqtiBv9f4oz61Q7Ra8Iju_0EVXLjDLMU&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">clog</font></a><font style="color:rgb(25, 27, 31);">。它们的用法和 cout 完全一样，但 cerr 常用来输出警告和错误信息给程序的使用者，clog 常用来输出程序执行过程中的日志信息（此部分信息只有程序开发者看得到，不需要对普通用户公开）。</font></p>
+<h2 id="font-style-color-rgb-25-27-31-cout、cerr-和-clog-之间的区别如下：-font"><font style="color:rgb(25, 27, 31);">cout、cerr 和 clog 之间的区别如下：</font></h2>
+<ol>
+<li><font style="color:rgb(25, 27, 31);">cout 除了可以将数据输出到屏幕上，通过重定向（后续会讲），还可以实现将数据输出到指定文件中；而 cerr 和 clog 都不支持重定向，它们只能将数据输出到屏幕上；</font></li>
+<li><font style="color:rgb(25, 27, 31);">cout 和 clog 都设有缓冲区，即它们在输出数据时，会先将要数据放到缓冲区，等缓冲区满或者手动换行（使用换行符 ‘\n’ 或者 endl）时，才会将数据全部显示到屏幕上；而 cerr 则不设缓冲区，它会直接将数据输出到屏幕上。</font></li>
+</ol>
+<p><font style="color:rgb(25, 27, 31);">除了以上 2 点特性上的不同之外，cerr、clog 和 cout 没有任何不同。之所以我们常用 cout，是因为 cerr 和 clog 有各自不同的适用场景。以 cerr 为例，一旦程序某处使用 cerr 输出数据，我们自然而然地会认为此处输出的是警告或者错误信息。</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230513-04546998-7a73-4e04-b26d-b7cf1cca03cb.png" alt=""></p>
+<h2 id="font-style-color-rgb-25-27-31-处理流错误：-font"><font style="color:rgb(25, 27, 31);">处理流错误：</font></h2>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">类型不符</font></li>
+<li><font style="color:rgb(25, 27, 31);">文件无法读取、写入</font></li>
+<li><font style="color:rgb(25, 27, 31);">文件游标不对</font></li>
+<li><font style="color:rgb(25, 27, 31);">非法字符</font></li>
+</ul>
+<h2 id="font-style-color-rgb-25-27-31-C-中流状态：-font"><strong><font style="color:rgb(25, 27, 31);">C++中流状态：</font></strong></h2>
+<ol>
+<li><font style="color:rgb(25, 27, 31);">goodbit 被置位表示流未发生错误。如果badbit failbit 和eofbit 任何一个被置位，则检查流状态的条件会失败。</font></li>
+<li><font style="color:rgb(25, 27, 31);">当输入流遇到文件尾时， eofbit位将被设置。可以调用函数 cin.eof()来判断是否到达文件末尾</font></li>
+<li><font style="color:rgb(25, 27, 31);">当在流中发生格式错误时，failbit位将被设置。例如程序要求输入整数，但是在输入流中有非整数的字符的情况。在遇到这种错误时，这些字符不会丢失。成员函数fail将报告流操作失败了，通常这种错误是可以恢复的。</font></li>
+<li><font style="color:rgb(25, 27, 31);">当发生数据丢失时，将会设置badbit位。成员函数bad将报告流操作是否失败了。一般情况下，这种严重的错误是不能修复的。</font></li>
+</ol>
+<h3 id="font-style-color-rgb-25-27-31-对应函数：-font"><font style="color:rgb(25, 27, 31);">对应函数：</font></h3>
+<ol>
+<li><font style="color:rgb(25, 27, 31);">int rdstate(): 无参数，返回值即是状态信息特征值</font></li>
+<li><font style="color:rgb(25, 27, 31);">bool good(): 若返回值true,一切正常，没有错误发生</font></li>
+<li><font style="color:rgb(25, 27, 31);">bool eof(): 若返回值true,表名已到达流的末尾。</font></li>
+<li><font style="color:rgb(25, 27, 31);">bool fail(): 若返回值true,表名I/O操作失败，主要原因是非法数据。但流可以继续使用</font></li>
+<li><font style="color:rgb(25, 27, 31);">bood bad(): 发生了致命性错误，流将不能继续使用</font></li>
+<li><font style="color:rgb(25, 27, 31);">clear成员函数将流的状态重置为“好的”，使得流可以继续执行I/O操作。clear函数的默认参数是goodbit所以语句cin.clear()清空了cin， 并且为该流设置goodbit位。语句cin.clear(</font><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=215221711&amp;content_type=Article&amp;match_order=1&amp;q=ios%3A%3Afailbit&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3ODQ1NTQ5OTQsInEiOiJpb3M6OmZhaWxiaXQiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoyMTUyMjE3MTEsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.vNtfndthS2OHMwvvZn7WEsLR-nurbYX1fG7dSbCig1U&amp;zhida_source=entity"><font style="color:rgb(9, 64, 142);">ios::failbit</font></a><font style="color:rgb(25, 27, 31);">)则为流设置failbit位。</font></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">        int a;</span><br><span class="line">        cout &lt;&lt; &quot;请输入一个数据：&quot;;</span><br><span class="line">        cin &gt;&gt; a;</span><br><span class="line">        cout &lt;&lt; &quot;状态值为：&quot; &lt;&lt; cin.rdstate() &lt;&lt; endl;</span><br><span class="line">        if (cin.good()) &#123;</span><br><span class="line">               cout&lt;&lt;&quot;输入数据的类型正确，无错误！&quot;&lt;&lt;endl;</span><br><span class="line">        &#125;</span><br><span class="line">        if (cin.fail()) &#123;</span><br><span class="line">               cout &lt;&lt; &quot;输入的数据类型错误，非致命错误，可清除输入缓冲区挽回！&quot; &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230377-20b47347-869b-4267-9e7d-39373eed2547.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">当发现错误需要改正时，使用clear()更改标记改正确后，同时使用get()成员函数清除输入缓冲区，已达到重复输入的目的</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">        int a;</span><br><span class="line">        while (1) &#123;</span><br><span class="line">               cin &gt;&gt; a;</span><br><span class="line">               if (cin.fail()) &#123;</span><br><span class="line">                       cout &lt;&lt; &quot;输入有错！请重新输入&quot; &lt;&lt; endl;</span><br><span class="line">                       cin.clear();</span><br><span class="line">                       cin.get();        //一次只读入一个字符，可以使用getline()替代get，一次清空缓冲区</span><br><span class="line">               &#125;</span><br><span class="line">               else &#123;</span><br><span class="line">                       cout &lt;&lt; a &lt;&lt; endl;</span><br><span class="line">                       break;</span><br><span class="line">               &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382230912-d6dd242d-547f-466d-9572-71859e98db3d.png" alt=""></p>
+<h2 id="font-style-color-rgb-25-27-31-c-输入输出流类图-font"><font style="color:rgb(25, 27, 31);">c++输入输出流类图</font></h2>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231521-77d32028-55be-44a1-b96a-8486d4274eae.png" alt=""></p>
+<h3 id="font-style-color-rgb-25-27-31-在类图中有-font"><font style="color:rgb(25, 27, 31);">在类图中有</font></h3>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">输入输出流istream类/ostream类/iostream类、</font></li>
+<li><font style="color:rgb(25, 27, 31);">文件输人输出流ifstream类/ofstream类/fstream类、</font></li>
+<li><font style="color:rgb(25, 27, 31);">字符串输入输出流stringstream类/istringstream类/ostringstream类等</font></li>
+</ul>
+<p><font style="color:rgb(25, 27, 31);">C++I/O还可以对对象进行输入输出操作,这些都是C函数所不具备的。这些流类都位于std名字空间内,一般都是用stream作后缀名。它们在数据流的处理上具有灵活、完善和强大的功能。</font></p>
+<h2 id="font-style-color-rgb-25-27-31-文件的输入输出流-font"><font style="color:rgb(25, 27, 31);">文件的输入输出流</font></h2>
+<h3 id="font-style-color-rgb-25-27-31-文件输入输出流特点：-font"><font style="color:rgb(25, 27, 31);">文件输入输出流特点：</font></h3>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">一个文件流对应一个物理文件</font></li>
+<li><font style="color:rgb(25, 27, 31);">文件流有下述属性</font>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">长度length</font></li>
+<li><font style="color:rgb(25, 27, 31);">索引(0,end)</font></li>
+</ul>
+</li>
+<li><font style="color:rgb(25, 27, 31);">文件流只能按字符方式迭代</font></li>
+<li><font style="color:rgb(25, 27, 31);">不同操作系统文件的编码模式不同（Big-endian,Little-endian）</font></li>
+</ul>
+<h2 id="font-style-color-rgb-25-27-31-文件流操作3步-font"><font style="color:rgb(25, 27, 31);">文件流操作3步</font></h2>
+<p><font style="color:rgb(25, 27, 31);">打开–&gt;操作–&gt;关闭</font></p>
+<h3 id="font-style-color-rgb-25-27-31-打开模式mode-font"><font style="color:rgb(25, 27, 31);">打开模式mode</font></h3>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">只读ios::in：以读取方式打开文件</font></li>
+<li><font style="color:rgb(25, 27, 31);">写入ios::out：以写入方式打开文件</font></li>
+<li><font style="color:rgb(25, 27, 31);">追加ios::app：每次希尔数据时，在文件尾追加数据</font></li>
+<li><font style="color:rgb(25, 27, 31);">trunc,ios::trunc：写入数据前，先清空文件，当文件不存在时会创建文件</font></li>
+<li><font style="color:rgb(25, 27, 31);">二进制ios::binary：以二进制方式打开文件，不作字符转换</font></li>
+<li><font style="color:rgb(25, 27, 31);">ios::ate，初始定位到末尾，可以seek到文件任何位置写入数据</font></li>
+</ul>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232136-c558f67d-e8cf-45fd-b9ee-7f1ec691739d.png" alt=""></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231720-fc33ef15-3cfb-407a-b752-612dde3d6617.png" alt=""></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;fstream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">        char buf[80];</span><br><span class="line">        ifstream in&#123; &quot;d:\\a.txt&quot; &#125;;</span><br><span class="line">        if (!in) &#123;</span><br><span class="line">               cout &lt;&lt; &quot;fail to open a.txt&quot; &lt;&lt; endl;</span><br><span class="line">               return EXIT_FAILURE;</span><br><span class="line">        &#125;</span><br><span class="line">        while(in.getline(buf, sizeof(buf)))</span><br><span class="line">        //while (in.get(buf, sizeof(buf)))</span><br><span class="line">        &#123;</span><br><span class="line">               cout &lt;&lt; buf &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        in.close();</span><br><span class="line">        return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232339-dd3c77be-774d-443e-9f8d-84dc8b32b0a8.png" alt=""></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;fstream&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">struct Student &#123;</span><br><span class="line">        char strName[20];</span><br><span class="line">        int nGrade;</span><br><span class="line">&#125;;</span><br><span class="line">int main() &#123;</span><br><span class="line">        ofstream out(&quot;d:\\a.txt&quot;);            //打开或创建文本文件</span><br><span class="line">        //ofstream out.open(&quot;d:\\a.txt&quot;);     </span><br><span class="line">        Student st1 = &#123; &quot;Jon&quot;, 5 &#125;;</span><br><span class="line">        Student st2 = &#123; &quot;Tome&quot;, 6 &#125;;                                        </span><br><span class="line">        out &lt;&lt; st1.strName &lt;&lt; &quot;\t&quot; &lt;&lt; st1.nGrade &lt;&lt; endl;           //把信息存入文本文件</span><br><span class="line">        out &lt;&lt; st2.strName &lt;&lt; &quot;\t&quot; &lt;&lt; st2.nGrade &lt;&lt; endl;</span><br><span class="line">        out.close();</span><br><span class="line">        return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line">//通过&lt;&lt;流操作可以很好的写文本文件，&lt;&lt;流操作可以把不同类型的数据直接输出。</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231398-0e1d872e-2af3-4bf5-8653-54bef4b3e527.png" alt=""></p>
+<h2 id="font-style-color-rgb-25-27-31-读写二进制文件-font"><font style="color:rgb(25, 27, 31);">读写二进制文件</font></h2>
+<h3 id="font-style-color-rgb-25-27-31-通过read-write完成2进制文件读写功能-font"><font style="color:rgb(25, 27, 31);">通过read/write完成2进制文件读写功能</font></h3>
+<p><font style="color:rgb(25, 27, 31);">ostream&amp; write(const char *, int nSize)</font></p>
+<p><font style="color:rgb(25, 27, 31);">istream&amp; read(char*, int nSize)</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;fstream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">struct Student &#123;</span><br><span class="line">        char name[20];</span><br><span class="line">        int grade;</span><br><span class="line">&#125;;</span><br><span class="line">int main() &#123;</span><br><span class="line">        /*ofstream out(&quot;d:\\a.txt&quot;);  //打开或创建文本文件</span><br><span class="line">        //out.open(&quot;d:\\a.txt&quot;);      //打开或创建文本文件</span><br><span class="line">        Student st1 = &#123;&quot;Jon&quot;, 90&#125;;            //先在a文件中写二进制信息</span><br><span class="line">        Student st2 = &#123; &quot;Rose&quot;, 80 &#125;;</span><br><span class="line">        out.write((const char*)&amp;st1, sizeof(Student));</span><br><span class="line">        out.write((const char*)&amp;st2, sizeof(Student));</span><br><span class="line">        out.close();*/</span><br><span class="line">        ifstream in;</span><br><span class="line">        in.open(&quot;d:\\a.txt&quot;);</span><br><span class="line">        if (!in) &#123;</span><br><span class="line">               return EXIT_FAILURE;</span><br><span class="line">        &#125;</span><br><span class="line">        Student st1;</span><br><span class="line">        Student st2;</span><br><span class="line">        in.read((char*)&amp;st1, sizeof(Student));        //读二进制文件</span><br><span class="line">        in.read((char*)&amp;st2, sizeof(Student));</span><br><span class="line">        cout &lt;&lt; st1.name &lt;&lt; &#x27;\t&#x27; &lt;&lt; st1.grade &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; st2.name &lt;&lt; &#x27;\t&#x27; &lt;&lt; st2.grade &lt;&lt; endl;</span><br><span class="line">        in.close();</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231721-3fca9d46-5d17-42dd-b1aa-bcd6dce6a12a.png" alt=""></p>
+<p><font style="color:rgb(25, 27, 31);">a文件中信息</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382231968-32ce38ad-3b2f-4772-acdd-d29f74cb051f.png" alt=""></p>
+<h3 id="font-style-color-rgb-25-27-31-二进制更直接面对问题，效率高-font"><font style="color:rgb(25, 27, 31);">二进制更直接面对问题，效率高</font></h3>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">网络的编解码使用较多</font></li>
+<li><font style="color:rgb(25, 27, 31);">粘连问题（如何分隔2条记录）</font></li>
+</ul>
+<h3 id="font-style-color-rgb-25-27-31-综合实例（读取a文件的二进制数据，写入b文件中）-font"><font style="color:rgb(25, 27, 31);">综合实例（读取a文件的二进制数据，写入b文件中）</font></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">#include &lt;fstream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">struct Student &#123;</span><br><span class="line">        string strName;</span><br><span class="line">        string strSex;</span><br><span class="line">        int nAge;</span><br><span class="line">&#125;;</span><br><span class="line">ifstream&amp; operator&gt;&gt;(ifstream&amp; is, Student&amp; s) &#123;</span><br><span class="line">        is.read((char*)&amp;s, sizeof(Student));</span><br><span class="line">        return is;</span><br><span class="line">&#125;</span><br><span class="line">ofstream&amp; operator&lt;&lt;(ofstream&amp; os, const Student&amp; s) &#123;</span><br><span class="line">        os.write((const char*)&amp;s, sizeof(Student));</span><br><span class="line">        return os;</span><br><span class="line">&#125;</span><br><span class="line">int main() &#123;</span><br><span class="line">        Student s;</span><br><span class="line">        ifstream in(&quot;d:\\a.txt&quot;);</span><br><span class="line">        </span><br><span class="line">        /*ofstream out(&quot;d:\\a.txt&quot;);          //先在a文件中写二进制数据</span><br><span class="line">        Student st1 = &#123; &quot;Jon&quot;,&quot;男&quot;,20 &#125;;</span><br><span class="line">        Student st2 = &#123; &quot;Anna&quot;, &quot;女&quot;, 18 &#125;;</span><br><span class="line">        out.write((const char*)&amp;st1, sizeof(Student));</span><br><span class="line">        out.write((const char*)&amp;st2, sizeof(Student));</span><br><span class="line">        out.close();*/</span><br><span class="line">        //cout&lt;&lt;in.rdbuf();</span><br><span class="line">        ofstream out(&quot;d:\\b.txt&quot;);</span><br><span class="line">        cout &lt;&lt; &quot;Reading...&quot; &lt;&lt; endl;</span><br><span class="line">        while (in &gt;&gt; s) &#123;</span><br><span class="line">               cout &lt;&lt; s.strName &lt;&lt; &#x27;,&#x27; &lt;&lt; s.strSex &lt;&lt; &#x27;,&#x27; &lt;&lt; s.nAge &lt;&lt; endl;</span><br><span class="line">               cout &lt;&lt; &quot;Writting...&quot; &lt;&lt; endl;</span><br><span class="line">               out &lt;&lt; s;</span><br><span class="line">        &#125;</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232217-0aa563c3-01e5-4cc4-aa4a-17532287bd7b.png" alt=""></p>
+<h2 id="font-style-color-rgb-25-27-31-输入输出流中的缓冲streambuf-font"><font style="color:rgb(25, 27, 31);">输入输出流中的缓冲streambuf</font></h2>
+<p><font style="color:rgb(25, 27, 31);">stl(标准库）提供了缓冲区类streambuf，提供给输入输出流使用，每个标准的输入输出流对象均包含一个streambuf的指针。</font></p>
+<p><font style="color:rgb(25, 27, 31);">可以通过调用rdbuf()获取该指针，从而直接访问底层streambuf对象</font></p>
+<p><font style="color:rgb(25, 27, 31);">streambuf最精彩的部分在于它支持&lt;&lt;,&gt;&gt;操作，以及迭代器操作，支持自定义。</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;fstream&gt;</span><br><span class="line">int main(int argc, char** argv) &#123;</span><br><span class="line">        if (argc != 2)</span><br><span class="line">               return 1;</span><br><span class="line">        std::ifstream fin(argv[1]);</span><br><span class="line">        if (fin) &#123;</span><br><span class="line">               std::cout &lt;&lt; fin.rdbuf();</span><br><span class="line">        &#125;</span><br><span class="line">        fin.close();</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="font-style-color-rgb-25-27-31-定位输入输出流-font"><font style="color:rgb(25, 27, 31);">定位输入输出流</font></h2>
+<h3 id="font-style-color-rgb-25-27-31-istream-seekg-long-relativepos-ios-seek-dir-dir-font"><font style="color:rgb(25, 27, 31);">istream&amp; seekg(long relativepos, ios::seek_dir dir)</font></h3>
+<p><font style="color:rgb(25, 27, 31);">针对输入流（只能ifstream和fstream定义的文件类型使用）</font></p>
+<p><font style="color:rgb(25, 27, 31);">参数一：要移动的字符数目，可正可负</font></p>
+<p><font style="color:rgb(25, 27, 31);">参数二：相对位置</font></p>
+<ol>
+<li><font style="color:rgb(25, 27, 31);">ios::beg：流的开始位置</font></li>
+<li><font style="color:rgb(25, 27, 31);">ios::cur：流的当前位置</font></li>
+<li><font style="color:rgb(25, 27, 31);">ios::end：流的结束位置</font></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">inFile.seekg(10, inFile.beg);    //beg：定位到文件中的第10个字节处</span><br><span class="line">inFile.seekg(10, inFile.cur);    //cur：定位到从文件的当前位置后10个字节处</span><br><span class="line">inFile.seekg(-10, inFile.end);    //end：定位到文件的倒数第10个字节处</span><br></pre></td></tr></table></figure>
+<h3 id="font-style-color-rgb-25-27-31-ostream-seekp-long-relativepos-ios-seek-dir-dir-font"><font style="color:rgb(25, 27, 31);">ostream&amp; seekp(long relativepos, ios::seek_dir dir)</font></h3>
+<p><font style="color:rgb(25, 27, 31);">针对输出流（只能ifstream和fstream定义的文件类型使用）</font></p>
+<p><font style="color:rgb(25, 27, 31);">用法和seekg一样</font></p>
+<h3 id="font-style-color-rgb-25-27-31-tellg-font"><font style="color:rgb(25, 27, 31);">tellg</font></h3>
+<p><font style="color:rgb(25, 27, 31);">返回该输入流的当前位置(距离文件的起始位置的偏移量)</font></p>
+<p><strong><font style="color:rgb(25, 27, 31);">只能ifstream和fstream定义的文件类型使用</font></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int line = inFile.tellg();</span><br></pre></td></tr></table></figure>
+<h3 id="font-style-color-rgb-25-27-31-tellp-font"><font style="color:rgb(25, 27, 31);">tellp</font></h3>
+<p><font style="color:rgb(25, 27, 31);">返回该输出流的当前位置(距离文件的起始位置的偏移量)</font></p>
+<p><strong><font style="color:rgb(25, 27, 31);">只能ofstream和fstream定义的文件类型使用</font></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int line = outFile.tellg();</span><br></pre></td></tr></table></figure>
+<h3 id="font-style-color-rgb-25-27-31-综合实例-font"><font style="color:rgb(25, 27, 31);">综合实例</font></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;fstream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">        fstream in_out;</span><br><span class="line">        in_out.open(&quot;d:\\a.txt&quot;, ios::in | ios::out | ios::trunc);</span><br><span class="line">        in_out.write(&quot;Hello&quot;, 5);</span><br><span class="line">        cout &lt;&lt; in_out.tellg() &lt;&lt; endl;</span><br><span class="line">        in_out.seekg(0, ios::beg);</span><br><span class="line">        cout &lt;&lt; in_out.rdbuf();</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">        in_out.close();</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232220-b1bbcc4d-4fd2-4634-8dc7-8296f1d39379.png" alt=""></p>
+<h2 id="font-style-color-rgb-25-27-31-字符串输入输出流-font"><font style="color:rgb(25, 27, 31);">字符串输入输出流</font></h2>
+<p><font style="color:rgb(25, 27, 31);">字符串输入输出流是直接对内存操作，针对的是string,而不是对文件或标准输入输出操作。所以其有streambuffer但没有通道</font></p>
+<h3 id="font-style-color-rgb-25-27-31-标准库定义的三种类型的字符串流-font"><font style="color:rgb(25, 27, 31);">标准库定义的三种类型的字符串流</font></h3>
+<ul>
+<li><font style="color:rgb(25, 27, 31);">istringstream 输入流，提供读string功能</font></li>
+<li><font style="color:rgb(25, 27, 31);">ostringstream 输出流，提供写string功能</font></li>
+<li><font style="color:rgb(25, 27, 31);">stringstream 输入输出流，同时读写string功能</font></li>
+</ul>
+<p><font style="color:rgb(25, 27, 31);">利用字符串输入输出流，可以方便地把多种基本数据类型组合成字符串，也可以反解字符串给各种变量赋值</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232665-20831801-c5b6-422b-afd8-77bc6db16cdf.png" alt=""></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;sstream&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;           //反解字符串给各变量赋值</span><br><span class="line">        int n;</span><br><span class="line">        float f;</span><br><span class="line">        string strHello;</span><br><span class="line">        string strText = &quot;1 3.14 hello&quot;;</span><br><span class="line">        istringstream s(strText);</span><br><span class="line">        s &gt;&gt; n;</span><br><span class="line">        s &gt;&gt; f;</span><br><span class="line">        s &gt;&gt; strHello;</span><br><span class="line">        cout &lt;&lt; &quot;n = &quot; &lt;&lt; n &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;f = &quot; &lt;&lt; f &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;strHello = &quot; &lt;&lt; strHello &lt;&lt; endl;</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232544-b35d5982-7262-4b77-9b54-38b440f0c3e5.png" alt=""></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;sstream&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;           //合并不同类型的数据到字符串</span><br><span class="line">        cout &lt;&lt; &quot;type an int, a float and a string:&quot;;</span><br><span class="line">        int i;                 </span><br><span class="line">        float f;</span><br><span class="line">        string stuff;</span><br><span class="line">        cin &gt;&gt; i &gt;&gt; f;</span><br><span class="line">        getline(cin, stuff);</span><br><span class="line">        ostringstream os;</span><br><span class="line">        os &lt;&lt; &quot;integer = &quot; &lt;&lt; i &lt;&lt; endl;</span><br><span class="line">        os &lt;&lt; &quot;float = &quot; &lt;&lt; f &lt;&lt; endl;</span><br><span class="line">        os &lt;&lt; &quot;string = &quot; &lt;&lt; stuff &lt;&lt; endl;</span><br><span class="line">        string result = os.str();</span><br><span class="line">        cout &lt;&lt; result &lt;&lt; endl;</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232586-afe567aa-bd0e-49d8-9669-9f0425a68a03.png" alt=""></p>
+<h3 id="font-style-color-rgb-25-27-31-流的模板化-font"><font style="color:rgb(25, 27, 31);">流的模板化</font></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sstream&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line">T stringTo(const std::string&amp; source) &#123;              //反解字符串给变量赋值</span><br><span class="line">        std::istringstream iss(source);</span><br><span class="line">        T ret;</span><br><span class="line">        iss &gt;&gt; ret;</span><br><span class="line">        return ret;</span><br><span class="line">&#125;</span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line">std::string Tostring(const T&amp; n) &#123;           //合并不同类型的数据到字符串</span><br><span class="line">        std::ostringstream tmp;</span><br><span class="line">        tmp &lt;&lt; n;</span><br><span class="line">        return tmp.str();</span><br><span class="line">&#125;</span><br><span class="line">int main() &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;5 = &quot; &lt;&lt; stringTo&lt;int&gt;(&quot;5&quot;) &lt;&lt; std::endl;</span><br><span class="line">        std::cout &lt;&lt; &quot;5 + 6 = &quot; &lt;&lt; stringTo&lt;int&gt;(&quot;5&quot;) + 6 &lt;&lt; std::endl;</span><br><span class="line">        std::cout &lt;&lt; Tostring&lt;int&gt;(stringTo&lt;int&gt;(&quot;5&quot;) + 6);</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/png/26867783/1784382232613-69d2ef7f-eb75-4f0a-8fed-7353788922d8.png" alt=""></p>
+<h2 id="font-style-color-rgb-25-27-31-总结：-font"><font style="color:rgb(25, 27, 31);">总结：</font></h2>
+<p><font style="color:rgb(25, 27, 31);">通常stream的直接&gt;&gt;、&lt;&lt;、read、write会效率较高，而迭代器主要应用在算法的使用，比如：从A形态转换成B形态。</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90LaTeX%E3%80%91%E6%8F%92%E5%85%A5%E4%BB%A3%E7%A0%81%E5%9D%97/" rel="prev" title="【LaTeX】插入代码块">
+                  <i class="fa fa-angle-left"></i> 【LaTeX】插入代码块
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90C_C++%E3%80%91GCC_G++%20%E7%BC%96%E8%AF%91C_C++%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="【C&#x2F;C++】GCC&#x2F;G++ 编译C&#x2F;C++的区别">
+                  【C/C++】GCC/G++ 编译C/C++的区别 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

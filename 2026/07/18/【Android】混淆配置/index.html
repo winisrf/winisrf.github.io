@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="转载于：https:&#x2F;&#x2F;blog.csdn.net&#x2F;chaoyu168&#x2F;article&#x2F;details&#x2F;126904071 android studio自带java语言的ProGuard工具，主要用来压缩、优化、混淆，然后配合Gradle构建工具实现混淆。 在app module中统一配置混淆规则 我们可以直接在app module中build.gradle文件配置所有module需要混淆的规则。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Android】混淆配置">
+<meta property="og:url" content="http://example.com/2026/07/18/%E3%80%90Android%E3%80%91%E6%B7%B7%E6%B7%86%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="转载于：https:&#x2F;&#x2F;blog.csdn.net&#x2F;chaoyu168&#x2F;article&#x2F;details&#x2F;126904071 android studio自带java语言的ProGuard工具，主要用来压缩、优化、混淆，然后配合Gradle构建工具实现混淆。 在app module中统一配置混淆规则 我们可以直接在app module中build.gradle文件配置所有module需要混淆的规则。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T17:56:27.895Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/07/18/%E3%80%90Android%E3%80%91%E6%B7%B7%E6%B7%86%E9%85%8D%E7%BD%AE/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/18/%E3%80%90Android%E3%80%91%E6%B7%B7%E6%B7%86%E9%85%8D%E7%BD%AE/","path":"2026/07/18/【Android】混淆配置/","title":"【Android】混淆配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【Android】混淆配置 | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8app-module%E4%B8%AD%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E6%B7%B7%E6%B7%86%E8%A7%84%E5%88%99"><span class="nav-number">1.</span> <span class="nav-text">在app module中统一配置混淆规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E6%B7%86%E8%A7%84%E5%88%99%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">混淆规则：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E6%9C%89%E4%B8%80%E4%BA%9B%E5%9B%BA%E5%AE%9A%E7%9A%84%E6%B7%B7%E6%B7%86%E8%A7%84%E5%88%99%E4%B8%8D%E9%9C%80%E8%A6%81%E6%9B%B4%E6%94%B9%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">1、有一些固定的混淆规则不需要更改：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">混淆时所采用的算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E7%90%86%E8%A7%A3%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text">2、理解通配符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E4%BF%9D%E8%AF%81%E6%8C%87%E5%AE%9A%E5%8C%85%E5%90%8D%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89%E7%B1%BB%E5%8F%8A%E5%AD%90%E5%8C%85%E4%B8%AD%E6%89%80%E6%9C%89%E7%9A%84%E7%B1%BB%E4%B8%8D%E8%A2%AB%E6%B7%B7%E6%B7%86"><span class="nav-number">2.2.</span> <span class="nav-text">3、保证指定包名下的所有类及子包中所有的类不被混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%E3%80%81%E4%BF%9D%E8%AF%81%E6%8C%87%E5%AE%9A%E7%9A%84%E7%B1%BB%E4%B8%8D%E8%A2%AB%E6%B7%B7%E6%B7%86"><span class="nav-number">2.3.</span> <span class="nav-text">4、保证指定的类不被混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%E3%80%81%E4%B8%8D%E6%B7%B7%E6%B7%86%E6%8C%87%E5%AE%9A%E7%B1%BB%E7%9A%84%E5%AD%90%E7%B1%BB"><span class="nav-number">2.4.</span> <span class="nav-text">5、不混淆指定类的子类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%E3%80%81%E6%8C%87%E5%AE%9A%E6%8E%A5%E5%8F%A3%E4%B8%8D%E6%B7%B7%E6%B7%86"><span class="nav-number">2.5.</span> <span class="nav-text">6、指定接口不混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7%E3%80%81%E6%8C%87%E5%AE%9A%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB%E4%B8%8D%E6%B7%B7%E6%B7%86"><span class="nav-number">2.6.</span> <span class="nav-text">7、指定接口的实现类不混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8%E3%80%81%E6%8C%87%E5%AE%9A%E7%B1%BB%E7%9A%84%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8D%E6%B7%B7%E6%B7%86"><span class="nav-number">2.7.</span> <span class="nav-text">8、指定类的内部类不混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9%E3%80%81%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%8D%E6%B7%B7%E6%B7%86"><span class="nav-number">2.8.</span> <span class="nav-text">9、构造函数不混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10%E3%80%81%E6%8C%87%E5%AE%9A%E7%B1%BB%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E4%B8%8D%E8%A2%AB%E6%B7%B7%E6%B7%86"><span class="nav-number">2.9.</span> <span class="nav-text">10、指定类的属性和方法不被混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11%E3%80%81%E4%B8%8D%E6%B7%B7%E6%B7%86%E7%B1%BB%E4%B8%AD%E6%89%80%E6%9C%89%E7%9A%84-public-%E6%96%B9%E6%B3%95"><span class="nav-number">2.10.</span> <span class="nav-text">11、不混淆类中所有的 public 方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text"> 匹配所有的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#12%E3%80%81%E4%B8%8D%E6%B7%B7%E6%B7%86%E7%B1%BB%E4%B8%AD%E6%89%80%E6%9C%89%E7%9A%84-public-%E5%AD%97%E6%AE%B5"><span class="nav-number">3.1.</span> <span class="nav-text">12、不混淆类中所有的 public 字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13%E3%80%81%E4%B8%8D%E6%B7%B7%E6%B7%86%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text">13、不混淆构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13%E3%80%81%E4%B8%8D%E6%B7%B7%E6%B7%86-bean-%E5%AF%B9%E8%B1%A1%E9%87%8C%E9%9D%A2%E7%9A%84-set-%E3%80%81get-%E6%96%B9%E6%B3%95"><span class="nav-number">3.3.</span> <span class="nav-text">13、不混淆 bean 对象里面的 set 、get 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E4%B8%8D%E6%B7%B7%E6%B7%86%E7%9A%84%E7%B1%BB%E5%92%8C%E5%B1%9E%E6%80%A7"><span class="nav-number">3.4.</span> <span class="nav-text">常见不混淆的类和属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%9A%84%E5%B8%B8%E8%A7%81%E4%B8%8D%E8%A2%AB%E6%B7%B7%E6%B7%86"><span class="nav-number">3.5.</span> <span class="nav-text">其他的常见不被混淆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%84%E4%B8%80%E4%BB%BD%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="nav-number">3.6.</span> <span class="nav-text">附一份配置：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Android%E3%80%91%E6%B7%B7%E6%B7%86%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【Android】混淆配置 | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Android】混淆配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 01:56:27" itemprop="dateModified" datetime="2026-07-19T01:56:27+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Intro/" itemprop="url" rel="index"><span itemprop="name">Intro</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>转载于：<a target="_blank" rel="noopener" href="https://blog.csdn.net/chaoyu168/article/details/126904071">https://blog.csdn.net/chaoyu168/article/details/126904071</a></p>
+<p>android studio自带java语言的ProGuard工具，主要用来压缩、优化、混淆，然后配合Gradle构建工具实现混淆。</p>
+<h2 id="在app-module中统一配置混淆规则">在app module中统一配置混淆规则</h2>
+<p>我们可以直接在app module中build.gradle文件配置所有module需要混淆的规则。这样，其他module中就无需开启混淆。<br>
+首先在build.gradle 中将混淆的开关打开，即 minifyEnabled 置为 true。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled true   //开启混淆</span><br><span class="line">            zipAlignEnabled true  //压缩优化</span><br><span class="line">            shrinkResources true  //移出无用资源</span><br><span class="line">            proguardFiles getDefaultProguardFile(&#x27;proguard-android.txt&#x27;), &#x27;proguard-rules.pro&#x27; //默认的混淆文件以及我们指定的混淆文件</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是model混淆，子模块混淆文件的指定是通过consumerProguardFiles这个属性来指定的，并不是proguardFiles 属性，而且我们无需配置其他的选项，只需要配置consumerProguardFiles属性就可以。该属性表示在打包的时候会自动寻找该module下我们指定的混淆文件对代码进行混淆。配置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">buildTypes &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">    //minifyEnabled true //是否开启混淆，其实子模块中这个已经没有作用了，由主模块控制</span><br><span class="line">    consumerProguardFiles &#x27;proguard-rules.pro&#x27; //子模块要用这个命令才能生效</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就要去proguard-rules.pro写入我们的混淆的规则（如文件其名），防止重要的类被混淆移除了。</p>
+<p>先特别介绍的是与保持相关元素不参与混淆的规则相关的几种命令：<br>
+-keep    防止类和成员被移除或者被重命名<br>
+-keepnames    防止类和成员被重命名<br>
+-keepclassmembers    防止成员被移除或者被重命名<br>
+-keepclasseswithmembers    防止拥有该成员的类和成员被移除或者被重命名<br>
+-keepclasseswithmembernames    防止拥有该成员的类和成员被重命名</p>
+<h3 id="混淆规则：">混淆规则：</h3>
+<h4 id="1、有一些固定的混淆规则不需要更改：">1、有一些固定的混淆规则不需要更改：</h4>
+<p>#指定代码的压缩级别<br>
+-optimizationpasses 5</p>
+<p>#包明不混合大小写<br>
+-dontusemixedcaseclassnames</p>
+<p>#不去忽略非公共的库类<br>
+-dontskipnonpubliclibraryclasses</p>
+<p>#优化  不优化输入的类文件<br>
+-dontoptimize</p>
+<p>#预校验<br>
+-dontpreverify</p>
+<p>#混淆时是否记录日志<br>
+-verbose</p>
+<h1>混淆时所采用的算法</h1>
+<p>-optimizations !code/simplification/arithmetic,!field/<em>,!class/merging/</em></p>
+<p>#保护注解<br>
+-keepattributes <em>Annotation</em></p>
+<h4 id="2、理解通配符">2、理解通配符</h4>
+<p>-keep class cn.hadcn.test.**<br>
+-keep class cn.hadcn.test.*<br>
+很多同学都搞不懂下面两个的区别，一颗星表示只是保持该包下的类名，而子包下的类名还是会被混淆；两颗星表示把本包和所含子包下的类名都保持；用以上方法保持类后，你会发现类名虽然未混淆，但里面的具体方法和变量命名还是变了，这时如果既想保持类名，又想保持里面的内容不被混淆，我们就需要以下方法了：</p>
+<p>-keep class cn.hadcn.test.* {*;}</p>
+<h4 id="3、保证指定包名下的所有类及子包中所有的类不被混淆">3、保证指定包名下的所有类及子包中所有的类不被混淆</h4>
+<p>例子1：com.lib.manager 包下面的类不混淆<br>
+-keep class com.lib.manager.<strong>{*;}<br>
+例子2：v4包下面的所有类不混淆<br>
+-keep class android.support.v4.</strong> { *; }</p>
+<h4 id="4、保证指定的类不被混淆">4、保证指定的类不被混淆</h4>
+<p>例子1：YiBaWiFiActivity 类不被混淆, YiBaWiFiActivity 完整包名：com.yiba.wifi.sdk.lib.activity.YiBaWiFiActivity<br>
+-keep class com.yiba.wifi.sdk.lib.activity.YiBaWiFiActivity{<em>;}<br>
+例子2：v4 包下面的 ActivityCompat 类不被混淆<br>
+-keep class android.support.v4.app.ActivityCompat{</em>;}</p>
+<h4 id="5、不混淆指定类的子类">5、不混淆指定类的子类</h4>
+<p>-keep class * extends pp.lib.User { *; }<br>
+User 类的子类不混淆</p>
+<h4 id="6、指定接口不混淆">6、指定接口不混淆</h4>
+<p>Callback 是一个接口，完整包名为：com.lib.impl.Callback</p>
+<p>-keep interface com.lib.impl.Callback{ * ; }</p>
+<h4 id="7、指定接口的实现类不混淆">7、指定接口的实现类不混淆</h4>
+<p>Callback 是一个接口，完整包名为：com.lib.impl.Callback . 所有的实现类都不会混淆。</p>
+<p>-keep class * implements com.lib.impl.Callback { *; }</p>
+<h4 id="8、指定类的内部类不混淆">8、指定类的内部类不混淆</h4>
+<p>PhoneUtil 的源码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package com.lib.manager;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.os.AsyncTask;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by yiba_zyj on 2017/4/5.</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public class PhoneUtil &#123;</span><br><span class="line">    public final static int APPID = 100 ;</span><br><span class="line">    public PhoneUtil( Context context )&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class MyTask extends AsyncTask &#123;</span><br><span class="line">        @Override</span><br><span class="line">        protected Object doInBackground(Object[] params) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PhoneUtil 有一个常量、一个构造函数、一个内部类。</p>
+<p>混淆规则：</p>
+<p>-keep class com.lib.manager.PhoneUtil$* {</p>
+<ul>
+<li>;<br>
+}</li>
+</ul>
+<h4 id="9、构造函数不混淆">9、构造函数不混淆</h4>
+<p>PhoneUtil 的源码如所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package com.lib;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by yiba_zyj on 2017/4/7.</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public class PhoneUtil &#123;</span><br><span class="line">    public static final String aa = &quot;1222&quot; ;</span><br><span class="line">    public void run()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>混淆规则：PhoneUtil 的无参构造函数不混淆 。PhoneUtil 里面没有用到的 属性和方法将会被移除。</p>
+<p>-keep class com.lib.PhoneUtil {<br>
+public <init >();<br>
+}<br>
+那么有参的构造函数的混淆规则是怎么样的？</p>
+<p>混淆规则：PhoneUtil 的 参数为 Context 的构造函数不混淆</p>
+<p>-keep class com.lib.PhoneUtil {<br>
+public <init>( android.content.Context );<br>
+}</p>
+<h4 id="10、指定类的属性和方法不被混淆">10、指定类的属性和方法不被混淆</h4>
+<p>原始类 PhoneUtil 代码如下，完整的包名为：com.lib.manager.PhoneUtil</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">package com.lib.manager;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.util.DisplayMetrics;</span><br><span class="line">import android.view.WindowManager;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by yiba_zyj on 2017/4/5.</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public class PhoneUtil &#123;</span><br><span class="line">     public static final int AppID = 100 ;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获得屏幕高度</span><br><span class="line">     * @param context</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    public static int getScreenWidth(Context context) &#123;</span><br><span class="line">        WindowManager wm = (WindowManager) context</span><br><span class="line">                .getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">        DisplayMetrics outMetrics = new DisplayMetrics();</span><br><span class="line">        wm.getDefaultDisplay().getMetrics(outMetrics);</span><br><span class="line">        return  outMetrics.widthPixels;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获得屏幕宽度</span><br><span class="line">     * @param context</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    public static int getScreenHeight(Context context) &#123;</span><br><span class="line">        WindowManager wm = (WindowManager) context</span><br><span class="line">                .getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">        DisplayMetrics outMetrics = new DisplayMetrics();</span><br><span class="line">        wm.getDefaultDisplay().getMetrics(outMetrics);</span><br><span class="line">        return  outMetrics.heightPixels;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PhoneUtil 类中包含1个常量及2个方法.类中的变量不被混淆：<br>
+-keep class com.lib.manager.PhoneUtil{<br>
+public static final int AppID ;<br>
+}<br>
+混淆后的效果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">package com.lib.manager;</span><br><span class="line">public class PhoneUtil &#123;</span><br><span class="line">    public static final int AppID = 100;</span><br><span class="line">    public PhoneUtil() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到混淆后的类中，AppID 常量被保存下来了，getScreenWidth 、 getScreenHeight 这两个方法被移除了。 为什么会有方法被移除？ 因为在混淆时，Android 会默认移除没有使用的的方法和资源，保证apk 合理的被压缩。保留类中的方法不被混淆<br>
+-keep class com.lib.manager.PhoneUtil{<br>
+public static int getScreenWidth(android.content.Context);<br>
+}<br>
+混淆后的方法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//</span><br><span class="line">// Source code recreated from a .class file by IntelliJ IDEA</span><br><span class="line">// (powered by Fernflower decompiler)</span><br><span class="line">//</span><br><span class="line">package com.lib.manager;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.util.DisplayMetrics;</span><br><span class="line">import android.view.WindowManager;</span><br><span class="line"></span><br><span class="line">public class PhoneUtil &#123;</span><br><span class="line">    public PhoneUtil() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int getScreenWidth(Context var0) &#123;</span><br><span class="line">        WindowManager var1 = (WindowManager)var0.getSystemService(&quot;window&quot;);</span><br><span class="line">        DisplayMetrics var2 = new DisplayMetrics();</span><br><span class="line">        var1.getDefaultDisplay().getMetrics(var2);</span><br><span class="line">        return var2.widthPixels;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="11、不混淆类中所有的-public-方法">11、不混淆类中所有的 public 方法</h4>
+<h1><methods> 匹配所有的方法</h1>
+<p>-keep class cn.hadcn.test.One {<br>
+public <methods>;<br>
+}<br>
+表示One类下的所有public方法都不会被混淆</p>
+<h4 id="12、不混淆类中所有的-public-字段">12、不混淆类中所有的 public 字段</h4>
+<p>-keep class pp.lib.PhoneUtil{<br>
+public <fields> ;<br>
+}<br>
+表示 PhoneUtil 类中所有的 public 属性将保留，其他类型的字段</p>
+<h4 id="13、不混淆构造函数">13、不混淆构造函数</h4>
+<p>-keep class pp.lib.PhoneUtil{<br>
+<init>(<em><strong>) ;<br>
+<init>(</strong></em> , *** ) ;<br>
+}<br>
+不混淆 PhoneUtil 类中所有 一个参数 和 两个参数的 的构造函数。</p>
+<h4 id="13、不混淆-bean-对象里面的-set-、get-方法">13、不混淆 bean 对象里面的 set 、get 方法</h4>
+<p>User 对象如下图所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">package pp.lib;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by $&#123;zhaoyanjun&#125; on 2017/4/10.</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public class User &#123;</span><br><span class="line">    private String name ;</span><br><span class="line">    private String age ;</span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(String age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>混淆规则：不混淆 User 类中所有的 set 和 get 方法，*** 代表 通配符</p>
+<p>-keep class pp.lib.User{<br>
+void set*( *** ) ;<br>
+*** get*() ;<br>
+}</p>
+<h3 id="常见不混淆的类和属性">常见不混淆的类和属性</h3>
+<p>不混淆四大组件 和 Application</p>
+<p>因为四大组件和 Application 需要在 AndroidManifest.xml 中注册，不能混淆，否则就会报类找不到异常。</p>
+<p>-keep public class * extends android.app.Activity<br>
+-keep public class * extends android.app.Application<br>
+-keep public class * extends android.app.Service<br>
+-keep public class * extends android.content.BroadcastReceiver<br>
+-keep public class * extends android.content.ContentProvider</p>
+<p>特殊情况：</p>
+<p>如果 BroadcastReceiver 是动态注册的，则是可以加入混淆的。</p>
+<p>不混淆任何包含native方法的类的类名以及native方法名<br>
+-keepclasseswithmembernames class * {<br>
+native <methods>;<br>
+}</p>
+<p>不混淆任何一个View中的setXxx()和getXxx()方法，因为属性动画需要有相应的setter和getter的方法实现，混淆了就无法工作了。<br>
+-keepclassmembers public class * extends android.view.View {<br>
+void set*(**<em>);<br>
+*** get</em>();<br>
+}</p>
+<p>不混淆Activity中参数是View的方法，因为有这样一种用法，在XML中配置android:onClick=”buttonClick”属性，当用户点击该按钮时就会调用Activity中的buttonClick(View view)方法，如果这个方法被混淆的话就找不到了。<br>
+-keepclassmembers class * extends android.app.Activity {<br>
+public void *(android.view.View);<br>
+}</p>
+<p>不混淆枚举中的values()和valueOf()方法</p>
+<p>-keepclassmembers enum * {<br>
+public static **[] values();<br>
+public static ** valueOf(java.lang.String);<br>
+}</p>
+<p>不混淆Parcelable实现类中的CREATOR字段，毫无疑问，CREATOR字段是绝对不能改变的，包括大小写都不能变，不然整个Parcelable工作机制都会失败。<br>
+-keepclassmembers class * implements android.os.Parcelable {<br>
+public static final android.os.Parcelable$Creator CREATOR;<br>
+}</p>
+<p>不混淆R文件中的所有静态字段，我们都知道R文件是通过字段来记录每个资源的id的，字段名要是被混淆了，id也就找不着了。<br>
+登录后复制<br>
+-keepclassmembers class *<em>.R$</em> {<br>
+public static <fields>;<br>
+}</p>
+<h3 id="其他的常见不被混淆">其他的常见不被混淆</h3>
+<p>一般以下情况都会不混淆：</p>
+<p>1.使用了自定义控件那么要保证它们不参与混淆。</p>
+<p>2.使用了枚举要保证枚举不被混淆。</p>
+<p>3.对第三方库中的类不进行混淆。</p>
+<p>4.运用了反射的类也不进行混淆。</p>
+<p>5.使用了 Gson 之类的工具要使 JavaBean 类即实体类不被混淆。</p>
+<p>6.在引用第三方库的时候，一般会标明库的混淆规则的，建议在使用的时候就把混淆规则添加上去，免得到最后才去找。</p>
+<p>7.有用到 WebView 的 JS 调用也需要保证写的接口方法不混淆，原因和第一条一样。</p>
+<p>8.Parcelable 的子类和 Creator 静态成员变量不混淆，否则会产生 Android.os.BadParcelableException 异常。</p>
+<p>9.供第三放调用的Interface接口不进行混淆。</p>
+<h3 id="附一份配置：">附一份配置：</h3>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90Java%E3%80%91Servlet%E5%AE%9E%E7%8E%B0%E5%89%8D%E5%90%8E%E7%AB%AF%E8%BF%9E%E6%8E%A5/" rel="prev" title="【Java】Servlet实现前后端连接">
+                  <i class="fa fa-angle-left"></i> 【Java】Servlet实现前后端连接
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90Android%E3%80%91SQlite%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="【Android】SQlite数据库">
+                  【Android】SQlite数据库 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

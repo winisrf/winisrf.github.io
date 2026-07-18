@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="转载自原帖：https:&#x2F;&#x2F;blog.csdn.net&#x2F;mid_Faker&#x2F;article&#x2F;details&#x2F;112271486 INT 21H是指令自动转入中断子程序的入口。以8086 CPU的汇编为例,输出一个字符串，就要使用如下指令： 12MOV AH,09HINT 21H  假如要在显示器显示输入一个字符串，实际上就是要调用DOS系统的功能来实现。当然，DOS是包括多种功能，如接受用户输入，">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Time to rest">
+<meta property="og:url" content="http://example.com/intro/%E3%80%90%E6%B1%87%E7%BC%96%E3%80%91%20INT%2021H%20%E5%91%BD%E4%BB%A4.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="转载自原帖：https:&#x2F;&#x2F;blog.csdn.net&#x2F;mid_Faker&#x2F;article&#x2F;details&#x2F;112271486 INT 21H是指令自动转入中断子程序的入口。以8086 CPU的汇编为例,输出一个字符串，就要使用如下指令： 12MOV AH,09HINT 21H  假如要在显示器显示输入一个字符串，实际上就是要调用DOS系统的功能来实现。当然，DOS是包括多种功能，如接受用户输入，">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-18T13:44:37.816Z">
+<meta property="article:modified_time" content="2026-07-18T13:44:37.816Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/intro/%E3%80%90%E6%B1%87%E7%BC%96%E3%80%91%20INT%2021H%20%E5%91%BD%E4%BB%A4">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":true,"permalink":"http://example.com/intro/%E3%80%90%E6%B1%87%E7%BC%96%E3%80%91%20INT%2021H%20%E5%91%BD%E4%BB%A4.html","path":"intro/【汇编】 INT 21H 命令.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Time to rest
+</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="en"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta-container">
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <p>转载自原帖：<a target="_blank" rel="noopener" href="https://blog.csdn.net/mid_Faker/article/details/112271486">https://blog.csdn.net/mid_Faker/article/details/112271486</a></p>
+<p>INT 21H是指令自动转入中断子程序的入口。以8086 CPU的汇编为例,输出一个字符串，就要使用如下指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV AH,09H</span><br><span class="line">INT 21H </span><br></pre></td></tr></table></figure>
+<p>假如要在显示器显示输入一个字符串，实际上就是要调用DOS系统的功能来实现。当然，DOS是包括多种功能，如接受用户输入，显示输出，输出到打印机打印等，每一个功能，都有一个编号，其中，在“显示器显示输出”这个功能的编号是09：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MOV AH,09H   </span><br></pre></td></tr></table></figure>
+<p>这个就表示把09这个编号放入AH中，INT 21H 表示 代码运行到这里，需要DOS系统工作了，做什么工作呢？DOS系统会查找AH里面是什么，上例是09, DOS系统就知道要做什么工作了。所以，可以这样理解，INT 21H是命令系统工作的意思，至于做什么工作，就看你往AH里面放了什么代码。参考：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ASSUME CS:CODES,DS:DATAS</span><br><span class="line">DATAS SEGMENT</span><br><span class="line">STRING DB &#x27;Hello World!&#x27;,&#x27;$&#x27;</span><br><span class="line">DATAS ENDS</span><br><span class="line">CODES SEGMENT</span><br><span class="line">BEGIN:</span><br><span class="line">MOV AX,DATAS</span><br><span class="line">MOV DS,AX</span><br><span class="line">LEA DX,STRING </span><br><span class="line">MOV AH,09H</span><br><span class="line">INT 21H </span><br><span class="line">MOV AH,4CH           ; 4CH编号表示结束DOS的功能，再返回本程序</span><br><span class="line">INT 21H </span><br><span class="line">CODES ENDS</span><br><span class="line">END BEGIN</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><font style="color:rgb(79, 79, 79);">AH</font></th>
+<th style="text-align:left"><font style="color:rgb(79, 79, 79);">功能</font></th>
+<th style="text-align:left"><font style="color:rgb(79, 79, 79);">调用参数</font></th>
+<th style="text-align:left"><font style="color:rgb(79, 79, 79);">返回参数</font></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">00</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">程序终止(同INT 20H)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">CS=程序段前缀</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">01</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">键盘输入并回显</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=输入字符</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">02</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">显示输出</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=输出字符</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">03</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">异步通迅输入</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=输入数据</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">04</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">异步通迅输出</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=输出数据</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">05</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">打印机输出</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=输出字符</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">06</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">直接控制台I/O</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=FF(输入)   </font><font style="color:rgb(79, 79, 79);">DL=字符(输出)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=输入字符</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">07</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">键盘输入(无回显)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=输入字符</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">08</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">键盘输入(无回显)   </font><font style="color:rgb(79, 79, 79);">检测Ctrl-Break</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=输入字符</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">09</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">显示字符串</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=串地址   </font><font style="color:rgb(79, 79, 79);">'$'结束字符串</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">0A</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">键盘输入到缓冲区</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=缓冲区首地址   </font><font style="color:rgb(79, 79, 79);">(DS:DX)=缓冲区最大字符数</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">(DS:DX+1)=实际输入的字符数</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">0B</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">检验键盘状态</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 有输入   </font><font style="color:rgb(79, 79, 79);">AL=FF 无输入</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">0C</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">清除输入缓冲区并   </font><font style="color:rgb(79, 79, 79);">请求指定的输入功能</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=输入功能号   </font><font style="color:rgb(79, 79, 79);">(1,6,7,8,A)</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">0D</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">磁盘复位</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">清除文件缓冲区</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">0E</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">指定当前缺省的磁盘驱动器</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=驱动器号 0=A,1=B,…</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=驱动器数</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">0F</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">打开文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 文件找到   </font><font style="color:rgb(79, 79, 79);">AL=FF 文件未找到</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">10</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">关闭文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 目录修改成功   </font><font style="color:rgb(79, 79, 79);">AL=FF 目录中未找到文件</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">11</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">查找第一个目录项</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 找到   </font><font style="color:rgb(79, 79, 79);">AL=FF 未找到</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">12</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">查找下一个目录项</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址   </font><font style="color:rgb(79, 79, 79);">(文件中带有*或?)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 找到   </font><font style="color:rgb(79, 79, 79);">AL=FF 未找到</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">13</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">删除文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 删除成功   </font><font style="color:rgb(79, 79, 79);">AL=FF 未找到</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">14   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">顺序读   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 读成功   </font><font style="color:rgb(79, 79, 79);">=01 文件结束,记录中无数据   </font><font style="color:rgb(79, 79, 79);">=02 DTA空间不够   </font><font style="color:rgb(79, 79, 79);">=03 文件结束,记录不完整</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">15</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">顺序写</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 写成功   </font><font style="color:rgb(79, 79, 79);">=01 盘满   </font><font style="color:rgb(79, 79, 79);">=02 DTA空间不够</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">16</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">建文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 建立成功   </font><font style="color:rgb(79, 79, 79);">=FF 无磁盘空间</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">17</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">文件改名</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址   </font><font style="color:rgb(79, 79, 79);">(DS:DX+1)=旧文件名   </font><font style="color:rgb(79, 79, 79);">(DS:DX+17)=新文件名</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 成功   </font><font style="color:rgb(79, 79, 79);">AL=FF 未成功</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">19</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取当前缺省磁盘驱动器</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=缺省的驱动器号 0=A,1=B,2=C,…</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">1A</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">置DTA地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=DTA地址</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">1B   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取缺省驱动器FAT信息   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=每簇的扇区数   </font><font style="color:rgb(79, 79, 79);">DS:BX=FAT标识字节   </font><font style="color:rgb(79, 79, 79);">CX=物理扇区大小   </font><font style="color:rgb(79, 79, 79);">DX=缺省驱动器的簇数</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">1C</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取任一驱动器FAT信息</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=驱动器号</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">同上</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">21   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">随机读   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 读成功   </font><font style="color:rgb(79, 79, 79);">=01 文件结束   </font><font style="color:rgb(79, 79, 79);">=02 缓冲区溢出   </font><font style="color:rgb(79, 79, 79);">=03 缓冲区不满</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">22</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">随机写</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 写成功   </font><font style="color:rgb(79, 79, 79);">=01 盘满   </font><font style="color:rgb(79, 79, 79);">=02 缓冲区溢出</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">23</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">测定文件大小</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 成功(文件长度填入FCB)   </font><font style="color:rgb(79, 79, 79);">AL=FF 未找到</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">24</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">设置随机记录号</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">25</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">设置中断向量</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=中断向量   </font><font style="color:rgb(79, 79, 79);">AL=中断类型号</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">26</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">建立程序段前缀</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DX=新的程序段前缀</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">27   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">随机分块读   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址   </font><font style="color:rgb(79, 79, 79);">CX=记录数</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 读成功   </font><font style="color:rgb(79, 79, 79);">=01 文件结束   </font><font style="color:rgb(79, 79, 79);">=02 缓冲区太小,传输结束   </font><font style="color:rgb(79, 79, 79);">=03 缓冲区不满</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">28</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">随机分块写</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=FCB首地址   </font><font style="color:rgb(79, 79, 79);">CX=记录数</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 写成功   </font><font style="color:rgb(79, 79, 79);">=01 盘满   </font><font style="color:rgb(79, 79, 79);">=02 缓冲区溢出</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">29</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">分析文件名</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">ES:DI=FCB首地址   </font><font style="color:rgb(79, 79, 79);">DS:SI=ASCIIZ串   </font><font style="color:rgb(79, 79, 79);">AL=控制分析标志</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 标准文件   </font><font style="color:rgb(79, 79, 79);">=01 多义文件   </font><font style="color:rgb(79, 79, 79);">=02 非法盘符</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">2A</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取日期</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">CX=年   </font><font style="color:rgb(79, 79, 79);">DH:DL=月:日(二进制)</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">2B</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">设置日期</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">CX:DH:DL=年:月:日</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 成功   </font><font style="color:rgb(79, 79, 79);">=FF 无效</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">2C</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取时间</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">CH:CL=时:分   </font><font style="color:rgb(79, 79, 79);">DH:DL=秒:1/100秒</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">2D</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">设置时间</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">CH:CL=时:分   </font><font style="color:rgb(79, 79, 79);">DH:DL=秒:1/100秒</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 成功   </font><font style="color:rgb(79, 79, 79);">=FF 无效</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">2E</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">置磁盘自动读写标志</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 关闭标志   </font><font style="color:rgb(79, 79, 79);">AL=01 打开标志</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">2F</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取磁盘缓冲区的首址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">ES:BX=缓冲区首址</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">30</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取DOS版本号</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AH=发行号,AL=版本</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">31</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">结束并驻留</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=返回码   </font><font style="color:rgb(79, 79, 79);">DX=驻留区大小</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">33   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">Ctrl-Break检测   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00 取状态   </font><font style="color:rgb(79, 79, 79);">=01 置状态(DL)   </font><font style="color:rgb(79, 79, 79);">DL=00 关闭检测   </font><font style="color:rgb(79, 79, 79);">=01 打开检测</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=00 关闭Ctrl-Break检测   </font><font style="color:rgb(79, 79, 79);">=01 打开Ctrl-Break检测</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">35</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取中断向量</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=中断类型</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">ES:BX=中断向量</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">36      </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取空闲磁盘空间      </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=驱动器号    </font><font style="color:rgb(79, 79, 79);">0=缺省,1=A,2=B,…   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=每簇扇区数   </font><font style="color:rgb(79, 79, 79);">BX=有效簇数   </font><font style="color:rgb(79, 79, 79);">CX=每扇区字节数   </font><font style="color:rgb(79, 79, 79);">DX=总簇数   </font><font style="color:rgb(79, 79, 79);">失败:AX=FFFF</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">38</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">置/取国家信息</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=信息区首地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=国家码(国际电话前缀码)   </font><font style="color:rgb(79, 79, 79);">AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">39</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">建立子目录(MKDIR)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">3A</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">删除子目录（RMDIR）</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">3B</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">改变当前目录(CHDIR)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">3C</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">建立文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址   </font><font style="color:rgb(79, 79, 79);">CX=文件属性</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=文件代号   </font><font style="color:rgb(79, 79, 79);">错误:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">3D   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">打开文件   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址   </font><font style="color:rgb(79, 79, 79);">AL=0 读   </font><font style="color:rgb(79, 79, 79);">=1 写   </font><font style="color:rgb(79, 79, 79);">=3 读/写</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=文件代号   </font><font style="color:rgb(79, 79, 79);">错误:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">3E</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">关闭文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=文件代号</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">3F   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">读文件或设备   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=数据缓冲区地址   </font><font style="color:rgb(79, 79, 79);">BX=文件代号   </font><font style="color:rgb(79, 79, 79);">CX=读取的字节数</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">读成功:   </font><font style="color:rgb(79, 79, 79);">AX=实际读入的字节数   </font><font style="color:rgb(79, 79, 79);">AX=0 已到文件尾   </font><font style="color:rgb(79, 79, 79);">读出错:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">40</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">写文件或设备</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=数据缓冲区地址   </font><font style="color:rgb(79, 79, 79);">BX=文件代号   </font><font style="color:rgb(79, 79, 79);">CX=写入的字节数</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">写成功:   </font><font style="color:rgb(79, 79, 79);">AX=实际写入的字节数   </font><font style="color:rgb(79, 79, 79);">写出错:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">41</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">删除文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=00   </font><font style="color:rgb(79, 79, 79);">出错:AX=错误码(2,5)</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">42      </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">移动文件指针      </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=文件代号   </font><font style="color:rgb(79, 79, 79);">CX:DX=位移量   </font><font style="color:rgb(79, 79, 79);">AL=移动方式(0:从文件头绝对位移,1:从当前位置相对移动,2:从文件尾绝对位移)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:DX:AX=新文件指针位置   </font><font style="color:rgb(79, 79, 79);">出错:AX=错误码   </font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">43   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">置/取文件属性   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址   </font><font style="color:rgb(79, 79, 79);">AL=0 取文件属性   </font><font style="color:rgb(79, 79, 79);">AL=1 置文件属性   </font><font style="color:rgb(79, 79, 79);">CX=文件属性</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:CX=文件属性   </font><font style="color:rgb(79, 79, 79);">失败:CX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">44            </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">设备文件I/O控制            </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=文件代号   </font><font style="color:rgb(79, 79, 79);">AL=0 取状态   </font><font style="color:rgb(79, 79, 79);">=1 置状态DX   </font><font style="color:rgb(79, 79, 79);">=2 读数据   </font><font style="color:rgb(79, 79, 79);">=3 写数据   </font><font style="color:rgb(79, 79, 79);">=6 取输入状态   </font><font style="color:rgb(79, 79, 79);">=7 取输出状态</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DX=设备信息            </font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">45</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">复制文件代号</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=文件代号1</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=文件代号2   </font><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">46</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">人工复制文件代号</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=文件代号1   </font><font style="color:rgb(79, 79, 79);">CX=文件代号2</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">47</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取当前目录路径名</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DL=驱动器号   </font><font style="color:rgb(79, 79, 79);">DS:SI=ASCIIZ串地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">(DS:SI)=ASCIIZ串   </font><font style="color:rgb(79, 79, 79);">失败:AX=出错码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">48</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">分配内存空间</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=申请内存容量</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=分配内存首地   </font><font style="color:rgb(79, 79, 79);">失败:BX=最大可用内存</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">49</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">释放内容空间</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">ES=内存起始段地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">4A</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">调整已分配的存储块</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">ES=原内存起始地址   </font><font style="color:rgb(79, 79, 79);">BX=再申请的容量</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">失败:BX=最大可用空间   </font><font style="color:rgb(79, 79, 79);">AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">4B   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">装配/执行程序   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址   </font><font style="color:rgb(79, 79, 79);">ES:BX=参数区首地址   </font><font style="color:rgb(79, 79, 79);">AL=0 装入执行   </font><font style="color:rgb(79, 79, 79);">AL=3 装入不执行</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">失败:AX=错误码   </font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">4C</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">带返回码结束</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=返回码</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">4D</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取返回代码</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=返回代码</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">4E</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">查找第一个匹配文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址   </font><font style="color:rgb(79, 79, 79);">CX=属性</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=出错代码(02,18)</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">4F</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">查找下一个匹配文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址   </font><font style="color:rgb(79, 79, 79);">(文件名中带有?或*)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=出错代码(18)</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">54</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取盘自动读写标志</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=当前标志值</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">56</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">文件改名</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串(旧)   </font><font style="color:rgb(79, 79, 79);">ES:DI=ASCIIZ串(新)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=出错码(03,05,17)</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">57</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">置/取文件日期和时间</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=文件代号   </font><font style="color:rgb(79, 79, 79);">AL=0 读取   </font><font style="color:rgb(79, 79, 79);">AL=1 设置(DX:CX)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">DX:CX=日期和时间   </font><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">58</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取/置分配策略码</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=0 取码   </font><font style="color:rgb(79, 79, 79);">AL=1 置码(BX)</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=策略码   </font><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">59   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取扩充错误码   </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AX=扩充错误码   </font><font style="color:rgb(79, 79, 79);">BH=错误类型   </font><font style="color:rgb(79, 79, 79);">BL=建议的操作   </font><font style="color:rgb(79, 79, 79);">CH=错误场所</font></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">5A</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">建立临时文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">CX=文件属性   </font><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=文件代号   </font><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">5B</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">建立新文件</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">CX=文件属性   </font><font style="color:rgb(79, 79, 79);">DS:DX=ASCIIZ串地址</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">成功:AX=文件代号   </font><font style="color:rgb(79, 79, 79);">失败:AX=错误码</font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">5C      </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">控制文件存取      </font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">AL=00封锁   </font><font style="color:rgb(79, 79, 79);">=01开启   </font><font style="color:rgb(79, 79, 79);">BX=文件代号   </font><font style="color:rgb(79, 79, 79);">CX:DX=文件位移   </font><font style="color:rgb(79, 79, 79);">SI:DI=文件长度</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">失败:AX=错误码      </font></td>
+</tr>
+<tr>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">62</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">取程序段前缀</font></td>
+<td style="text-align:left"><font style="color:rgb(79, 79, 79);">BX=PSP地址</font></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+      
+      
+      
+    </div>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

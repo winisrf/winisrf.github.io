@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Abstract Identifying disease-causing genes associated with genetic and rare diseases is crucial for understanding molecular mechanisms and advancing clinical treatments. Traditional experimental meth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Large-Scale Parallel Computing for Biological Heterogeneous Networks in Genetic Disease Prediction">
+<meta property="og:url" content="http://example.com/2026/07/02/parallel-computing-disease-gene-prediction/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="Abstract Identifying disease-causing genes associated with genetic and rare diseases is crucial for understanding molecular mechanisms and advancing clinical treatments. Traditional experimental meth">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/disease-gene/figure1.png">
+<meta property="og:image" content="http://example.com/images/disease-gene/figure2.png">
+<meta property="og:image" content="http://example.com/images/disease-gene/figure3.png">
+<meta property="og:image" content="http://example.com/images/disease-gene/figure4.png">
+<meta property="article:published_time" content="2026-07-02T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T18:02:47.189Z">
+<meta property="article:author" content="winis">
+<meta property="article:tag" content="Node2Vec">
+<meta property="article:tag" content="bioinformatics">
+<meta property="article:tag" content="disease gene prediction">
+<meta property="article:tag" content="graph embedding">
+<meta property="article:tag" content="parallel computing">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/disease-gene/figure1.png">
+
+
+<link rel="canonical" href="http://example.com/2026/07/02/parallel-computing-disease-gene-prediction/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/02/parallel-computing-disease-gene-prediction/","path":"2026/07/02/parallel-computing-disease-gene-prediction/","title":"Large-Scale Parallel Computing for Biological Heterogeneous Networks in Genetic Disease Prediction"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Large-Scale Parallel Computing for Biological Heterogeneous Networks in Genetic Disease Prediction | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction"><span class="nav-number">2.</span> <span class="nav-text">1. Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Materials-and-Methods"><span class="nav-number">3.</span> <span class="nav-text">2. Materials and Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Datasets"><span class="nav-number">3.1.</span> <span class="nav-text">2.1. Datasets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Heterogeneous-Disease-Gene-Related-Network-Embedding-Representation"><span class="nav-number">3.2.</span> <span class="nav-text">2.2. Heterogeneous Disease Gene-Related Network Embedding Representation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-LVR-Based-Similarity-Calculation"><span class="nav-number">3.3.</span> <span class="nav-text">2.3. LVR-Based Similarity Calculation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Disease-Pair-Overlap-Analysis-Based-on-Similarity"><span class="nav-number">3.4.</span> <span class="nav-text">2.4. Disease Pair Overlap Analysis Based on Similarity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Random-Walks-on-Reconstructed-Disease-Gene-Networks"><span class="nav-number">3.5.</span> <span class="nav-text">2.5. Random Walks on Reconstructed Disease-Gene Networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Experimental-Setup-and-Evaluation-Metrics"><span class="nav-number">3.6.</span> <span class="nav-text">2.6. Experimental Setup and Evaluation Metrics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Optimization-Technical-Approach"><span class="nav-number">4.</span> <span class="nav-text">3. Optimization Technical Approach</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Overall-Approach"><span class="nav-number">4.1.</span> <span class="nav-text">3.1. Overall Approach</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Node2Vec-Random-Walk-Parallelization"><span class="nav-number">4.2.</span> <span class="nav-text">3.2. Node2Vec Random Walk Parallelization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Parallelization-of-Vector-Similarity-Computation"><span class="nav-number">4.3.</span> <span class="nav-text">3.3. Parallelization of Vector Similarity Computation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-Word2Vec-Training-Optimization"><span class="nav-number">4.4.</span> <span class="nav-text">3.4. Word2Vec Training Optimization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Results"><span class="nav-number">5.</span> <span class="nav-text">4. Results</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Conclusion"><span class="nav-number">6.</span> <span class="nav-text">5. Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/02/parallel-computing-disease-gene-prediction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Large-Scale Parallel Computing for Biological Heterogeneous Networks in Genetic Disease Prediction | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Large-Scale Parallel Computing for Biological Heterogeneous Networks in Genetic Disease Prediction
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-02 17:00:00" itemprop="dateCreated datePublished" datetime="2026-07-02T17:00:00+08:00">2026-07-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 02:02:47" itemprop="dateModified" datetime="2026-07-19T02:02:47+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Research/" itemprop="url" rel="index"><span itemprop="name">Research</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><span id="more"></span>
+<h2 id="Abstract">Abstract</h2>
+<p>Identifying disease-causing genes associated with genetic and rare diseases is crucial for understanding molecular mechanisms and advancing clinical treatments. Traditional experimental methods are time-consuming and labor-intensive. While various computational approaches have emerged in recent years, they still face efficiency and scalability bottlenecks when applied to large-scale heterogeneous networks. Building upon prior work, this study integrates multi-source data — including disease-gene associations, protein-protein interactions, disease-symptom correlations, and gene functional annotations — to construct a heterogeneous disease-gene network. Low-dimensional representation learning is achieved using Node2Vec and LINE. Through cosine similarity calculations and network reconstruction, we propose the Local Vector Representation Similarity Measure (LVRSim) and the Random Walk-based Heterogeneous Network Prediction Method (RW-RDGN). Methodologically, this study emphasizes parallel optimization and graph computation acceleration. This includes implementing parallelized random walks and memory layout optimization using Node2Vec, enhancing similarity calculation efficiency through matrix vectorization and multi-process acceleration, and replacing Word2Vec with FastText to improve representation capabilities for sparse nodes. Experimental results demonstrate that LVR-based representations effectively capture biological coherence among disease–gene–symptom relationships. RW-RDGN significantly outperforms multiple classical baseline methods in recall and association precision, successfully predicting numerous candidate genes validated by literature and databases. This research not only improves the accuracy and interpretability of disease gene prediction but also provides an optimized pathway for parallel computing on large-scale heterogeneous biological networks.</p>
+<p><strong>Keywords:</strong> Random Walk, Graph Computing Acceleration, Parallel Optimization, Disease-Gene Prediction, Heterogeneous Networks</p>
+<h2 id="1-Introduction">1. Introduction</h2>
+<p>Identifying genes implicated in genetic disorders and rare diseases in large-scale medical datasets is a crucial step toward uncovering underlying molecular mechanisms and improving clinical treatment. Computational methods have increasingly been employed to accelerate this process [1], as traditional experimental approaches are labor-intensive and time-consuming [2].</p>
+<p>Recent studies have focused on leveraging different types of biomedical data to improve disease-gene prediction. These include protein-protein interaction (PPI) networks [3], disease phenotypes [4], gene expression profiles [5], Gene Ontology (GO) annotations [6], signaling pathways [7], and literature-derived associations [8]. Computational approaches vary from simple guilt-by-association principles to advanced network-based and machine learning methods, including network propagation, shortest path analysis, correlation-based prediction, clustering, and classification methods [9].</p>
+<p>Beyond traditional methods, heterogeneous graph-based approaches and graph neural networks (GNNs) have been developed to integrate multi-source biomedical data, capturing complex biological relationships in large-scale networks. International research has established frameworks for heterogeneous graph modeling, graph-based Transformers, and parallel computation, with representative work such as COMET combining meta-path attention mechanisms and domain-specific pre-trained models (e.g., BioGPT) to enhance gene-disease prediction performance.</p>
+<p>Despite these advances, most existing parallel optimization strategies remain focused on compute-intensive tasks in natural language processing and computer vision, with insufficient adaptation to biomedical data characterized by structural complexity, sparsity, and heterogeneity. In domestic research, progress has been made in graph modeling and parallel graph computation for applications such as power grids and UAV networks; however, comprehensive parallelized systems for model training and inference tailored to medical data remain limited.</p>
+<p>Building on these developments, this study aims to optimize gene-disease prediction algorithms for large-scale medical datasets. We integrate multi-source data to construct heterogeneous disease-gene networks, implement parallelized graph computations, and employ advanced representation learning techniques such as Node2Vec, LINE, and FastText. Experimental results demonstrate improved prediction accuracy, interpretability, and computational efficiency, providing a scalable framework for future biomedical applications.</p>
+<h2 id="2-Materials-and-Methods">2. Materials and Methods</h2>
+<p>This section broadly draws upon the material selection and computational methods of HerGePred [10]. The original disease gene detection approach suffers from technical limitations, so this study designs an optimized technical approach for large-scale graph embedding and downstream node analysis tasks. It aims to significantly enhance computational efficiency and scalability while ensuring node representation quality, providing reliable support for large-scale graph analysis.</p>
+<h3 id="2-1-Datasets">2.1. Datasets</h3>
+<p>The dataset primarily includes disease-gene associations, protein-protein interactions, disease-symptom associations, and gene functional annotations.</p>
+<p>The dataset sources and statistical information are shown in Table 1. Disease-gene association information was collected from two databases: DisGeNet [12] and MalaCards [13]. To evaluate algorithm novelty, we deduplicated association data from DisGeNet and MalaCards, ensuring no overlap between test and training sets. These two datasets are independent. Furthermore, we removed any associations overlapping with cross-validation datasets.</p>
+<p>The protein-protein interaction (PPI) dataset originates from the research by Menche et al. [14]. Since this PPI network already encompasses most pathway-level interactions, no additional pathway information was utilized when constructing the heterogeneous disease-gene network.</p>
+<p>Disease-symptom associations were sourced from the HPO [15] and Orphanet [16] databases. After integrating HPO and Orphanet disease-symptom associations, we manually mapped OMIM and Orphanet disease IDs to UMLS codes to unify disease coding.</p>
+<p>Finally, for gene functional annotation, GO (Gene Ontology) annotation information was primarily extracted from the STRING v10 database [17].</p>
+<p><strong>Table 1: Data Source Information.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Database</th>
+<th>Data Type</th>
+<th style="text-align:center">Data Volume</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DisGeNet</td>
+<td>Disease-Gene Associations</td>
+<td style="text-align:center">430,286</td>
+<td>11,925 diseases, 15,993 genes</td>
+</tr>
+<tr>
+<td>MalaCards</td>
+<td>Disease-Gene Associations</td>
+<td style="text-align:center">65,905</td>
+<td>5,783 diseases, 8,045 genes</td>
+</tr>
+<tr>
+<td>Menche et al.</td>
+<td>Protein-Protein Interactions</td>
+<td style="text-align:center">213,888</td>
+<td>213,888 PPIs involving 15,964 proteins</td>
+</tr>
+<tr>
+<td>HPO and Orphanet</td>
+<td>Disease-Symptom Associations</td>
+<td style="text-align:center">99,087</td>
+<td>5,423 diseases, 6,540 symptoms</td>
+</tr>
+<tr>
+<td>STRING v10</td>
+<td>GO Annotation Information</td>
+<td style="text-align:center">218,337</td>
+<td>18,584 genes, 14,204 GO terms</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-Heterogeneous-Disease-Gene-Related-Network-Embedding-Representation">2.2. Heterogeneous Disease Gene-Related Network Embedding Representation</h3>
+<p><img src="/images/disease-gene/figure1.png" alt="Low-dimensional vector representation of nodes"></p>
+<p><em>Figure 1: Low-dimensional vector representation of nodes.</em></p>
+<p>After processing the dataset, we integrated multi-source data covering disease-gene, disease-symptom, PPI, and GO annotations into a heterogeneous network. Using Node2Vec [18] and LINE [19], we mapped nodes in the network to low-dimensional vectors, preparing for subsequent algorithms to compare similarity or perform random walks. The specific representation of genes is shown in Figure 1.</p>
+<p>We represent diseases, genes, symptoms, and GO terms as nodes <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span></span></span></span>, with their interactions expressed as edges <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi></mrow><annotation encoding="application/x-tex">E</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span></span></span></span>, designing the network <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mo stretchy="false">(</mo><mi>V</mi><mo separator="true">,</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">G = (V, E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mclose">)</span></span></span></span>. We then perform the following Node2Vec and LINE learning processes:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mi>f</mi><mo>:</mo><mi>V</mi><mo>→</mo><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup><mo separator="true">,</mo><mspace width="1em"/><mi>v</mi><mo>↦</mo><mi>N</mi><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(1)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">f: V \rightarrow \mathbb{R}^{d}, \quad v \mapsto N(v) \tag{1}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0935em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">↦</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span></span><span class="tag"><span class="strut" style="height:1.1491em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">1</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>Node2Vec strikes a balance between BFS-style (structural similarity) and DFS-style (community similarity) approaches, making it well-suited for capturing features in complex networks. BFS and DFS search strategies are shown in Figure 2.</p>
+<p><img src="/images/disease-gene/figure2.png" alt="BFS and DFS search strategies from node u (k = 3)"></p>
+<p><em>Figure 2: BFS and DFS search strategies from node u (k = 3).</em></p>
+<p>LINE operates faster and is better suited for large-scale sparse networks, but its expressive power is weaker than Node2Vec. In subsequent studies comparing Node2Vec and LINE, we found Node2Vec to perform better.</p>
+<h3 id="2-3-LVR-Based-Similarity-Calculation">2.3. LVR-Based Similarity Calculation</h3>
+<p><img src="/images/disease-gene/figure3.png" alt="LVR-based similarity prediction"></p>
+<p><em>Figure 3: LVR-based similarity prediction.</em></p>
+<p>Using the obtained low-dimensional node vectors, similarity can be computed to validate the validity of the embedded vectors and provide a similarity metric for subsequent prediction algorithms. After obtaining the low-dimensional vector representation <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">N(v)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span></span></span></span> for a node, the similarity between two nodes can be measured using cosine similarity:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mi>cos</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mi>N</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>x</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>N</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>y</mi></msub><mo stretchy="false">)</mo><mo fence="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>N</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>x</mi></msub><mo stretchy="false">)</mo><mo>⋅</mo><mi>N</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>y</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mi mathvariant="normal">∣</mi><mi>N</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>x</mi></msub><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mo>⋅</mo><mi mathvariant="normal">∣</mi><mi>N</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>y</mi></msub><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi></mrow></mfrac></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(2)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">\cos\left(N(v_x), N(v_y)\right) = \frac{N(v_x) \cdot N(v_y)}{|N(v_x)| \cdot |N(v_y)|} \tag{2}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose delimcenter" style="top:0em;">)</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3991em;vertical-align:-0.9721em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∣</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9721em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="tag"><span class="strut" style="height:2.3991em;vertical-align:-0.9721em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">2</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>If two diseases occupy structurally close positions within a heterogeneous network, such as sharing many identical genes or symptoms, their vectors will also be closer, yielding higher cosine similarity. The same principle applies to gene-gene pairs.</p>
+<h3 id="2-4-Disease-Pair-Overlap-Analysis-Based-on-Similarity">2.4. Disease Pair Overlap Analysis Based on Similarity</h3>
+<p>To further validate the feasibility of the aforementioned computational methods, this study compared LVR-based similarity with traditional gene-based and symptom-based similarity metrics. High correlation indicates that LVR successfully captures the topological characteristics of the disease-gene-symptom triad, confirming that Node2Vec has learned meaningful representations. Three validation approaches were employed here.</p>
+<p><strong>Correlation Analysis (PCC):</strong> First, calculate gene similarity between disease pairs based on shared genes. Then compute LVR similarity for the corresponding disease pairs. The correlation between these two similarity measures is assessed using Pearson’s correlation coefficient (PCC).</p>
+<p><strong>Overlap Analysis:</strong> Select the top K% disease pairs with highest similarity. Examine whether LVR similarity and gene similarity yield substantial overlap. High overlap indicates LVR vectors learned biologically consistent patterns.</p>
+<p><strong>Random Control:</strong> To avoid coincidence, randomly shuffle disease LVR vectors 100 times, recalculating similarity each time. Calculate overlap ratio with actual results to establish a random baseline. If the actual overlap rate significantly exceeds the random control, it indicates that the LVR embedding results are meaningful.</p>
+<p>Experimental results validate the effectiveness of the embedding, demonstrating that the representations learned by Node2Vec and LINE are not merely mathematical graph structure compressions but possess genuine biological interpretability. Subsequently, in LVRSim, this similarity will be directly used to calculate disease-gene correlations for ranking and prediction.</p>
+<h3 id="2-5-Random-Walks-on-Reconstructed-Disease-Gene-Networks">2.5. Random Walks on Reconstructed Disease-Gene Networks</h3>
+<p>Building upon the LVRSim approach, the computed point-to-point cosine similarity scores are ranked to introduce the RW-RDGN method for network reconstruction and random walk generation. This further leverages disease-disease similarity and gene-gene similarity to form a richer diffusion propagation prediction framework. The method comprises three steps.</p>
+<p><img src="/images/disease-gene/figure4.png" alt="Random walk with restart on reconstructed heterogeneous disease-gene network"></p>
+<p><em>Figure 4: Random walk with restart on reconstructed heterogeneous disease-gene network.</em></p>
+<p><strong>First, compute similarities and reconstruct the network.</strong> Using LVR vectors, calculate disease–disease similarity and gene–gene similarity to construct the disease–disease network <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span> and gene–gene network <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span>, where edge weights represent similarity values. To mitigate weak-edge noise, retain only the top α most similar diseases and top β most similar genes for each disease. Combining this with the original disease–gene association matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span> (where 0 indicates no known association and 1 indicates known association), we obtain a three-layer reconstructed heterogeneous network RDGN comprising disease, gene, and disease–gene layers.</p>
+<p><strong>Next, define a random walk process.</strong> An initial probability <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>p</mi><mrow><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">p^{(0)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0824em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight">0</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span> is assigned to the queried disease node. At each step, there is a probability θ of returning to the initial disease node and a probability 1−θ of wandering within the network. Cross layers with probability ϕ, remaining in the current layer with probability 1−ϕ. This enables diffusion within the disease space and propagation across layers into the gene space.</p>
+<p><strong>Finally, perform mathematical calculations.</strong> Network matrices are defined as follows.</p>
+<p>Disease–Disease Matrix: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mo stretchy="false">)</mo><mrow><mi>m</mi><mo>×</mo><mi>m</mi></mrow></msub></mrow><annotation encoding="application/x-tex">D = (d_{ij})_{m \times m}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2583em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">d_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> is the similarity between diseases <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span>.</p>
+<p>Gene–Gene Matrix: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>g</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mo stretchy="false">)</mo><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">G = (g_{ij})_{n \times n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2583em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">g_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> is the similarity between genes <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span>.</p>
+<p>Disease–Gene Adjacency Matrix: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mo stretchy="false">)</mo><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">R = (a_{ij})_{m \times n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2583em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a_{ij} = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span> (known association) or <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>.</p>
+<p>Perform row normalization on <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">R^{T}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span></span></span></span></span></span></span></span></span> to obtain <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi></mrow><annotation encoding="application/x-tex">U</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">U</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi></mrow><annotation encoding="application/x-tex">B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span>. The random walk iteration is:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>p</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></msup><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>θ</mi><mo stretchy="false">)</mo><mi>W</mi><msup><mi>p</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msup><mo>+</mo><mi>θ</mi><msup><mi>p</mi><mrow><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">p^{(t)} = (1 - \theta) W p^{(t-1)} + \theta p^{(0)}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1324em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">t</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.188em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.1389em;">W</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.1324em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight">0</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>with transition matrix:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>t</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mo stretchy="false">)</mo><mrow><mo stretchy="false">(</mo><mi>m</mi><mo>+</mo><mi>n</mi><mo stretchy="false">)</mo><mo>×</mo><mo stretchy="false">(</mo><mi>m</mi><mo>+</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msub><mo>=</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>φ</mi><mo stretchy="false">)</mo><mi>U</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>φ</mi><mi>A</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>φ</mi><mi>B</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>φ</mi><mo stretchy="false">)</mo><mi>V</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">T = (t_{ij})_{(m+n) \times (m+n)} = \begin{pmatrix} (1 - \varphi)U &amp; \varphi A \\ \varphi B &amp; (1 - \varphi)V \end{pmatrix}.
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3552em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.5198em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">n</span><span class="mclose mtight">)</span><span class="mbin mtight">×</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">m</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">n</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3552em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">φ</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0502em;">φB</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">φ</span><span class="mord mathnormal">A</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">φ</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">.</span></span></span></span></span></p>
+<p>Here <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi></mrow><annotation encoding="application/x-tex">W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">W</span></span></span></span> is the normalized transition matrix, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>p</mi><mrow><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">p^{(0)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0824em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight">0</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span> is the initial state vector (disease query probability = 1, others = 0), and the convergence condition is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><msup><mi>p</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msup><mo>−</mo><msup><mi>p</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></msup><msub><mi mathvariant="normal">∣</mi><mn>1</mn></msub><mo>&lt;</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">|p^{(t+1)} - p^{(t)}|_1 &lt; \epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">t</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">ϵ</span></span></span></span>. At convergence, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>p</mi><mo>∗</mo></msup><mo>=</mo><mo stretchy="false">(</mo><mtext>disease scores</mtext><mo separator="true">,</mo><mtext>gene scores</mtext><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p^* = (\text{disease scores}, \text{gene scores})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8831em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">disease scores</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">gene scores</span></span><span class="mclose">)</span></span></span></span>; taking the gene component and ranking genes yields candidate disease gene rankings. This method simultaneously captures local similarity and global diffusion information, thereby enhancing the accuracy of disease gene prediction.</p>
+<h3 id="2-6-Experimental-Setup-and-Evaluation-Metrics">2.6. Experimental Setup and Evaluation Metrics</h3>
+<p>The experiment employed 10-fold cross-validation on the DisGeNet association dataset, using classical methods such as CIPHER, PRINCE, pgWalk, DADA, and GUILD as baseline comparisons. For evaluation metrics, TOP@i precision, recall, F1-score, and association precision (AP) were simultaneously employed to comprehensively assess algorithm performance across two dimensions: key candidate gene identification and overall prediction coverage.</p>
+<h2 id="3-Optimization-Technical-Approach">3. Optimization Technical Approach</h2>
+<h3 id="3-1-Overall-Approach">3.1. Overall Approach</h3>
+<p>The optimization strategy encompasses multiple dimensions. First, Nodevectors performs random walks on the graph to generate node sequences, providing the corpus for subsequent embedding training. Compared to traditional Node2Vec, this approach enhances generation speed and scalability for large-scale graphs through multi-process parallelization and optimized memory layout. After node embedding training completes, node similarity must be computed to support downstream tasks. Efficient similarity computation is achieved through matrix vectorization and multi-process parallelization strategies, significantly reducing the computational cost of large-scale node queries. Finally, replacing the original Word2Vec with FastText enables subword modeling and multi-threaded training. This enhances the representation capability for low-frequency nodes and preserves structural information while improving training efficiency, delivering higher-quality embeddings for downstream prediction tasks.</p>
+<h3 id="3-2-Node2Vec-Random-Walk-Parallelization">3.2. Node2Vec Random Walk Parallelization</h3>
+<p>The original framework employs Node2Vec to generate random walk sequences on graphs, providing foundational corpora for subsequent vector training. While innovative in graph embedding methodology, this approach faces limitations when applied to large-scale graphs. The random walk process typically relies on object-oriented linked lists or pointer-based graph structures. Each neighbor node access may trigger non-contiguous memory operations, frequently invoking RAM calls. Consequently, the random walk becomes a major performance bottleneck in the overall training process. Furthermore, the original Node2Vec implementation in Python relies heavily on interpreted code, amplifying performance losses from memory latency. Additionally, the original implementation typically executes random walks sequentially in a single thread, lacking parallel computing capabilities. Consequently, when graph sizes reach millions or even hundreds of millions of nodes, the computational efficiency and scalability of the original implementation struggle to meet practical demands.</p>
+<p>To address these issues, we optimized the implementation using Nodevectors. On one hand, Nodevectors significantly accelerates random walk generation through multi-process parallelization. By decomposing and executing random walk tasks in parallel, it effectively reduces runtime and enhances scalability on large-scale graphs. On the other hand, a more critical improvement lies in storing the graph using a compressed sparse row (CSR) format. The CSR format compresses edge weights, destination nodes, and index pointers into contiguous arrays. This ensures access locality and cache-friendliness, enabling CPUs to complete most operations within the cache hierarchy without frequent RAM accesses. Consequently, it effectively resolves the memory access bottlenecks caused by linked-list storage.</p>
+<p>The performance gains from CSR are significant. For instance, in a 64-bit environment, each edge requires storing only its weight and target node, while each node needs just one additional index pointer, enabling efficient storage and processing.</p>
+<p>Therefore, we chose to replace the original Node2Vec framework with Nodevectors for experimentation. Compared to the original implementation, Nodevectors preserves Node2Vec’s modeling philosophy and result consistency while achieving significant improvements in parallelization efficiency for random walks, memory access optimization, and scalability for large-scale graphs. This provides more efficient support for subsequent vector training and downstream tasks.</p>
+<h3 id="3-3-Parallelization-of-Vector-Similarity-Computation">3.3. Parallelization of Vector Similarity Computation</h3>
+<p>In the original framework, vector similarity computation primarily serves to identify the closest neighbor nodes to a target node and supports a series of downstream tasks. In link prediction or community detection tasks, this computation also measures structural similarity between nodes. Cosine similarity is a commonly used similarity metric, calculated as follows:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mtext>sim</mtext><mo stretchy="false">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>q</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>⋅</mo><mi>q</mi></mrow><mrow><mi mathvariant="normal">∣</mi><msub><mi>v</mi><mi>i</mi></msub><msub><mi mathvariant="normal">∣</mi><mn>2</mn></msub><mtext> </mtext><mi mathvariant="normal">∣</mi><mi>q</mi><msub><mi mathvariant="normal">∣</mi><mn>2</mn></msub></mrow></mfrac></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(3)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">\text{sim}(v_i, q) = \frac{v_i \cdot q}{|v_i|_2 \, |q|_2} \tag{3}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">sim</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0574em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="tag"><span class="strut" style="height:2.0574em;vertical-align:-0.936em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">3</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>Here <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">v_i \in \mathbb{R}^{d}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span></span></span></span> is the vector representation of a node, and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span></span></span></span> denotes the query vector.</p>
+<p>However, in the original implementation, this process typically employs a double loop to compute the cosine similarity between each node and the query node individually, resulting in a time complexity of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>N</mi><mn>2</mn></msup><mi>d</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N^{2}d)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">d</span><span class="mclose">)</span></span></span></span> (where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span> is the number of nodes and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span> is the vector dimension). At scales exceeding hundreds of thousands of nodes, this process becomes the primary bottleneck for overall runtime. This study optimizes the original similarity calculation function in the following two aspects.</p>
+<p>First, we optimized matrix vectorization calculations. Element-wise iteration incurs significant overhead at the Python interpreter level and fails to leverage the vectorization advantages of underlying BLAS libraries. To address this, we reformulated the similarity calculation as a matrix operation: we assembled all node vectors into a matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><mi>N</mi><mo>×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">V \in \mathbb{R}^{N \times d}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span><span class="mbin mtight">×</span><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span></span></span></span>, performed L2 normalization on each vector, and normalized the query vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>q</mi><mo stretchy="true">^</mo></mover></mrow><annotation encoding="application/x-tex">\widehat{q}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.865em;vertical-align:-0.1944em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6706em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span></span><span class="svg-align" style="width:calc(100% - 0.1667em);margin-left:0.1667em;top:-3.4306em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.24em;"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="0.24em" viewBox="0 0 1062 239" preserveAspectRatio="none"><path d="M529 0h5l519 115c5 1 9 5 9 10 0 1-1 2-1 3l-4 22
+c-1 5-5 9-11 9h-2L532 67 19 159h-2c-5 0-9-4-11-9l-5-22c-1-6 2-12 8-13z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span></span></span></span>.</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mover accent="true"><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="true">^</mo></mover><mo>=</mo><mfrac><msub><mi>v</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">∣</mi><msub><mi>v</mi><mi>i</mi></msub><msub><mi mathvariant="normal">∣</mi><mn>2</mn></msub></mrow></mfrac></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(4)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">\widehat{v_i} = \frac{v_i}{|v_i|_2} \tag{4}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8206em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6706em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span class="svg-align" style="top:-3.4306em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.24em;"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="0.24em" viewBox="0 0 1062 239" preserveAspectRatio="none"><path d="M529 0h5l519 115c5 1 9 5 9 10 0 1-1 2-1 3l-4 22
+c-1 5-5 9-11 9h-2L532 67 19 159h-2c-5 0-9-4-11-9l-5-22c-1-6 2-12 8-13z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0436em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="tag"><span class="strut" style="height:2.0436em;vertical-align:-0.936em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">4</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>Similarity calculation is converted into batch matrix-vector multiplication:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable width="100%"><mtr><mtd width="50%"></mtd><mtd><mrow><mi>s</mi><mo>=</mo><mi>V</mi><msup><mover accent="true"><mi>q</mi><mo stretchy="true">^</mo></mover><mi>T</mi></msup></mrow></mtd><mtd width="50%"></mtd><mtd><mtext>(5)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">s = V \widehat{q}^{T} \tag{5}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0858em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6706em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span></span><span class="svg-align" style="width:calc(100% - 0.1667em);margin-left:0.1667em;top:-3.4306em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.24em;"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="0.24em" viewBox="0 0 1062 239" preserveAspectRatio="none"><path d="M529 0h5l519 115c5 1 9 5 9 10 0 1-1 2-1 3l-4 22
+c-1 5-5 9-11 9h-2L532 67 19 159h-2c-5 0-9-4-11-9l-5-22c-1-6 2-12 8-13z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span></span></span></span></span></span></span><span class="tag"><span class="strut" style="height:1.1413em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">5</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>Here <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>N</mi></msup></mrow><annotation encoding="application/x-tex">s \in \mathbb{R}^{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span></span></span></span></span></span></span></span></span> represents the similarity results between all nodes and the query vector. This approach leverages the underlying C implementation of NumPy to achieve highly optimized parallel matrix operations on a single core, significantly reducing Python loop overhead.</p>
+<p>Next comes optimization at the multi-process parallel batch computation level. When batch-computing the most similar nodes for multiple query nodes, relying solely on single-threaded matrix operations remains constrained by single-core computational power. To further accelerate processing, this study introduces task-level parallelization using Python’s multiprocessing module. The query node set is evenly partitioned into tasks and distributed across multiple processes. The <code>multiprocessing.Manager()</code> is used to share the node vector matrix, avoiding redundant data loading. Each process independently computes the top-k similarity results, which are then merged in the main process. This strategy leverages multi-core CPU resources more effectively, enabling near-linear acceleration for batch similarity calculations across multiple query nodes.</p>
+<h3 id="3-4-Word2Vec-Training-Optimization">3.4. Word2Vec Training Optimization</h3>
+<p>In its original implementation, Node2Vec generates node sequences through random walks and trains these sequences using the Word2Vec model to learn low-dimensional embedding representations for each node. Within the overall framework, this process captures contextual relationships between nodes via the Skip-gram objective function while also providing a vectorized foundation for subsequent node similarity calculations and disease-gene association predictions. However, Word2Vec exhibits two limitations in this context: First, node IDs are treated as discrete tokens, lacking the ability to model their internal structure or semantic information. Second, the training process relies on serial data generation and model updates, failing to fully leverage multi-core parallelism and underlying optimization libraries, resulting in limited training efficiency on large-scale networks.</p>
+<p>To overcome these shortcomings, this study replaces Word2Vec with FastText. By introducing n-gram subword modeling within the Skip-gram framework, FastText decomposes node IDs into local patterns for representation, demonstrating advantages in learning low-frequency nodes and preserving structural information.</p>
+<p>For each word, the model first performs embedding to obtain a vector representation. Then, for each sentence, the model sums the vector representations of all words in the sentence to form the sentence’s vector representation. Finally, the model applies softmax to the sentence’s vector representation to obtain the probabilities for each classification.</p>
+<p>For training parameters, the Skip-gram mode is adopted. The embedding dimension is set to 128–256 to balance representational power and computational cost. The window size is set to 10–15 to capture more global dependencies. The sub-sampling rate is set to 1e-4 to reduce interference from high-frequency nodes. The negative sampling rate is set to 10 to enhance discrimination capability. Simultaneously, n-gram ranges of 3–6 are enabled to cover local patterns of node IDs. For parallel optimization, workers were set to the number of CPU cores, and batch updates were enabled to reduce parameter synchronization overhead.</p>
+<p>Through these replacements and optimizations, the model improved prediction performance in sparse regions, effectively mitigating the impact of unregistered nodes, thereby significantly reducing overall training time.</p>
+<h2 id="4-Results">4. Results</h2>
+<p>Regarding computational accuracy, experimental results demonstrate that the LVR-based similarity metric effectively captures biological consistency between diseases at the gene and symptom levels, exhibiting strong performance in disease gene recovery tasks. Among these, the node2vec-based LVRSim_N significantly outperforms the LINE algorithm, while the embDGG network — which integrates protein interaction networks — achieves the best results, indicating that PPI information contributes more significantly to disease gene prediction. Introducing additional information such as GO annotations or symptoms did not yield significant improvements and may even introduce interference, suggesting that information fusion requires careful balancing.</p>
+<p>The RW-RDGN method significantly outperformed LVRSim and multiple classical baseline algorithms in disease gene prediction, particularly demonstrating notable improvements in recall and association precision. This indicates that combining LVR similarity with the random walk diffusion mechanism can more fully exploit both local and global structural information within heterogeneous networks. Further comparison of different network types revealed that PPI information contributed most to performance enhancement, while blindly fusing multi-source information may introduce noise interference.</p>
+<p><strong>Table 3: Performance comparison of disease gene prediction algorithms.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Networks</th>
+<th>Algorithms</th>
+<th style="text-align:center">AP</th>
+<th style="text-align:center">TOP3_PR</th>
+<th style="text-align:center">TOP3_RE</th>
+<th style="text-align:center">TOP3_F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>pgWalk</td>
+<td style="text-align:center">0.258±0.003</td>
+<td style="text-align:center">0.222±0.003</td>
+<td style="text-align:center">0.305±0.005</td>
+<td style="text-align:center">0.219±0.003</td>
+</tr>
+<tr>
+<td>—</td>
+<td>PRINCE</td>
+<td style="text-align:center">0.019±0.003</td>
+<td style="text-align:center">0.006±0.003</td>
+<td style="text-align:center">0.008±0.007</td>
+<td style="text-align:center">0.005±0.004</td>
+</tr>
+<tr>
+<td>—</td>
+<td>CIPHER</td>
+<td style="text-align:center">0.003±0.002</td>
+<td style="text-align:center">0.002±0.001</td>
+<td style="text-align:center">0.003±0.003</td>
+<td style="text-align:center">0.002±0.001</td>
+</tr>
+<tr>
+<td>—</td>
+<td>DADA</td>
+<td style="text-align:center">0.087±0.001</td>
+<td style="text-align:center">0.010±0.006</td>
+<td style="text-align:center">0.021±0.011</td>
+<td style="text-align:center">0.012±0.007</td>
+</tr>
+<tr>
+<td>—</td>
+<td>GUILD</td>
+<td style="text-align:center">0.091±0.007</td>
+<td style="text-align:center">0.010±0.003</td>
+<td style="text-align:center">0.021±0.010</td>
+<td style="text-align:center">0.013±0.004</td>
+</tr>
+<tr>
+<td>EmbDG</td>
+<td>LVRSim</td>
+<td style="text-align:center">0.138±0.003</td>
+<td style="text-align:center">0.152±0.004</td>
+<td style="text-align:center">0.242±0.006</td>
+<td style="text-align:center">0.164±0.003</td>
+</tr>
+<tr>
+<td>EmbDGS</td>
+<td>LVRSim</td>
+<td style="text-align:center">0.216±0.004</td>
+<td style="text-align:center">0.213±0.002</td>
+<td style="text-align:center">0.285±0.004</td>
+<td style="text-align:center">0.207±0.002</td>
+</tr>
+<tr>
+<td>EmbDGG</td>
+<td>LVRSim</td>
+<td style="text-align:center">0.239±0.004</td>
+<td style="text-align:center">0.200±0.003</td>
+<td style="text-align:center">0.264±0.006</td>
+<td style="text-align:center">0.191±0.003</td>
+</tr>
+<tr>
+<td>EmbDGSG</td>
+<td>LVRSim</td>
+<td style="text-align:center">0.166±0.003</td>
+<td style="text-align:center">0.184±0.002</td>
+<td style="text-align:center">0.256±0.007</td>
+<td style="text-align:center">0.184±0.003</td>
+</tr>
+<tr>
+<td>EmbDG</td>
+<td>RW-RDGN</td>
+<td style="text-align:center">0.239±0.005</td>
+<td style="text-align:center">0.211±0.002</td>
+<td style="text-align:center">0.316±0.003</td>
+<td style="text-align:center">0.220±0.002</td>
+</tr>
+<tr>
+<td>EmbDGS</td>
+<td>RW-RDGN</td>
+<td style="text-align:center">0.268±0.005</td>
+<td style="text-align:center">0.232±0.002</td>
+<td style="text-align:center">0.315±0.004</td>
+<td style="text-align:center">0.227±0.002</td>
+</tr>
+<tr>
+<td><strong>EmbDGG</strong></td>
+<td><strong>RW-RDGN</strong></td>
+<td style="text-align:center"><strong>0.294±0.005</strong></td>
+<td style="text-align:center"><strong>0.243±0.003</strong></td>
+<td style="text-align:center"><strong>0.325±0.004</strong></td>
+<td style="text-align:center"><strong>0.233±0.003</strong></td>
+</tr>
+<tr>
+<td>EmbDGSG</td>
+<td>RW-RDGN</td>
+<td style="text-align:center">0.184±0.003</td>
+<td style="text-align:center">0.204±0.003</td>
+<td style="text-align:center">0.299±0.004</td>
+<td style="text-align:center">0.211±0.003</td>
+</tr>
+</tbody>
+</table>
+<p>Regarding computational speed, the aforementioned optimizations substantially reduced runtime for large-scale datasets — from an average of 30 minutes to 8 minutes — with consistent performance across multiple computational experiments. The method also supports highly parallelized processing by simultaneously utilizing multiple processor cores, potentially yielding superior results on high-performance distributed computing platforms.</p>
+<p><strong>Table 4: Performance comparison of acceleration algorithms.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th style="text-align:center">Data Volume</th>
+<th style="text-align:center">Original avg. time / s</th>
+<th style="text-align:center">Accelerated avg. time / s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node2Vec Random Walk Parallelization</td>
+<td style="text-align:center">3,360,570</td>
+<td style="text-align:center">1813</td>
+<td style="text-align:center">922</td>
+</tr>
+<tr>
+<td>Parallelization of Vector Similarity Computation</td>
+<td style="text-align:center">3,360,570</td>
+<td style="text-align:center">922</td>
+<td style="text-align:center">651</td>
+</tr>
+<tr>
+<td>Word2Vec Training Optimization</td>
+<td style="text-align:center">3,360,570</td>
+<td style="text-align:center">651</td>
+<td style="text-align:center">482</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-Conclusion">5. Conclusion</h2>
+<p>Building upon previous studies, this research first validates the effectiveness and novelty of the proposed methods for disease-related gene prediction. The Local Vector Representation (LVR) similarity measure successfully captures biological consistency between diseases at both the gene and symptom levels, outperforming multiple baseline methods and demonstrating strong potential for accurate disease–gene association discovery. The Random Walk–based Heterogeneous Network Prediction Method (RW-RDGN) achieves substantial improvements in both recall and precision.</p>
+<p>Subsequently, several computational innovations were introduced to enhance graph-based algorithm efficiency. By incorporating parallelized random walks, matrix-vectorized similarity computations, and multi-threaded embedding training, the overall runtime was reduced by approximately 4–6×, while maintaining stable performance across repeated experiments.</p>
+<p>However, the current study has some limitations. The datasets used for validation remain relatively limited, and due to constraints in experimental resources, large-scale repeated experiments were not conducted, and the number of devices used for deployment testing was relatively small. Future work could further improve computational stability, explore distributed computing platforms to support even larger-scale analyses, and integrate additional biomedical data sources to enhance predictive coverage and reliability.</p>
+<h2 id="References">References</h2>
+<ol>
+<li>D. H. Le and V. T. Dang, “Ontology-based disease similarity network for disease gene prediction,” <em>Vietnam J. Comput. Sci.</em>, vol. 3, no. 3, pp. 1–9, 2016.</li>
+<li>B. Calvo, N. Lopez-Bigas, S. J. Furney, P. Larrañaga, and J. A. Lozano, “A partially supervised classification approach to dominant and recessive human disease gene prediction,” <em>Comput. Methods Programs Biomed.</em>, vol. 85, no. 3, pp. 229–37, 2007.</li>
+<li>J. Xu and Y. Li, “Discovering disease-genes by topological features in human protein–protein interaction network,” <em>Bioinformatics</em>, vol. 22, no. 22, pp. 2800–2805, 2006.</li>
+<li>K. Lage et al., “A human phenome–interactome network of protein complexes implicated in genetic disorders,” <em>Nature Biotechnol.</em>, vol. 25, no. 3, pp. 309–316, 2007.</li>
+<li>R. A. George, J. Y. Liu, L. L. Feng, R. J. Bryson-Richardson, D. Fatkin, and M. A. Wouters, “Analysis of protein sequence and interaction data for candidate disease gene prediction,” <em>Nucleic Acids Res.</em>, vol. 34, no. 19, p. e130, 2006.</li>
+<li>S. Aerts et al., “Gene prioritization through genomic data fusion,” <em>Nature Biotechnol.</em>, vol. 24, no. 5, pp. 537–544, 2006.</li>
+<li>D. Horn, “Walking the interactome for prioritization of candidate disease genes,” <em>Amer. J. Human Genetics</em>, vol. 82, no. 4, pp. 949–58, 2008.</li>
+<li>P. Radivojac et al., “An integrated approach to inferring gene-disease associations in humans,” <em>Proteins: Struct. Function Bioinform.</em>, vol. 72, no. 3, pp. 1030–1037, 2008.</li>
+<li>M. Oti, B. Snel, M. A. Huynen, and H. G. Brunner, “Predicting disease genes using protein–protein interactions,” <em>J. Med. Genetics</em>, vol. 43, no. 8, pp. 691–698, 2006.</li>
+<li>K. Yang, R. Wang, G. Liu, Z. Shu, N. Wang, R. Zhang, J. Yu, J. Chen, X. Li, X. Zhou. “HerGePred: Heterogeneous Network Embedding Representation for Disease Gene Prediction,” <em>IEEE Journal of Biomedical and Health Informatics</em>, 2018, 23(4): 1805–1815.</li>
+<li>J. Piñero et al., “DisGeNET: A discovery platform for the dynamical exploration of human diseases and their genes,” <em>Database: J. Biol. Databases Curation</em>, vol. 2015, Art. no. bav028, 2015.</li>
+<li>N. Rappaport et al., “MalaCards: An amalgamated human disease compendium with diverse clinical and genetic annotation and structured search,” <em>Nucleic Acids Res.</em>, vol. 45, no. Database issue, pp. D877–D887, 2017.</li>
+<li>J. Menche et al., “Disease networks. Uncovering disease–disease relationships through the incomplete interactome,” <em>Science</em>, vol. 347, no. 6224, p. 1257601, 2015.</li>
+<li>S. Köhler et al., “The human phenotype ontology in 2017,” <em>Nucleic Acids Res.</em>, vol. 45, no. Database issue, pp. D865–D876, 2017.</li>
+<li>A. Rath et al., “Representation of rare diseases in health information systems: the Orphanet approach to serve a wide range of end users,” <em>Human Mutation</em>, vol. 33, no. 5, pp. 803–808, 2012.</li>
+<li>D. Szklarczyk et al., “The STRING database in 2017: Quality controlled protein–protein association networks, made broadly accessible,” <em>Nucleic Acids Res.</em>, vol. 45, no. Database issue, pp. D362–D368.</li>
+<li>A. Grover and J. Leskovec, “node2vec: Scalable feature learning for networks,” in <em>Proc. 22nd ACM SIGKDD Int. Conf. Knowl. Discovery Data Mining</em>, San Francisco, CA, USA, 2016, pp. 855–864.</li>
+<li>J. Tang, M. Qu, M. Wang, M. Zhang, J. Yan, and Q. Mei, “LINE: Large-scale information network embedding,” in <em>Proc. 24th Int. Conf. World Wide Web</em>, Florence, Italy, 2015, pp. 1067–1077.</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/graph-embedding/" rel="tag"># graph embedding</a>
+              <a href="/tags/disease-gene-prediction/" rel="tag"># disease gene prediction</a>
+              <a href="/tags/parallel-computing/" rel="tag"># parallel computing</a>
+              <a href="/tags/Node2Vec/" rel="tag"># Node2Vec</a>
+              <a href="/tags/bioinformatics/" rel="tag"># bioinformatics</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/01/hyperparameter-tuning-food11/" rel="prev" title="Hyperparameter Tuning Analysis for Food-11 Image Classification">
+                  <i class="fa fa-angle-left"></i> Hyperparameter Tuning Analysis for Food-11 Image Classification
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E6%96%87%E4%BB%B6%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C-%E5%85%B3%E4%BA%8E%E6%95%A3%E5%88%97%E5%80%BC%E5%92%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" rel="next" title="文件完整性校验-关于散列值和数字签名">
+                  文件完整性校验-关于散列值和数字签名 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

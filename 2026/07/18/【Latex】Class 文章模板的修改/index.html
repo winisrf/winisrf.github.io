@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;milkbusy&#x2F;article&#x2F;details&#x2F;81389289 页边距 12345\usepackage&#123;geometry&#125;\geometry&#123;a4paper,left&#x3D;1.5cm,right&#x3D;1.5cm,top&#x3D;3cm,bottom&#x3D;2.5cm&#125;\begin&#123;document&#125;..">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Latex】Class 文章模板的修改">
+<meta property="og:url" content="http://example.com/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/index.html">
+<meta property="og:site_name" content="Time to rest">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;milkbusy&#x2F;article&#x2F;details&#x2F;81389289 页边距 12345\usepackage&#123;geometry&#125;\geometry&#123;a4paper,left&#x3D;1.5cm,right&#x3D;1.5cm,top&#x3D;3cm,bottom&#x3D;2.5cm&#125;\begin&#123;document&#125;..">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046204-58f3075f-9cc7-4315-8a9e-acfb492a1f09.gif">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046681-e3403c3b-b8fa-4afd-aa97-0cb85a60d28a.gif">
+<meta property="article:published_time" content="2026-07-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-18T18:03:40.494Z">
+<meta property="article:author" content="winis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046204-58f3075f-9cc7-4315-8a9e-acfb492a1f09.gif">
+
+
+<link rel="canonical" href="http://example.com/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/","path":"2026/07/18/【Latex】Class 文章模板的修改/","title":"【Latex】Class 文章模板的修改"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【Latex】Class 文章模板的修改 | Time to rest</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Time to rest</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">welcome</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archive"><a href="/categories/Archive/" rel="section"><i class="fas fa-archive fa-fw"></i>Archive</a></li><li class="menu-item menu-item-intro"><a href="/categories/Intro/" rel="section"><i class="fas fa-book fa-fw"></i>Intro</a></li><li class="menu-item menu-item-fix"><a href="/categories/Fix/" rel="section"><i class="fas fa-wrench fa-fw"></i>Fix</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fas fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B5%E8%BE%B9%E8%B7%9D"><span class="nav-number">1.</span> <span class="nav-text">页边距</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B5%E7%9C%89%E9%A1%B5%E8%84%9A"><span class="nav-number">2.</span> <span class="nav-text">页眉页脚</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%B1%85%E5%B7%A6"><span class="nav-number">3.</span> <span class="nav-text">题目居左</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%9C%E8%80%85%E5%B1%85%E5%B7%A6"><span class="nav-number">4.</span> <span class="nav-text">作者居左</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B9%E5%8F%98%E9%97%B4%E8%B7%9D"><span class="nav-number">5.</span> <span class="nav-text">改变间距</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="winis"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">winis</p>
+  <div class="site-description" itemprop="description">至于俗世流言，诸位请便。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/winisrf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;winisrf" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/07/18/%E3%80%90Latex%E3%80%91Class%20%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BF%AE%E6%94%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="winis">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Time to rest">
+      <meta itemprop="description" content="至于俗世流言，诸位请便。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【Latex】Class 文章模板的修改 | Time to rest">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Latex】Class 文章模板的修改
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-07-18 12:00:00" itemprop="dateCreated datePublished" datetime="2026-07-18T12:00:00+08:00">2026-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-07-19 02:03:40" itemprop="dateModified" datetime="2026-07-19T02:03:40+08:00">2026-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Fixed/" itemprop="url" rel="index"><span itemprop="name">Fixed</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/milkbusy/article/details/81389289?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&amp;utm_relevant_index=1">https://blog.csdn.net/milkbusy/article/details/</a>81389289</p>
+<h4 id="页边距">页边距</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\usepackage&#123;geometry&#125;</span><br><span class="line">\geometry&#123;a4paper,left=1.5cm,right=1.5cm,top=3cm,bottom=2.5cm&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="页眉页脚">页眉页脚</h4>
+<p>值得注意的是，页眉页脚的设置应该自页边距设置之后，否则无法对齐页边距。<br>
+在用 LaTeX 排版文章、书籍时，缺省定义了四种页眉页脚的格式：</p>
+<ul>
+<li>empty 没有页眉和页脚</li>
+<li>plain 没有页眉，页脚中部放置页码。</li>
+<li>headings 没有页脚，页眉包含章节的标题和页码。</li>
+<li>myheadings 没有页脚，页眉页码和使用者所定义的信息。</li>
+</ul>
+<p>article 缺省使用 plain 格式，而 book 则使用headings 格式。 也可用 \pagestyle 命令在你的文档中设定所用的格式，例如在文档中使用 \pagestyle{empty} 则使得此后的页面没有页眉和页脚。 一般情况下，这四种格式基本可满足排版的要求。但在某些情况下，特别是 使用者想定义自己的页眉和页脚格式时，就会遇到很多限制和麻烦。这时，使用 fancyhdr 宏 包可以很容易地达到目的。</p>
+<p>利用 fancyhdr 宏包提供的命令，可以方便的作到：</p>
+<ul>
+<li>自定义页眉和页脚。</li>
+<li>为页眉和页脚加上装饰性的横线。</li>
+<li>页眉和页脚的宽度可以超过正文文本的宽度。</li>
+<li>多行的页眉和页脚。</li>
+<li>奇偶页使用不同格式的页眉和页脚。</li>
+<li>每章的首页使用不同格式的页眉和页脚。</li>
+<li>浮动对象页使用不同格式的页眉和页脚。</li>
+<li>控制页眉和页脚的字体，包括字形，字族，大小写等。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\usepackage&#123;fancyhdr&#125;</span><br><span class="line">\pagestyle&#123;fancy&#125;</span><br><span class="line">\lhead&#123;&#125; </span><br><span class="line">\chead&#123;&#125; </span><br><span class="line">\rhead&#123;\bfseries The performance of new graduates&#125; </span><br><span class="line">\lfoot&#123;From: K. Grant&#125; </span><br><span class="line">\cfoot&#123;To: Dean A. Smith&#125;</span><br><span class="line">\rfoot&#123;\thepage&#125; </span><br><span class="line"></span><br><span class="line">\renewcommand&#123;\headrulewidth&#125;&#123;0.4pt&#125; </span><br><span class="line">\renewcommand&#123;\footrulewidth&#125;&#123;0.4pt&#125;</span><br><span class="line">......</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046204-58f3075f-9cc7-4315-8a9e-acfb492a1f09.gif" alt=""><br>
+上面例子中，\thepage 给出了当前页的页码，而 \bfseries 则使 LaTeX 使用粗体字排版页眉。如果想在文档中改用其它形式，比如在第一页不要页眉和页脚，则可在 \begin{document} 和 \maketitle 后使用命令</p>
+<p>\thispagestyle{empty}</p>
+<p>缺省情况下，\maketitle 命令会自动设置其所在页的格式为 plain 。因此，如果你想在该页使用 fancy 格式的话，应该在 \maketile 后面使用命令 \thispagestyle{fancy}。</p>
+<p>下面是一个双面页版式下的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;book&#125; </span><br><span class="line">\usepackage&#123;fancyhdr&#125;</span><br><span class="line">\fancyhead&#123;&#125; % clear all fields </span><br><span class="line">\fancyhead[RO,LE]&#123;\bfseries The performance of new graduates&#125; \fancyfoot[LE,RO]&#123;\thepage&#125; </span><br><span class="line">\fancyfoot[LO,CE]&#123;From: K. Grant&#125; </span><br><span class="line">\fancyfoot[CO,RE]&#123;To: Dean A. Smith&#125; </span><br><span class="line">\renewcommand&#123;\headrulewidth&#125;&#123;0.4pt&#125; \renewcommand&#123;\footrulewidth&#125;&#123;0.4pt&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">......</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>结果如图所示：</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="https://cdn.nlark.com/yuque/0/2026/gif/26867783/1784383046681-e3403c3b-b8fa-4afd-aa97-0cb85a60d28a.gif" alt=""></p>
+<p>这里方括号中字母代表的意义为：</p>
+<p>E 偶数页<br>
+O 奇数页<br>
+L 页眉或页脚的左边部分<br>
+C 页眉或页脚的中间部分<br>
+R 页眉或页脚的右边部分<br>
+H 页眉<br>
+F 页脚<br>
+例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\fancyhf[HL]&#123;Hello world&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="题目居左">题目居左</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;flushleft&#125;</span><br><span class="line">\huge&#123;This is a title&#125;</span><br><span class="line">\end&#123;flushleft&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="作者居左">作者居左</h4>
+<p>如果文章中用到了maketitle，建议直接在*.cls中修改，找到关键词@author</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\mbox&#123;&#125;\hfill\begin&#123;@IEEEauthorhalign&#125;\@author\end&#123;@IEEEauthorhalign&#125;\hfill\mbox&#123;&#125;\par</span><br><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
+<p>以上是居中，如果要居左，使用flushleft，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\mbox&#123;&#125;\hfill</span><br><span class="line">\begin&#123;flushleft&#125;</span><br><span class="line">\begin&#123;@IEEEauthorhalign&#125;\@author\end&#123;@IEEEauthorhalign&#125;</span><br><span class="line">\end&#123;flushleft&#125;\hfill\mbox&#123;&#125;\par</span><br><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="改变间距">改变间距</h4>
+<p>以上加上flushleft之后，可能间距也会随之改变，那么就继续调整</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;\vspace&#123;0.5\baselineskip&#125;</span><br><span class="line">&#123;\vspace&#123;2.5\baselineskip&#125;</span><br><span class="line">&#123;\vspace&#123;-2.5\baselineskip&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90LaTeX%E3%80%91%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/" rel="prev" title="【LaTeX】数学公式">
+                  <i class="fa fa-angle-left"></i> 【LaTeX】数学公式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/18/%E3%80%90Java%E3%80%91%E4%BC%A0%E7%BB%9FJsp+Servlet%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E5%B0%86%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80%E4%BF%9D%E5%AD%98%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="【Java】传统Jsp+Servlet上传文件到服务器并将图片地址保存到数据库">
+                  【Java】传统Jsp+Servlet上传文件到服务器并将图片地址保存到数据库 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">winis</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
